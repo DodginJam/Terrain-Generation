@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <GridXLength>k__BackingField: 10
-  <GridZLength>k__BackingField: 10
+  <GridZLength>k__BackingField: 16
   <GridSpacing>k__BackingField: 1.5
   <GridYHeightRange>k__BackingField: 3
 --- !u!1 &705507993
