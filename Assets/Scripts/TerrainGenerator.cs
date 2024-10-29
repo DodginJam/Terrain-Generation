@@ -23,11 +23,12 @@ public class TerrainGenerator : MonoBehaviour
     void Start()
     {
         GenerateVertices();
-        GenerateGameObjectsAtVertices();
+        // GenerateGameObjectsAtVertices();
 
         // Generate a new gameObject with mesh components.
         GameObject meshHolder = new GameObject("meshHolder");
         MeshRenderer renderer = meshHolder.AddComponent<MeshRenderer>();
+        renderer.material.color = Color.white;
         MeshFilter filter = meshHolder.AddComponent<MeshFilter>();
 
         // Mesh to be added to the meshHolder mesh filter.
@@ -40,9 +41,9 @@ public class TerrainGenerator : MonoBehaviour
         // Grab vertices and make triangles.
         terrainMesh.triangles = ReturnTriangles(allVertices);
 
-        // Grab normals for mesh.
-        terrainMesh.normals = GenerateNormals(allVertices);
-
+        // Grab normals for mesh - to help with how light interacts with the mesh.
+        terrainMesh.normals = GenerateNormals(allVertices, terrainMesh.triangles);
+        terrainMesh.RecalculateNormals();
 
         filter.mesh = terrainMesh;
     }
@@ -93,12 +94,17 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Returns a single-dimensional array for containing the vertices positions of the terrain mesh. Due to order of generating the 2D vertices, the array contains one x position and all related y positions, followed by the next x position, followed by all related next x, y position, etc.
+    /// </summary>
+    /// <param name="twoDimensionalVectors"></param>
+    /// <returns></returns>
     public Vector3[] TwoDimensionalVectorsToOne(Vector3[,] twoDimensionalVectors)
     {
         Vector3[] newSingleArray = new Vector3[twoDimensionalVectors.GetLength(0) * twoDimensionalVectors.GetLength(1)];
 
         int counter = 0;
-        foreach (Vector3 vertices in GridVertices)
+        foreach (Vector3 vertices in twoDimensionalVectors)
         {
             newSingleArray[counter] = vertices;
             counter++;
@@ -107,89 +113,87 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// Return an array of integers for drawing triangles for the mesh. Based on an index 
+    /// Return an array of integers for drawing triangles for the mesh. The integers are the index positions of the vertices of the mesh when in a single array.
     /// </summary>
     /// <param name="verticesArray"></param>
     /// <returns></returns>
     public int[] ReturnTriangles(Vector3[] verticesArray)
     {
-        List<int> trianglesVertices = new List<int>();
+        List<int> trianglesVerticesIndexes = new List<int>();
 
+        // 
         for (int i = 0; i < verticesArray.Length - GridVertices.GetLength(1); i++)
         {
+            // If the current index is an index in the last row, don't generate triangles as there are no vertices further in the array to connect to for creating a triangle.
             if ((i + 1) % GridVertices.GetLength(1) == 0)
             {
                 continue;
             }
 
+            // The index positions are chosen based on how the array was generated - going up in Z axis only needs to add one to index, while going across in X axis needs to go up by length of width (Z axis).
             int bottomLeftIndex = i;
             int topLeftIndex = i + 1;
             int topRightIndex = i + GridVertices.GetLength(1) + 1;
             int bottomRightIndex = i + GridVertices.GetLength(1);
 
             // First triangle
-            trianglesVertices.Add(bottomLeftIndex);
-            trianglesVertices.Add(topLeftIndex);
-            trianglesVertices.Add(bottomRightIndex);
+            trianglesVerticesIndexes.Add(bottomLeftIndex);
+            trianglesVerticesIndexes.Add(topLeftIndex);
+            trianglesVerticesIndexes.Add(bottomRightIndex);
 
             // Second triangle
-            trianglesVertices.Add(topLeftIndex);
-            trianglesVertices.Add(topRightIndex);
-            trianglesVertices.Add(bottomRightIndex);
+            trianglesVerticesIndexes.Add(topLeftIndex);
+            trianglesVerticesIndexes.Add(topRightIndex);
+            trianglesVerticesIndexes.Add(bottomRightIndex);
 
         }
 
-        return trianglesVertices.ToArray();
+        return trianglesVerticesIndexes.ToArray();
     }
 
-    Vector3[] GenerateNormals(Vector3[] vertices)
-    {
-        Vector3[] normalsArray = new Vector3[vertices.Length];
-
-        for (int i = 0; i < vertices.Length; i ++ )
-        {
-            normalsArray[i] = -Vector3.up;
-        }
-
-        return normalsArray;
-    }
-
-
-    // From chatGPT - need to study and understand.
-    public Vector3[] GenerateNormals(Vector3[] vertices, int[] triangles)
+    /// <summary>
+    /// Generates normals for each vertices of a triangle within the mesh. Returns a respective array of normalised Vector3's for each vertices of the triangles.
+    /// </summary>
+    /// <param name="vertices"></param>
+    /// <param name="triangles"></param>
+    /// <returns></returns>
+    public Vector3[] GenerateNormals(Vector3[] vertices, int[] trianglesVerticesIndexes)
     {
         // Create an array to hold the normals for each vertex
-        Vector3[] normals = new Vector3[vertices.Length];
+        Vector3[] normalsValuesForVertices = new Vector3[vertices.Length];
 
-        // Calculate normals for each triangle
-        for (int i = 0; i < triangles.Length; i += 3)
+        // Calculate normals for each triangle, looping in increments of 3 for each grouping of triangle vertices. 
+        for (int i = 0; i < trianglesVerticesIndexes.Length; i += 3)
         {
-            int index0 = triangles[i];
-            int index1 = triangles[i + 1];
-            int index2 = triangles[i + 2];
+            // Grab the indexes of the triangles vertices.
+            int triangleIndex0 = trianglesVerticesIndexes[i];
+            int triangleIndex1 = trianglesVerticesIndexes[i + 1];
+            int triangleIndex2 = trianglesVerticesIndexes[i + 2];
 
-            // Get the vertices for the triangle
-            Vector3 vertex0 = vertices[index0];
-            Vector3 vertex1 = vertices[index1];
-            Vector3 vertex2 = vertices[index2];
+            // Use these indexes to grab the actual vertices for a triangle.
+            Vector3 vertex0 = vertices[triangleIndex0];
+            Vector3 vertex1 = vertices[triangleIndex1];
+            Vector3 vertex2 = vertices[triangleIndex2];
 
-            // Calculate the normal using the cross product
-            Vector3 edge1 = vertex1 - vertex0;
-            Vector3 edge2 = vertex2 - vertex0;
-            Vector3 normal = Vector3.Cross(edge1, edge2).normalized;
+            // Calculate the normal using the cross product - a third axis that is perpendicular to two of the lengths of the triangle.
+            Vector3 lengthOne = vertex1 - vertex0;
+            Vector3 lengthTwo = vertex2 - vertex0;
+            Vector3 normal = Vector3.Cross(lengthOne, lengthTwo).normalized;
 
-            // Add the normal to each vertex's normal
-            normals[index0] += normal;
-            normals[index1] += normal;
-            normals[index2] += normal;
+            // Add the normal to each vertex's normal.
+            // The normals values are added with past / future normal values calulated by adjorning triangles. This helps produces a smoothed out edge for the lighting,
+            // as each vertices takes into account the cross products of all edges it provides to triangles, before being normalised.
+            normalsValuesForVertices[triangleIndex0] += normal;
+            normalsValuesForVertices[triangleIndex1] += normal;
+            normalsValuesForVertices[triangleIndex2] += normal;
         }
 
         // Normalize the normals to ensure they have a length of 1
-        for (int i = 0; i < normals.Length; i++)
+        for (int i = 0; i < normalsValuesForVertices.Length; i++)
         {
-            normals[i].Normalize();
+            normalsValuesForVertices[i].Normalize();
         }
 
-        return normals;
+        return normalsValuesForVertices;
     }
 }
