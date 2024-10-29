@@ -166,10 +166,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2955066368abdcf4cb8cd76978b745ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GridXLength>k__BackingField: 3
-  <GridZLength>k__BackingField: 5
-  <GridSpacing>k__BackingField: 1.5
-  <GridYHeightRange>k__BackingField: 3
+  <GridXLength>k__BackingField: 200
+  <GridZLength>k__BackingField: 200
+  <GridSpacing>k__BackingField: 1.1
+  <GridYHeightRange>k__BackingField: 0.51
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,13 +257,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.012643565, y: -0.25879684, z: 0.0033878325, w: 0.9658431}
   m_LocalPosition: {x: 0, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 1.5, y: -30, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
