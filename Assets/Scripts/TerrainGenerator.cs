@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
@@ -19,7 +20,10 @@ public class TerrainGenerator : MonoBehaviour
     { get; private set; } = 1.0f;
 
     [field: SerializeField] public Color TerrainColour
-    { get; private set; } = Color.white;
+    { get; private set; } = Color.green;
+
+    [field: SerializeField] public bool EnableSmoothing
+    { get; private set; } = true;
 
     public Vector3[,] GridVertices
     { get; private set; }
@@ -48,6 +52,61 @@ public class TerrainGenerator : MonoBehaviour
                 float yCoord = Random.Range(0, GridYHeightRange);
 
                 GridVertices[xCount, zCount] = new Vector3(xCount * GridSpacing, yCoord * GridYHeightMultiplier, zCount * GridSpacing);
+            }
+        }
+    }
+
+    public void AverageVertexHeights()
+    {
+        // To be filled in with the averaged vertex heights for assigning to GridVertices vector3.Y.
+        float[,] vertexAverageHeights = new float[GridVertices.GetLength(0), GridVertices.GetLength(1)];
+
+        // Represent the indexes of all neighbouring adjacent vertices.
+        int[,] directionalIndexes = new int[,]
+        {
+            { 0, 0 },
+            { 0, 1 },
+            { 1, 1 },
+            { 1, 0 },
+            { 1, -1 },
+            { 0, -1 },
+            { -1, -1 },
+            { -1, 0 },
+            { -1, 1 }
+        };
+
+
+        // Loop over all the gridVertices to get the vertex values.
+        for (int xCount = 0; xCount < GridVertices.GetLength(0); xCount++)
+        {
+            for (int zCount = 0; zCount < GridVertices.GetLength(1); zCount++)
+            {
+                // List to contain all the valid vertices that are to be averaged for current vertices.
+                List<float> validVerticesHeightsToAverage = new List<float>();
+
+                // Loop over all the directional indexes to grab the height values from, including self.
+                for (int i = 0; i < directionalIndexes.GetLength(0); i++)
+                {
+                    int[] currentIndexToCheck = { xCount + directionalIndexes[i, 0], zCount + directionalIndexes[i, 1] };
+
+                    // Check if the index being checked from is inside the bounds of the grid of vertices, and skip if it isn't.
+                    if (currentIndexToCheck[0] >= 0 && currentIndexToCheck[0] < GridVertices.GetLength(0) && currentIndexToCheck[1] >= 0 && currentIndexToCheck[1] < GridVertices.GetLength(1))
+                    {
+                        validVerticesHeightsToAverage.Add(GridVertices[currentIndexToCheck[0], currentIndexToCheck[1]].y);
+                    }
+                }
+
+                float averageHeight = validVerticesHeightsToAverage.Average();
+
+                vertexAverageHeights[xCount, zCount] = averageHeight;
+            }
+        }
+
+        for (int i = 0; i < GridVertices.GetLength(0); i++)
+        {
+            for (int j = 0; j < GridVertices.GetLength(1); j++)
+            {
+                GridVertices[ i,j].y = vertexAverageHeights[i,j];
             }
         }
     }
@@ -182,6 +241,10 @@ public class TerrainGenerator : MonoBehaviour
         return normalsValuesForVertices;
     }
 
+    /// <summary>
+    /// For any value changed that impacts the mesh, remove the existing mesh and generate a new mesh.
+    /// </summary>
+    /// <returns></returns>
     IEnumerator UpdateMeshOnInputChange()
     {
         float timeTillNextCheck = 0.01f;
@@ -223,6 +286,12 @@ public class TerrainGenerator : MonoBehaviour
     void GenerateTerrain()
     {
         GenerateVertices();
+
+        if (EnableSmoothing)
+        {
+            AverageVertexHeights();
+        }
+
         // GenerateGameObjectsAtVertices();
 
         if (GameObject.Find("meshHolder") != null)
