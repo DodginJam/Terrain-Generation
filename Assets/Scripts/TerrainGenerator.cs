@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    [field: SerializeField, Header("Grid Layout"), Range(1, 1000)] public int GridXLength
+    [field: SerializeField, Header("Grid Layout"), Range(1, 200)] public int GridXLength
     { get; private set; } = 5;
 
-    [field: SerializeField, Range(1, 1000)] public int GridZLength
+    [field: SerializeField, Range(1, 200)] public int GridZLength
     { get; private set; } = 3;
 
     [field: SerializeField, Range(0.1f, 5)] public float GridSpacing
     { get; private set; } = 1.1f;
 
-    [field: SerializeField, Range(0.0f, 3.0f)] public float GridYHeightRange
+    [field: SerializeField, Range(0.0f, 1.0f)] public float GridYHeightRange
     { get; private set; } = 1.0f;
     [field: SerializeField, Range(0.0f, 10.0f)] public float GridYHeightMultiplier
     { get; private set; } = 1.0f;
@@ -22,8 +22,6 @@ public class TerrainGenerator : MonoBehaviour
     { get; private set; } = Color.white;
 
     public Vector3[,] GridVertices
-    { get; private set; }
-    public float[] GridVerticesHeights
     { get; private set; }
 
     // Start is called before the first frame update
@@ -47,7 +45,9 @@ public class TerrainGenerator : MonoBehaviour
         {
             for (int zCount = 0; zCount < GridZLength; zCount++)
             {
-                GridVertices[xCount, zCount] = new Vector3(xCount * GridSpacing, Random.Range(0, GridYHeightRange) * GridYHeightMultiplier, zCount * GridSpacing);
+                float yCoord = Random.Range(0, GridYHeightRange);
+
+                GridVertices[xCount, zCount] = new Vector3(xCount * GridSpacing, yCoord * GridYHeightMultiplier, zCount * GridSpacing);
             }
         }
     }

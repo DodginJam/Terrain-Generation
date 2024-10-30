@@ -166,10 +166,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2955066368abdcf4cb8cd76978b745ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GridXLength>k__BackingField: 200
-  <GridZLength>k__BackingField: 200
+  <GridXLength>k__BackingField: 20
+  <GridZLength>k__BackingField: 30
   <GridSpacing>k__BackingField: 1.1
-  <GridYHeightRange>k__BackingField: 0.51
+  <GridYHeightRange>k__BackingField: 1
+  <GridYHeightMultiplier>k__BackingField: 2
+  <TerrainColour>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
