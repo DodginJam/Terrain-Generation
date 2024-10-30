@@ -255,6 +255,7 @@ public class TerrainGenerator : MonoBehaviour
         float Old_GridYHeightRange;
         Color Old_TerrainColour;
         float Old_GridYHeightMultiplier;
+        bool Old_EnableSmoothing;
 
         while (true)
         {
@@ -264,6 +265,7 @@ public class TerrainGenerator : MonoBehaviour
             Old_GridYHeightRange = GridYHeightRange;
             Old_TerrainColour = TerrainColour;
             Old_GridYHeightMultiplier = GridYHeightMultiplier;
+            Old_EnableSmoothing = EnableSmoothing;
 
             yield return new WaitForSeconds(timeTillNextCheck);
 
