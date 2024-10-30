@@ -4,54 +4,39 @@ using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    [field: SerializeField, Header("Grid Layout")] public int GridXLength
+    [field: SerializeField, Header("Grid Layout"), Range(1, 1000)] public int GridXLength
     { get; private set; } = 5;
 
-    [field: SerializeField] public int GridZLength
+    [field: SerializeField, Range(1, 1000)] public int GridZLength
     { get; private set; } = 3;
 
-    [field: SerializeField] public float GridSpacing
+    [field: SerializeField, Range(0.1f, 5)] public float GridSpacing
     { get; private set; } = 1.1f;
 
     [field: SerializeField, Range(0.0f, 3.0f)] public float GridYHeightRange
-    { get; private set; } = 0.0f;
+    { get; private set; } = 1.0f;
+    [field: SerializeField, Range(0.0f, 10.0f)] public float GridYHeightMultiplier
+    { get; private set; } = 1.0f;
+
+    [field: SerializeField] public Color TerrainColour
+    { get; private set; } = Color.white;
 
     public Vector3[,] GridVertices
+    { get; private set; }
+    public float[] GridVerticesHeights
     { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
-        GenerateVertices();
-        // GenerateGameObjectsAtVertices();
-
-        // Generate a new gameObject with mesh components.
-        GameObject meshHolder = new GameObject("meshHolder");
-        MeshRenderer renderer = meshHolder.AddComponent<MeshRenderer>();
-        renderer.material.color = Color.white;
-        MeshFilter filter = meshHolder.AddComponent<MeshFilter>();
-
-        // Mesh to be added to the meshHolder mesh filter.
-        Mesh terrainMesh = new Mesh();
-
-        // Add required information to terrainMesh for mesh generation.
-        Vector3[] allVertices = TwoDimensionalVectorsToOne(GridVertices);
-        terrainMesh.vertices = allVertices;
-
-        // Grab vertices and make triangles.
-        terrainMesh.triangles = ReturnTriangles(allVertices);
-
-        // Grab normals for mesh - to help with how light interacts with the mesh.
-        terrainMesh.normals = GenerateNormals(allVertices, terrainMesh.triangles);
-        terrainMesh.RecalculateNormals();
-
-        filter.mesh = terrainMesh;
+        GenerateTerrain();
+        StartCoroutine(UpdateMeshOnInputChange());
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public void GenerateVertices()
@@ -62,7 +47,7 @@ public class TerrainGenerator : MonoBehaviour
         {
             for (int zCount = 0; zCount < GridZLength; zCount++)
             {
-                GridVertices[xCount, zCount] = new Vector3(xCount * GridSpacing, Random.Range(0, GridYHeightRange), zCount * GridSpacing);
+                GridVertices[xCount, zCount] = new Vector3(xCount * GridSpacing, Random.Range(0, GridYHeightRange) * GridYHeightMultiplier, zCount * GridSpacing);
             }
         }
     }
@@ -195,5 +180,76 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         return normalsValuesForVertices;
+    }
+
+    IEnumerator UpdateMeshOnInputChange()
+    {
+        float timeTillNextCheck = 0.01f;
+
+        int Old_GridXLength;
+        int Old_GridZLength;
+        float Old_GridSpacing;
+        float Old_GridYHeightRange;
+        Color Old_TerrainColour;
+        float Old_GridYHeightMultiplier;
+
+        while (true)
+        {
+            Old_GridXLength = GridXLength;
+            Old_GridZLength = GridZLength;
+            Old_GridSpacing = GridSpacing;
+            Old_GridYHeightRange = GridYHeightRange;
+            Old_TerrainColour = TerrainColour;
+            Old_GridYHeightMultiplier = GridYHeightMultiplier;
+
+            yield return new WaitForSeconds(timeTillNextCheck);
+
+            bool areValuesSame = Old_GridXLength == GridXLength
+                                    && Old_GridZLength == GridZLength
+                                    && Old_GridSpacing == GridSpacing
+                                    && Old_GridYHeightRange == GridYHeightRange
+                                    && Old_TerrainColour == TerrainColour
+                                    && Old_GridYHeightMultiplier == GridYHeightMultiplier;
+
+            if (areValuesSame)
+            {
+                continue;
+            }
+
+            GenerateTerrain();
+        }
+    }
+
+    void GenerateTerrain()
+    {
+        GenerateVertices();
+        // GenerateGameObjectsAtVertices();
+
+        if (GameObject.Find("meshHolder") != null)
+        {
+            Destroy(GameObject.Find("meshHolder"));
+        }
+
+        // Generate a new gameObject with mesh components.
+        GameObject meshHolder = new GameObject("meshHolder");
+        MeshRenderer renderer = meshHolder.AddComponent<MeshRenderer>();
+        renderer.material.color = TerrainColour;
+        MeshFilter filter = meshHolder.AddComponent<MeshFilter>();
+
+        // Mesh to be added to the meshHolder mesh filter.
+        Mesh terrainMesh = new Mesh();
+
+        // Add required information to terrainMesh for mesh generation.
+        Vector3[] allVertices = TwoDimensionalVectorsToOne(GridVertices);
+        terrainMesh.vertices = allVertices;
+
+        // Grab vertices and make triangles.
+        terrainMesh.triangles = ReturnTriangles(allVertices);
+
+        // Grab normals for mesh - to help with how light interacts with the mesh.
+        terrainMesh.normals = GenerateNormals(allVertices, terrainMesh.triangles);
+        terrainMesh.RecalculateNormals();
+
+        filter.mesh = terrainMesh;
     }
 }
