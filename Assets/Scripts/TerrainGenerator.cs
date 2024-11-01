@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
@@ -28,6 +29,9 @@ public class TerrainGenerator : MonoBehaviour
     public Vector3[,] GridVertices
     { get; private set; }
 
+    [field: SerializeField] public Material TextureApplied
+    { get; private set; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,7 +53,8 @@ public class TerrainGenerator : MonoBehaviour
         {
             for (int zCount = 0; zCount < GridZLength; zCount++)
             {
-                float yCoord = Random.Range(0, GridYHeightRange);
+                // Range ensures generated meshes real position centre will remain some-what centre position.
+                float yCoord = Random.Range(-GridYHeightRange, GridYHeightRange);
 
                 GridVertices[xCount, zCount] = new Vector3(xCount * GridSpacing, yCoord * GridYHeightMultiplier, zCount * GridSpacing);
             }
@@ -75,6 +80,10 @@ public class TerrainGenerator : MonoBehaviour
             { -1, 1 }
         };
 
+        // Floats are added up each vertices by the current Y value, one pre-smoothing and one post-smoothing.
+        // In the end, the average of each height is produced by dividing the total of all height positions by the number of vertices.
+        float originalAverageHeightForEveryVertices = 0;
+        float newSmoothedAverageHeightForEveryVertices = 0;
 
         // Loop over all the gridVertices to get the vertex values.
         for (int xCount = 0; xCount < GridVertices.GetLength(0); xCount++)
@@ -83,6 +92,9 @@ public class TerrainGenerator : MonoBehaviour
             {
                 // List to contain all the valid vertices that are to be averaged for current vertices.
                 List<float> validVerticesHeightsToAverage = new List<float>();
+
+                float preAveragedHeight = GridVertices[xCount, zCount].y;
+                originalAverageHeightForEveryVertices += preAveragedHeight;
 
                 // Loop over all the directional indexes to grab the height values from, including self.
                 for (int i = 0; i < directionalIndexes.GetLength(0); i++)
@@ -96,17 +108,24 @@ public class TerrainGenerator : MonoBehaviour
                     }
                 }
 
-                float averageHeight = validVerticesHeightsToAverage.Average();
-
-                vertexAverageHeights[xCount, zCount] = averageHeight;
+                float postAveragedHeight = validVerticesHeightsToAverage.Average();
+                vertexAverageHeights[xCount, zCount] = postAveragedHeight;
+                newSmoothedAverageHeightForEveryVertices += postAveragedHeight;
             }
         }
+
+        originalAverageHeightForEveryVertices /= GridVertices.GetLength(0) * GridVertices.GetLength(1);
+        newSmoothedAverageHeightForEveryVertices /= GridVertices.GetLength(0) * GridVertices.GetLength(1);
+
+        float heightOffset = originalAverageHeightForEveryVertices - newSmoothedAverageHeightForEveryVertices;
+
+        Debug.Log($"{originalAverageHeightForEveryVertices} and {newSmoothedAverageHeightForEveryVertices}");
 
         for (int i = 0; i < GridVertices.GetLength(0); i++)
         {
             for (int j = 0; j < GridVertices.GetLength(1); j++)
             {
-                GridVertices[ i,j].y = vertexAverageHeights[i,j];
+                GridVertices[i,j].y = vertexAverageHeights[i, j] + heightOffset;
             }
         }
     }
@@ -242,6 +261,29 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     /// <summary>
+    /// The UV value is a normalised value that states where along the mesh, at a particular vertices point, should the texture project too for a certain indices.
+    /// The use of normalised values ensures that the textures is project in a 1:1 manner across the mesh surface
+    /// </summary>
+    /// <returns></returns>
+    Vector2[] GenerateUVs()
+    {
+        Vector2[] uvPoints = new Vector2[GridXLength * GridZLength];
+
+        int counter = 0;
+        for (int x = 0; x < GridXLength; x++)
+        {
+            for (int z = 0; z < GridZLength; z++)
+            {
+
+                uvPoints[counter] = new Vector2((float)x / (GridXLength - 1), (float)z / (GridZLength - 1));
+                counter++;
+            }
+        }
+
+        return uvPoints;
+    }
+
+    /// <summary>
     /// For any value changed that impacts the mesh, remove the existing mesh and generate a new mesh.
     /// </summary>
     /// <returns></returns>
@@ -274,7 +316,8 @@ public class TerrainGenerator : MonoBehaviour
                                     && Old_GridSpacing == GridSpacing
                                     && Old_GridYHeightRange == GridYHeightRange
                                     && Old_TerrainColour == TerrainColour
-                                    && Old_GridYHeightMultiplier == GridYHeightMultiplier;
+                                    && Old_GridYHeightMultiplier == GridYHeightMultiplier
+                                    && Old_EnableSmoothing == EnableSmoothing;
 
             if (areValuesSame)
             {
@@ -304,7 +347,8 @@ public class TerrainGenerator : MonoBehaviour
         // Generate a new gameObject with mesh components.
         GameObject meshHolder = new GameObject("meshHolder");
         MeshRenderer renderer = meshHolder.AddComponent<MeshRenderer>();
-        renderer.material.color = TerrainColour;
+        // renderer.material.color = TerrainColour;
+        renderer.GetComponent<MeshRenderer>().material = TextureApplied;
         MeshFilter filter = meshHolder.AddComponent<MeshFilter>();
 
         // Mesh to be added to the meshHolder mesh filter.
@@ -319,8 +363,12 @@ public class TerrainGenerator : MonoBehaviour
 
         // Grab normals for mesh - to help with how light interacts with the mesh.
         terrainMesh.normals = GenerateNormals(allVertices, terrainMesh.triangles);
-        terrainMesh.RecalculateNormals();
+
+        Vector2[] allUV = GenerateUVs();
+
+        terrainMesh.uv = allUV;
 
         filter.mesh = terrainMesh;
+
     }
 }
