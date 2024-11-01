@@ -54,9 +54,13 @@ public class TerrainGenerator : MonoBehaviour
             for (int zCount = 0; zCount < GridZLength; zCount++)
             {
                 // Range ensures generated meshes real position centre will remain some-what centre position.
-                float yCoord = Random.Range(-GridYHeightRange, GridYHeightRange);
+                // float yCoord = Random.Range(-GridYHeightRange, GridYHeightRange);
 
-                GridVertices[xCount, zCount] = new Vector3(xCount * GridSpacing, yCoord * GridYHeightMultiplier, zCount * GridSpacing);
+                float xCoord = xCount * GridSpacing;
+                float zCoord = zCount * GridSpacing;
+                float yCoord = Mathf.PerlinNoise(xCount * GridSpacing, zCount * GridSpacing) * GridYHeightRange;
+
+                GridVertices[xCount, zCount] = new Vector3(xCoord, yCoord * GridYHeightMultiplier, zCoord);
             }
         }
     }
