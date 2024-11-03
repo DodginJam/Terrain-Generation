@@ -12,12 +12,12 @@ public class TerrainGenerator : MonoBehaviour
     [field: SerializeField, Range(1, 200)] public int GridZLength
     { get; private set; } = 3;
 
-    [field: SerializeField, Range(0.1f, 5)] public float GridSpacing
+    [field: SerializeField, Range(0.1f, 20)] public float GridSpacing
     { get; private set; } = 1.1f;
 
-    [field: SerializeField, Range(0.0f, 1.0f)] public float GridYHeightRange
+    [field: SerializeField, Range(0.0f, 100.0f)] public float GridYHeightRange
     { get; private set; } = 1.0f;
-    [field: SerializeField, Range(0.0f, 10.0f)] public float GridYHeightMultiplier
+    [field: SerializeField, Range(0.0f, 1.0f)] public float GridYHeightMultiplier
     { get; private set; } = 1.0f;
 
     [field: SerializeField] public Color TerrainColour
@@ -47,18 +47,24 @@ public class TerrainGenerator : MonoBehaviour
 
     public void GenerateVertices()
     {
-        GridVertices = new Vector3[GridXLength, GridZLength];
+        GridVertices = new Vector3[GridXLength + 1, GridZLength + 1];
 
-        for (int xCount = 0; xCount < GridXLength; xCount++)
+        for (int xCount = 0; xCount < GridVertices.GetLength(0); xCount++)
         {
-            for (int zCount = 0; zCount < GridZLength; zCount++)
+            for (int zCount = 0; zCount < GridVertices.GetLength(1); zCount++)
             {
                 // Range ensures generated meshes real position centre will remain some-what centre position.
                 // float yCoord = Random.Range(-GridYHeightRange, GridYHeightRange);
 
                 float xCoord = xCount * GridSpacing;
                 float zCoord = zCount * GridSpacing;
-                float yCoord = Mathf.PerlinNoise(xCount * GridSpacing, zCount * GridSpacing) * GridYHeightRange;
+
+                float noiseScale = 1.0f / (float)GridSpacing;
+
+                float yCoord = Mathf.PerlinNoise(xCount * noiseScale, zCount * noiseScale) * GridYHeightRange;
+
+                // Create depth in the terrain heights alongside heights.
+                yCoord = (yCoord - 0.5f) * 2.0f;
 
                 GridVertices[xCount, zCount] = new Vector3(xCoord, yCoord * GridYHeightMultiplier, zCoord);
             }
@@ -97,6 +103,7 @@ public class TerrainGenerator : MonoBehaviour
                 // List to contain all the valid vertices that are to be averaged for current vertices.
                 List<float> validVerticesHeightsToAverage = new List<float>();
 
+                // Add up the pre-Averaged heights for each vertices before it is averaged over all vertices later.
                 float preAveragedHeight = GridVertices[xCount, zCount].y;
                 originalAverageHeightForEveryVertices += preAveragedHeight;
 
@@ -114,17 +121,18 @@ public class TerrainGenerator : MonoBehaviour
 
                 float postAveragedHeight = validVerticesHeightsToAverage.Average();
                 vertexAverageHeights[xCount, zCount] = postAveragedHeight;
+                // Add up the post-Averaged heights for each vertices before it is averaged over all vertices later.
                 newSmoothedAverageHeightForEveryVertices += postAveragedHeight;
             }
         }
 
+        // Here the overall average heights are calculated after all the vertices heights have been added up.
         originalAverageHeightForEveryVertices /= GridVertices.GetLength(0) * GridVertices.GetLength(1);
         newSmoothedAverageHeightForEveryVertices /= GridVertices.GetLength(0) * GridVertices.GetLength(1);
 
         float heightOffset = originalAverageHeightForEveryVertices - newSmoothedAverageHeightForEveryVertices;
 
-        Debug.Log($"{originalAverageHeightForEveryVertices} and {newSmoothedAverageHeightForEveryVertices}");
-
+        // Apply the smoothed vertex heights to the GridVertices 2D array, overwriting the non-smoothed values.
         for (int i = 0; i < GridVertices.GetLength(0); i++)
         {
             for (int j = 0; j < GridVertices.GetLength(1); j++)
@@ -271,15 +279,15 @@ public class TerrainGenerator : MonoBehaviour
     /// <returns></returns>
     Vector2[] GenerateUVs()
     {
-        Vector2[] uvPoints = new Vector2[GridXLength * GridZLength];
+        Vector2[] uvPoints = new Vector2[GridVertices.GetLength(0) * GridVertices.GetLength(1)];
 
         int counter = 0;
-        for (int x = 0; x < GridXLength; x++)
+        for (int x = 0; x < GridVertices.GetLength(0); x++)
         {
-            for (int z = 0; z < GridZLength; z++)
+            for (int z = 0; z < GridVertices.GetLength(1); z++)
             {
 
-                uvPoints[counter] = new Vector2((float)x / (GridXLength - 1), (float)z / (GridZLength - 1));
+                uvPoints[counter] = new Vector2((float)x / (GridVertices.GetLength(0) - 1), (float)z / (GridVertices.GetLength(1) - 1));
                 counter++;
             }
         }
@@ -374,5 +382,6 @@ public class TerrainGenerator : MonoBehaviour
 
         filter.mesh = terrainMesh;
 
+        meshHolder.transform.position = Vector3.zero;
     }
 }
