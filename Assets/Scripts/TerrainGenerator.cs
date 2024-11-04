@@ -47,8 +47,14 @@ public class TerrainGenerator : MonoBehaviour
     [field: SerializeField, Range(0.0f, 1.0f)] public float GridYHeightMultiplier
     { get; private set; } = 1.0f;
 
-    [field: SerializeField] public Color TerrainColour
+    [field: SerializeField] public Color TerrainColourLow
     { get; private set; } = Color.green;
+
+    [field: SerializeField] public Color TerrainColourHigh
+    { get; private set; } = Color.white;
+
+    [field: SerializeField] public float HeightColorChange
+    { get; private set; } = 100.0f;
 
     [field: SerializeField] public bool EnableSmoothing
     { get; private set; } = true;
@@ -66,7 +72,7 @@ public class TerrainGenerator : MonoBehaviour
         
     }
 
-    public Vector3[,] GenerateVertices(int xLength, int zLength)
+    public Vector3[,] GenerateVertices(int xLength, int zLength, float scale)
     {
         int xVerticeCount = xLength + 1;
         int zVerticeCount = zLength + 1;
@@ -83,7 +89,7 @@ public class TerrainGenerator : MonoBehaviour
                 float xPerlinCoord = (float)xCount / xVerticeCount;
                 float zPerlinCoord = (float)zCount / zVerticeCount;
 
-                float yCoord = Mathf.PerlinNoise(xPerlinCoord * PerlinScale + OffsetX, zPerlinCoord * PerlinScale + OffsetZ) * GridYHeightRange;
+                float yCoord = Mathf.PerlinNoise(xPerlinCoord * scale + OffsetX, zPerlinCoord * scale + OffsetZ) * GridYHeightRange;
 
                 newVertices[xCount, zCount] = new Vector3(xCoord, yCoord * GridYHeightMultiplier, zCoord);
             }
@@ -309,7 +315,9 @@ public class TerrainGenerator : MonoBehaviour
         int Old_GridZLength;
         float Old_GridSpacing;
         float Old_GridYHeightRange;
-        Color Old_TerrainColour;
+        Color Old_TerrainColourLow;
+        Color Old_TerrainColourHigh;
+        float Old_HeightColorChange;
         float Old_GridYHeightMultiplier;
         bool Old_EnableSmoothing;
         float Old_PerlinScale;
@@ -322,7 +330,9 @@ public class TerrainGenerator : MonoBehaviour
             Old_GridZLength = GridZLength;
             Old_GridSpacing = GridSpacing;
             Old_GridYHeightRange = GridYHeightRange;
-            Old_TerrainColour = TerrainColour;
+            Old_TerrainColourLow = TerrainColourLow;
+            Old_TerrainColourHigh = TerrainColourHigh;
+            Old_HeightColorChange = HeightColorChange;
             Old_GridYHeightMultiplier = GridYHeightMultiplier;
             Old_EnableSmoothing = EnableSmoothing;
             Old_PerlinScale = PerlinScale;
@@ -335,7 +345,9 @@ public class TerrainGenerator : MonoBehaviour
                                     && Old_GridZLength == GridZLength
                                     && Old_GridSpacing == GridSpacing
                                     && Old_GridYHeightRange == GridYHeightRange
-                                    && Old_TerrainColour == TerrainColour
+                                    && Old_TerrainColourLow == TerrainColourLow
+                                    && Old_TerrainColourHigh == TerrainColourHigh
+                                    && Old_HeightColorChange == HeightColorChange
                                     && Old_GridYHeightMultiplier == GridYHeightMultiplier
                                     && Old_EnableSmoothing == EnableSmoothing
                                     && Old_PerlinScale == PerlinScale
@@ -353,7 +365,7 @@ public class TerrainGenerator : MonoBehaviour
 
     void GenerateTerrain()
     {
-        Vector3[,] newVertices = GenerateVertices(GridXLength, GridZLength);
+        Vector3[,] newVertices = GenerateVertices(GridXLength, GridZLength, PerlinScale);
         int width = newVertices.GetLength(0);
         int length = newVertices.GetLength(1);
 
@@ -365,7 +377,10 @@ public class TerrainGenerator : MonoBehaviour
         // Generate a new gameObject with mesh components.
         GameObject meshHolder = new GameObject("meshHolder");
         MeshRenderer renderer = meshHolder.AddComponent<MeshRenderer>();
-        renderer.material.mainTexture = GenerateTexture(width, length, PerlinScale);
+
+        //renderer.material.mainTexture = GenerateTexture(width, length, PerlinScale, TerrainColourLow, TerrainColourHigh);
+        renderer.material.mainTexture = GenerateTexture(newVertices, TerrainColourLow, TerrainColourHigh, HeightColorChange);
+
         MeshFilter filter = meshHolder.AddComponent<MeshFilter>();
 
         // Mesh to be added to the meshHolder mesh filter.
@@ -398,27 +413,68 @@ public class TerrainGenerator : MonoBehaviour
     /// <param name="width"></param>
     /// <param name="height"></param>
     /// <returns></returns>
-    Texture2D GenerateTexture(int width, int height, float scale)
+    Texture2D GenerateTexture(int width, int length, float scale, Color lowColor, Color highColor)
     {
-        Texture2D newTexture = new Texture2D(width, height);
+        Texture2D newTexture = new Texture2D(width, length);
 
         for(int xCount = 0; xCount < width; xCount++)
         {
-            for (int zCount = 0; zCount < height; zCount++)
+            for (int zCount = 0; zCount < length; zCount++)
             {
                 float xPerlinCoord = (float)xCount / width;
-                float zPerlinCoord = (float)zCount / height;
+                float zPerlinCoord = (float)zCount / length;
 
                 float colourNoise = Mathf.PerlinNoise(xPerlinCoord * scale + OffsetX, zPerlinCoord * scale + OffsetZ);
 
-                Color yellow = new Color(1, 0.984f, 0);
-                Color darBlue = new Color(0.114f, 0.024f, 0.4f);
-
-                float r = Mathf.Lerp(yellow.r, darBlue.r, colourNoise);
-                float g = Mathf.Lerp(yellow.g, darBlue.g, colourNoise);
-                float b = Mathf.Lerp(yellow.b, darBlue.b, colourNoise);
+                float r = Mathf.Lerp(lowColor.r, highColor.r, colourNoise);
+                float g = Mathf.Lerp(lowColor.g, highColor.g, colourNoise);
+                float b = Mathf.Lerp(lowColor.b, highColor.b, colourNoise);
 
                 newTexture.SetPixel(xCount, zCount, new Color(r, g, b));
+            }
+        }
+
+        newTexture.Apply();
+        return newTexture;
+    }
+
+    /// <summary>
+    /// Generates a texture for the terrain. The height of the peaks determine the color gradient being applied.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <returns></returns>
+    Texture2D GenerateTexture(Vector3[,] vertices, Color lowColor, Color highColor, float heightColorChange)
+    {
+        int width = vertices.GetLength(0);
+        int length = vertices.GetLength(1);
+
+        Texture2D newTexture = new Texture2D(width, length);
+
+        float expectedMaxHeight = 0;
+
+        for (int xCount = 0; xCount < width; xCount++)
+        {
+            for (int zCount = 0; zCount < length; zCount++)
+            {
+                if (vertices[xCount, zCount].y > expectedMaxHeight)
+                {
+                    expectedMaxHeight = vertices[xCount, zCount].y;
+                }
+            }
+        }
+
+        Debug.Log(expectedMaxHeight);
+
+        for (int xCount = 0; xCount < width; xCount++)
+        {
+            for (int zCount = 0; zCount < length; zCount++)
+            {
+                float noramlisedHeight = vertices[xCount, zCount].y / heightColorChange;
+
+                Color normalisedColor = Color.Lerp(lowColor, highColor, noramlisedHeight);
+
+                newTexture.SetPixel(xCount, zCount, normalisedColor);
             }
         }
 
