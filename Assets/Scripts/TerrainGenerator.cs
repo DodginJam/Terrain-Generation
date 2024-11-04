@@ -56,9 +56,6 @@ public class TerrainGenerator : MonoBehaviour
     public Vector3[,] GridVertices
     { get; private set; }
 
-    [field: SerializeField] public Material TextureApplied
-    { get; private set; }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -431,11 +428,18 @@ public class TerrainGenerator : MonoBehaviour
             for (int zCount = 0; zCount < height; zCount++)
             {
                 float xPerlinCoord = (float)xCount / width;
-                float zPerlinCoord = (float)zCount / width;
+                float zPerlinCoord = (float)zCount / height;
 
-                float colourNoise = Mathf.PerlinNoise(xPerlinCoord * PerlinScale + OffsetX, zPerlinCoord * PerlinScale + OffsetZ);
+                float colourNoise = Mathf.PerlinNoise(xPerlinCoord * scale + OffsetX, zPerlinCoord * scale + OffsetZ);
 
-                newTexture.SetPixel(xCount, zCount, new Color(colourNoise, colourNoise, colourNoise));
+                Color yellow = new Color(1, 0.984f, 0);
+                Color darBlue = new Color(0.114f, 0.024f, 0.4f);
+
+                float r = Mathf.Lerp(yellow.r, darBlue.r, colourNoise);
+                float g = Mathf.Lerp(yellow.g, darBlue.g, colourNoise);
+                float b = Mathf.Lerp(yellow.b, darBlue.b, colourNoise);
+
+                newTexture.SetPixel(xCount, zCount, new Color(r, g, b));
             }
         }
 
