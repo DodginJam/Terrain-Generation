@@ -20,7 +20,7 @@ public class TerrainGenerator : MonoBehaviour
     { get; private set; } = 3;
 
     /// <summary>
-    /// GridSpacing determines the distance between the vertices in world space.
+    /// GridSpacing determines the distance between the vertices - essentially the resolution of the grid.
     /// </summary>
     [field: SerializeField, Range(0.1f, 20)] public float GridSpacing
     { get; private set; } = 1.1f;
@@ -30,11 +30,15 @@ public class TerrainGenerator : MonoBehaviour
     /// </summary>
     [field: SerializeField, Range(0.1f, 20)] public float PerlinScale
     { get; private set; } = 1.0f;
+    [field: SerializeField] public float OffsetX
+    { get; private set; } = 0.0f;
+    [field: SerializeField] public float OffsetZ
+    { get; private set; } = 0.0f;
 
     /// <summary>
     /// Real height range pre-smoothing.
     /// </summary>
-    [field: SerializeField, Range(0.0f, 100.0f)] public float GridYHeightRange
+    [field: SerializeField, Range(-100.0f, 100.0f)] public float GridYHeightRange
     { get; private set; } = 1.0f;
 
     /// <summary>
@@ -79,13 +83,10 @@ public class TerrainGenerator : MonoBehaviour
                 float xCoord = xCount * GridSpacing;
                 float zCoord = zCount * GridSpacing;
 
-                float xPerlinCoord = (float)xCoord / GridVertices.GetLength(0);
-                float zPerlinCoord = (float)zCoord / GridVertices.GetLength(1);
+                float xPerlinCoord = (float)xCount / GridVertices.GetLength(0);
+                float zPerlinCoord = (float)zCount / GridVertices.GetLength(1);
 
-                float yCoord = Mathf.PerlinNoise(xPerlinCoord * PerlinScale, zPerlinCoord * PerlinScale) * GridYHeightRange;
-
-                // Create depth in the terrain heights alongside heights.
-                yCoord = (yCoord - 0.5f) * 2.0f;
+                float yCoord = Mathf.PerlinNoise(xPerlinCoord * PerlinScale + OffsetX, zPerlinCoord * PerlinScale + OffsetZ) * GridYHeightRange;
 
                 GridVertices[xCount, zCount] = new Vector3(xCoord, yCoord * GridYHeightMultiplier, zCoord);
             }
@@ -332,7 +333,9 @@ public class TerrainGenerator : MonoBehaviour
         float Old_GridYHeightMultiplier;
         bool Old_EnableSmoothing;
         float Old_PerlinScale;
-
+        float Old_OffsetX;
+        float Old_OffsetZ;
+        
         while (true)
         {
             Old_GridXLength = GridXLength;
@@ -343,6 +346,8 @@ public class TerrainGenerator : MonoBehaviour
             Old_GridYHeightMultiplier = GridYHeightMultiplier;
             Old_EnableSmoothing = EnableSmoothing;
             Old_PerlinScale = PerlinScale;
+            Old_OffsetX = OffsetX;
+            Old_OffsetZ = OffsetZ;
 
             yield return new WaitForSeconds(timeTillNextCheck);
 
@@ -353,7 +358,9 @@ public class TerrainGenerator : MonoBehaviour
                                     && Old_TerrainColour == TerrainColour
                                     && Old_GridYHeightMultiplier == GridYHeightMultiplier
                                     && Old_EnableSmoothing == EnableSmoothing
-                                    && Old_PerlinScale == PerlinScale;
+                                    && Old_PerlinScale == PerlinScale
+                                    && Old_OffsetX == OffsetX
+                                    && Old_OffsetZ == OffsetZ;
 
             if (areValuesSame)
             {
