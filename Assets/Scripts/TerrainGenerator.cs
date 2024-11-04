@@ -53,9 +53,6 @@ public class TerrainGenerator : MonoBehaviour
     [field: SerializeField] public bool EnableSmoothing
     { get; private set; } = true;
 
-    public Vector3[,] GridVertices
-    { get; private set; }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -69,31 +66,44 @@ public class TerrainGenerator : MonoBehaviour
         
     }
 
-    public void GenerateVertices()
+    public Vector3[,] GenerateVertices(int xLength, int zLength)
     {
-        GridVertices = new Vector3[GridXLength + 1, GridZLength + 1];
+        int xVerticeCount = xLength + 1;
+        int zVerticeCount = zLength + 1;
 
-        for (int xCount = 0; xCount < GridVertices.GetLength(0); xCount++)
+        Vector3[,] newVertices = new Vector3[xVerticeCount, zVerticeCount];
+
+        for (int xCount = 0; xCount < xVerticeCount; xCount++)
         {
-            for (int zCount = 0; zCount < GridVertices.GetLength(1); zCount++)
+            for (int zCount = 0; zCount < zVerticeCount; zCount++)
             {
                 float xCoord = xCount * GridSpacing;
                 float zCoord = zCount * GridSpacing;
 
-                float xPerlinCoord = (float)xCount / GridVertices.GetLength(0);
-                float zPerlinCoord = (float)zCount / GridVertices.GetLength(1);
+                float xPerlinCoord = (float)xCount / xVerticeCount;
+                float zPerlinCoord = (float)zCount / zVerticeCount;
 
                 float yCoord = Mathf.PerlinNoise(xPerlinCoord * PerlinScale + OffsetX, zPerlinCoord * PerlinScale + OffsetZ) * GridYHeightRange;
 
-                GridVertices[xCount, zCount] = new Vector3(xCoord, yCoord * GridYHeightMultiplier, zCoord);
+                newVertices[xCount, zCount] = new Vector3(xCoord, yCoord * GridYHeightMultiplier, zCoord);
             }
         }
+
+        if (EnableSmoothing)
+        {
+            newVertices = AverageVertexHeights(newVertices);
+        }
+
+        return newVertices;
     }
 
-    public void AverageVertexHeights()
+    public Vector3[,] AverageVertexHeights(Vector3[,] verticesArray)
     {
+        int width = verticesArray.GetLength(0);
+        int length = verticesArray.GetLength(1);
+
         // To be filled in with the averaged vertex heights for assigning to GridVertices vector3.Y.
-        float[,] vertexAverageHeights = new float[GridVertices.GetLength(0), GridVertices.GetLength(1)];
+        float[,] vertexAverageHeights = new float[width, length];
 
         // Represent the indexes of all neighbouring adjacent vertices.
         int[,] directionalIndexes = new int[,]
@@ -115,15 +125,15 @@ public class TerrainGenerator : MonoBehaviour
         float newSmoothedAverageHeightForEveryVertices = 0;
 
         // Loop over all the gridVertices to get the vertex values.
-        for (int xCount = 0; xCount < GridVertices.GetLength(0); xCount++)
+        for (int xCount = 0; xCount < width; xCount++)
         {
-            for (int zCount = 0; zCount < GridVertices.GetLength(1); zCount++)
+            for (int zCount = 0; zCount < length; zCount++)
             {
                 // List to contain all the valid vertices that are to be averaged for current vertices.
                 List<float> validVerticesHeightsToAverage = new List<float>();
 
                 // Add up the pre-Averaged heights for each vertices before it is averaged over all vertices later.
-                float preAveragedHeight = GridVertices[xCount, zCount].y;
+                float preAveragedHeight = verticesArray[xCount, zCount].y;
                 originalAverageHeightForEveryVertices += preAveragedHeight;
 
                 // Loop over all the directional indexes to grab the height values from, including self.
@@ -132,9 +142,9 @@ public class TerrainGenerator : MonoBehaviour
                     int[] currentIndexToCheck = { xCount + directionalIndexes[i, 0], zCount + directionalIndexes[i, 1] };
 
                     // Check if the index being checked from is inside the bounds of the grid of vertices, and skip if it isn't.
-                    if (currentIndexToCheck[0] >= 0 && currentIndexToCheck[0] < GridVertices.GetLength(0) && currentIndexToCheck[1] >= 0 && currentIndexToCheck[1] < GridVertices.GetLength(1))
+                    if (currentIndexToCheck[0] >= 0 && currentIndexToCheck[0] < width && currentIndexToCheck[1] >= 0 && currentIndexToCheck[1] < length)
                     {
-                        validVerticesHeightsToAverage.Add(GridVertices[currentIndexToCheck[0], currentIndexToCheck[1]].y);
+                        validVerticesHeightsToAverage.Add(verticesArray[currentIndexToCheck[0], currentIndexToCheck[1]].y);
                     }
                 }
 
@@ -146,46 +156,21 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         // Here the overall average heights are calculated after all the vertices heights have been added up.
-        originalAverageHeightForEveryVertices /= GridVertices.GetLength(0) * GridVertices.GetLength(1);
-        newSmoothedAverageHeightForEveryVertices /= GridVertices.GetLength(0) * GridVertices.GetLength(1);
+        originalAverageHeightForEveryVertices /= width * length;
+        newSmoothedAverageHeightForEveryVertices /= width * length;
 
         float heightOffset = originalAverageHeightForEveryVertices - newSmoothedAverageHeightForEveryVertices;
 
         // Apply the smoothed vertex heights to the GridVertices 2D array, overwriting the non-smoothed values.
-        for (int i = 0; i < GridVertices.GetLength(0); i++)
+        for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < GridVertices.GetLength(1); j++)
+            for (int j = 0; j < length; j++)
             {
-                GridVertices[i,j].y = vertexAverageHeights[i, j] + heightOffset;
+                verticesArray[i,j].y = vertexAverageHeights[i, j] + heightOffset;
             }
         }
-    }
 
-    public void GenerateGameObjectsAtVertices()
-    {
-        // Reset the cube container if one already exists.
-        GameObject cubeContainer;
-
-        if (GameObject.Find("CubeContainer") != null)
-        {
-            Destroy(GameObject.Find("CubeContainer"));
-        }
-
-        cubeContainer = new GameObject("CubeContainer");
-        cubeContainer.transform.parent = transform;
-
-        // Generate cubes objects at position of vertices.
-        for (int xCount = 0; xCount < GridVertices.GetLength(0); xCount++)
-        {
-            for (int zCount = 0; zCount < GridVertices.GetLength(1); zCount++)
-            {
-                GameObject newCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                newCube.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-
-                newCube.transform.position = GridVertices[xCount, zCount];
-                newCube.transform.SetParent(cubeContainer.transform, true);
-            }
-        }
+        return verticesArray;
     }
 
     /// <summary>
@@ -211,15 +196,14 @@ public class TerrainGenerator : MonoBehaviour
     /// </summary>
     /// <param name="verticesArray"></param>
     /// <returns></returns>
-    public int[] ReturnTriangles(Vector3[] verticesArray)
+    public int[] ReturnTriangles(Vector3[] verticesArray, int width, int length)
     {
         List<int> trianglesVerticesIndexes = new List<int>();
 
-        // 
-        for (int i = 0; i < verticesArray.Length - GridVertices.GetLength(1); i++)
+        for (int i = 0; i < verticesArray.Length - length; i++)
         {
             // If the current index is an index in the last row, don't generate triangles as there are no vertices further in the array to connect to for creating a triangle.
-            if ((i + 1) % GridVertices.GetLength(1) == 0)
+            if ((i + 1) % length == 0)
             {
                 continue;
             }
@@ -227,8 +211,8 @@ public class TerrainGenerator : MonoBehaviour
             // The index positions are chosen based on how the array was generated - going up in Z axis only needs to add one to index, while going across in X axis needs to go up by length of width (Z axis).
             int bottomLeftIndex = i;
             int topLeftIndex = i + 1;
-            int topRightIndex = i + GridVertices.GetLength(1) + 1;
-            int bottomRightIndex = i + GridVertices.GetLength(1);
+            int topRightIndex = i + length + 1;
+            int bottomRightIndex = i + length;
 
             // First triangle
             trianglesVerticesIndexes.Add(bottomLeftIndex);
@@ -296,16 +280,16 @@ public class TerrainGenerator : MonoBehaviour
     /// The use of normalised values ensures that the textures is project in a 1:1 manner across the mesh surface
     /// </summary>
     /// <returns></returns>
-    Vector2[] GenerateUVs()
+    Vector2[] GenerateUVs(Vector3[,] vertices)
     {
-        Vector2[] uvPoints = new Vector2[GridVertices.GetLength(0) * GridVertices.GetLength(1)];
+        Vector2[] uvPoints = new Vector2[vertices.GetLength(0) * vertices.GetLength(1)];
 
         int counter = 0;
-        for (int x = 0; x < GridVertices.GetLength(0); x++)
+        for (int x = 0; x < vertices.GetLength(0); x++)
         {
-            for (int z = 0; z < GridVertices.GetLength(1); z++)
+            for (int z = 0; z < vertices.GetLength(1); z++)
             {
-                uvPoints[counter] = new Vector2((float)x / (GridVertices.GetLength(0) - 1), (float)z / (GridVertices.GetLength(1) - 1));
+                uvPoints[counter] = new Vector2((float)x / (vertices.GetLength(0) - 1), (float)z / (vertices.GetLength(1) - 1));
                 counter++;
             }
         }
@@ -369,14 +353,9 @@ public class TerrainGenerator : MonoBehaviour
 
     void GenerateTerrain()
     {
-        GenerateVertices();
-
-        if (EnableSmoothing)
-        {
-            AverageVertexHeights();
-        }
-
-        // GenerateGameObjectsAtVertices();
+        Vector3[,] newVertices = GenerateVertices(GridXLength, GridZLength);
+        int width = newVertices.GetLength(0);
+        int length = newVertices.GetLength(1);
 
         if (GameObject.Find("meshHolder") != null)
         {
@@ -386,24 +365,24 @@ public class TerrainGenerator : MonoBehaviour
         // Generate a new gameObject with mesh components.
         GameObject meshHolder = new GameObject("meshHolder");
         MeshRenderer renderer = meshHolder.AddComponent<MeshRenderer>();
-        renderer.material.mainTexture = GenerateTexture(GridVertices.GetLength(0), GridVertices.GetLength(1), PerlinScale);
+        renderer.material.mainTexture = GenerateTexture(width, length, PerlinScale);
         MeshFilter filter = meshHolder.AddComponent<MeshFilter>();
 
         // Mesh to be added to the meshHolder mesh filter.
         Mesh terrainMesh = new Mesh();
 
         // Add required information to terrainMesh for mesh generation.
-        Vector3[] allVertices = TwoDimensionalVectorsToOne(GridVertices);
+        Vector3[] allVertices = TwoDimensionalVectorsToOne(newVertices);
         terrainMesh.vertices = allVertices;
 
         // Grab vertices and make triangles.
-        terrainMesh.triangles = ReturnTriangles(allVertices);
+        terrainMesh.triangles = ReturnTriangles(allVertices, width, length);
 
         // Grab normals for mesh - to help with how light interacts with the mesh.
         terrainMesh.normals = GenerateNormals(allVertices, terrainMesh.triangles);
 
         //
-        Vector2[] allUV = GenerateUVs();
+        Vector2[] allUV = GenerateUVs(newVertices);
         terrainMesh.uv = allUV;
 
 
