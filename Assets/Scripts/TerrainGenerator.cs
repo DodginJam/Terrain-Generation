@@ -11,24 +11,24 @@ public class TerrainGenerator : MonoBehaviour
     /// The length of how many vertices in the X direction.
     /// </summary>
     [field: SerializeField, Header("Grid Layout"), Range(1, 200)] public int GridXLength
-    { get; private set; } = 5;
+    { get; private set; } = 50;
 
     /// <summary>
     /// The length of how many vertices in the Z direction.
     /// </summary>
     [field: SerializeField, Range(1, 200)] public int GridZLength
-    { get; private set; } = 3;
+    { get; private set; } = 50;
 
     /// <summary>
     /// GridSpacing determines the distance between the vertices - essentially the resolution of the grid.
     /// </summary>
-    [field: SerializeField, Range(0.1f, 20)] public float GridSpacing
+    [field: SerializeField, Range(0.1f, 200)] public float GridSpacing
     { get; private set; } = 1.1f;
 
     /// <summary>
     /// PerlinScale changes the detail or resolution of the perlin noise being used in application to the height of the terrain.
     /// </summary>
-    [field: SerializeField, Range(0.1f, 20)] public float PerlinScale
+    [field: SerializeField, Range(0.1f, 200)] public float PerlinScale
     { get; private set; } = 1.0f;
     [field: SerializeField] public float OffsetX
     { get; private set; } = 0.0f;
@@ -38,7 +38,7 @@ public class TerrainGenerator : MonoBehaviour
     /// <summary>
     /// Real height range pre-smoothing.
     /// </summary>
-    [field: SerializeField, Range(-100.0f, 100.0f)] public float GridYHeightRange
+    [field: SerializeField, Range(-1000.0f, 1000.0f)] public float GridYHeightRange
     { get; private set; } = 1.0f;
 
     /// <summary>
@@ -308,7 +308,6 @@ public class TerrainGenerator : MonoBehaviour
         {
             for (int z = 0; z < GridVertices.GetLength(1); z++)
             {
-
                 uvPoints[counter] = new Vector2((float)x / (GridVertices.GetLength(0) - 1), (float)z / (GridVertices.GetLength(1) - 1));
                 counter++;
             }
@@ -390,8 +389,7 @@ public class TerrainGenerator : MonoBehaviour
         // Generate a new gameObject with mesh components.
         GameObject meshHolder = new GameObject("meshHolder");
         MeshRenderer renderer = meshHolder.AddComponent<MeshRenderer>();
-        // renderer.material.color = TerrainColour;
-        renderer.GetComponent<MeshRenderer>().material = TextureApplied;
+        renderer.material.mainTexture = GenerateTexture(GridVertices.GetLength(0), GridVertices.GetLength(1), PerlinScale);
         MeshFilter filter = meshHolder.AddComponent<MeshFilter>();
 
         // Mesh to be added to the meshHolder mesh filter.
@@ -407,12 +405,41 @@ public class TerrainGenerator : MonoBehaviour
         // Grab normals for mesh - to help with how light interacts with the mesh.
         terrainMesh.normals = GenerateNormals(allVertices, terrainMesh.triangles);
 
+        //
         Vector2[] allUV = GenerateUVs();
-
         terrainMesh.uv = allUV;
 
+
+        // Apply the terrainMesh mesh to the filter of the gameObject holding the mesh.
         filter.mesh = terrainMesh;
 
         meshHolder.transform.position = Vector3.zero;
+    }
+
+    /// <summary>
+    /// Generates a texture for the terrain. Note that the texture is generated via Perlin noise, using the same inputs as the terrain generation.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <returns></returns>
+    Texture2D GenerateTexture(int width, int height, float scale)
+    {
+        Texture2D newTexture = new Texture2D(width, height);
+
+        for(int xCount = 0; xCount < width; xCount++)
+        {
+            for (int zCount = 0; zCount < height; zCount++)
+            {
+                float xPerlinCoord = (float)xCount / width;
+                float zPerlinCoord = (float)zCount / width;
+
+                float colourNoise = Mathf.PerlinNoise(xPerlinCoord * PerlinScale + OffsetX, zPerlinCoord * PerlinScale + OffsetZ);
+
+                newTexture.SetPixel(xCount, zCount, new Color(colourNoise, colourNoise, colourNoise));
+            }
+        }
+
+        newTexture.Apply();
+        return newTexture;
     }
 }
