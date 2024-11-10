@@ -4,65 +4,20 @@ using System.ComponentModel;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class TerrainGenerator : MonoBehaviour
+public class TerrainObject : MonoBehaviour
 {
-    /// <summary>
-    /// The length of how many vertices in the X direction.
-    /// </summary>
-    [field: SerializeField, Header("Grid Layout"), Range(1, 200)] public int GridXLength
-    { get; private set; } = 50;
+    public TerrainInformation Information
+    { get; set; }
 
-    /// <summary>
-    /// The length of how many vertices in the Z direction.
-    /// </summary>
-    [field: SerializeField, Range(1, 200)] public int GridZLength
-    { get; private set; } = 50;
-
-    /// <summary>
-    /// GridSpacing determines the distance between the vertices - essentially the resolution of the grid.
-    /// </summary>
-    [field: SerializeField, Range(0.1f, 200)] public float GridSpacing
-    { get; private set; } = 1.1f;
-
-    /// <summary>
-    /// PerlinScale changes the detail or resolution of the perlin noise being used in application to the height of the terrain.
-    /// </summary>
-    [field: SerializeField, Range(0.1f, 200)] public float PerlinScale
-    { get; private set; } = 1.0f;
-    [field: SerializeField] public float OffsetX
-    { get; private set; } = 0.0f;
-    [field: SerializeField] public float OffsetZ
-    { get; private set; } = 0.0f;
-
-    /// <summary>
-    /// Real height range pre-smoothing.
-    /// </summary>
-    [field: SerializeField, Range(-1000.0f, 1000.0f)] public float GridYHeightRange
-    { get; private set; } = 1.0f;
-
-    /// <summary>
-    /// Multiplier tied to the height range.
-    /// </summary>
-    [field: SerializeField, Range(0.0f, 1.0f)] public float GridYHeightMultiplier
-    { get; private set; } = 1.0f;
-
-    [field: SerializeField] public Color TerrainColourLow
-    { get; private set; } = Color.green;
-
-    [field: SerializeField] public Color TerrainColourHigh
-    { get; private set; } = Color.white;
-
-    [field: SerializeField] public float HeightColorChange
-    { get; private set; } = 100.0f;
-
-    [field: SerializeField] public bool EnableSmoothing
-    { get; private set; } = true;
+    public string TerrainName
+    { get; set; }
 
     // Start is called before the first frame update
     void Start()
     {
-        GenerateTerrain();
+        GenerateTerrain(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.GridZLength, Information.PerlinScale, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
         StartCoroutine(UpdateMeshOnInputChange());
     }
 
@@ -72,7 +27,7 @@ public class TerrainGenerator : MonoBehaviour
         
     }
 
-    public Vector3[,] GenerateVertices(int xLength, int zLength, float scale)
+    public Vector3[,] GenerateVertices(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float scale)
     {
         int xVerticeCount = xLength + 1;
         int zVerticeCount = zLength + 1;
@@ -83,19 +38,19 @@ public class TerrainGenerator : MonoBehaviour
         {
             for (int zCount = 0; zCount < zVerticeCount; zCount++)
             {
-                float xCoord = xCount * GridSpacing;
-                float zCoord = zCount * GridSpacing;
+                float xCoord = xCount * gridSpacing;
+                float zCoord = zCount * gridSpacing;
 
                 float xPerlinCoord = (float)xCount / xVerticeCount;
                 float zPerlinCoord = (float)zCount / zVerticeCount;
 
-                float yCoord = Mathf.PerlinNoise(xPerlinCoord * scale + OffsetX, zPerlinCoord * scale + OffsetZ) * GridYHeightRange;
+                float yCoord = Mathf.PerlinNoise(xPerlinCoord * scale + offsetX, zPerlinCoord * scale + offsetZ) * gridYHeightRange;
 
-                newVertices[xCount, zCount] = new Vector3(xCoord, yCoord * GridYHeightMultiplier, zCoord);
+                newVertices[xCount, zCount] = new Vector3(xCoord, yCoord * gridYHeightMultiplier, zCoord);
             }
         }
 
-        if (EnableSmoothing)
+        if (Information.EnableSmoothing)
         {
             newVertices = AverageVertexHeights(newVertices);
         }
@@ -326,60 +281,60 @@ public class TerrainGenerator : MonoBehaviour
         
         while (true)
         {
-            Old_GridXLength = GridXLength;
-            Old_GridZLength = GridZLength;
-            Old_GridSpacing = GridSpacing;
-            Old_GridYHeightRange = GridYHeightRange;
-            Old_TerrainColourLow = TerrainColourLow;
-            Old_TerrainColourHigh = TerrainColourHigh;
-            Old_HeightColorChange = HeightColorChange;
-            Old_GridYHeightMultiplier = GridYHeightMultiplier;
-            Old_EnableSmoothing = EnableSmoothing;
-            Old_PerlinScale = PerlinScale;
-            Old_OffsetX = OffsetX;
-            Old_OffsetZ = OffsetZ;
+            Old_GridXLength = Information.GridXLength;
+            Old_GridZLength = Information.GridZLength;
+            Old_GridSpacing = Information.GridSpacing;
+            Old_GridYHeightRange = Information.GridYHeightRange;
+            Old_TerrainColourLow = Information.TerrainColourLow;
+            Old_TerrainColourHigh = Information.TerrainColourHigh;
+            Old_HeightColorChange = Information.HeightColorChange;
+            Old_GridYHeightMultiplier = Information.GridYHeightMultiplier;
+            Old_EnableSmoothing = Information.EnableSmoothing;
+            Old_PerlinScale = Information.PerlinScale;
+            Old_OffsetX = Information.OffsetX;
+            Old_OffsetZ = Information.OffsetZ;
 
             yield return new WaitForSeconds(timeTillNextCheck);
 
-            bool areValuesSame = Old_GridXLength == GridXLength
-                                    && Old_GridZLength == GridZLength
-                                    && Old_GridSpacing == GridSpacing
-                                    && Old_GridYHeightRange == GridYHeightRange
-                                    && Old_TerrainColourLow == TerrainColourLow
-                                    && Old_TerrainColourHigh == TerrainColourHigh
-                                    && Old_HeightColorChange == HeightColorChange
-                                    && Old_GridYHeightMultiplier == GridYHeightMultiplier
-                                    && Old_EnableSmoothing == EnableSmoothing
-                                    && Old_PerlinScale == PerlinScale
-                                    && Old_OffsetX == OffsetX
-                                    && Old_OffsetZ == OffsetZ;
+            bool areValuesSame = Old_GridXLength == Information.GridXLength
+                                    && Old_GridZLength == Information.GridZLength
+                                    && Old_GridSpacing == Information.GridSpacing
+                                    && Old_GridYHeightRange == Information.GridYHeightRange
+                                    && Old_TerrainColourLow == Information.TerrainColourLow
+                                    && Old_TerrainColourHigh == Information.TerrainColourHigh
+                                    && Old_HeightColorChange == Information.HeightColorChange
+                                    && Old_GridYHeightMultiplier == Information.GridYHeightMultiplier
+                                    && Old_EnableSmoothing == Information.EnableSmoothing
+                                    && Old_PerlinScale == Information.PerlinScale
+                                    && Old_OffsetX == Information.OffsetX
+                                    && Old_OffsetZ == Information.OffsetZ;
 
             if (areValuesSame)
             {
                 continue;
             }
 
-            GenerateTerrain();
+            GenerateTerrain(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.GridZLength, Information.PerlinScale, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
         }
     }
 
-    void GenerateTerrain()
+    void GenerateTerrain(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float perlinScale, Color lowTerrainColour, Color hightTerrainColour, float heightColorChange)
     {
-        Vector3[,] newVertices = GenerateVertices(GridXLength, GridZLength, PerlinScale);
+        Vector3[,] newVertices = GenerateVertices(xLength, zLength, gridSpacing, gridYHeightRange, gridYHeightMultiplier, offsetX, offsetZ, perlinScale);
         int width = newVertices.GetLength(0);
         int length = newVertices.GetLength(1);
 
-        if (GameObject.Find("meshHolder") != null)
+        if (GameObject.Find(TerrainName))
         {
-            Destroy(GameObject.Find("meshHolder"));
+            Destroy(GameObject.Find(TerrainName));
         }
 
         // Generate a new gameObject with mesh components.
-        GameObject meshHolder = new GameObject("meshHolder");
+        GameObject meshHolder = new GameObject(TerrainName);
         MeshRenderer renderer = meshHolder.AddComponent<MeshRenderer>();
 
         //renderer.material.mainTexture = GenerateTexture(width, length, PerlinScale, TerrainColourLow, TerrainColourHigh);
-        renderer.material.mainTexture = GenerateTexture(newVertices, TerrainColourLow, TerrainColourHigh, HeightColorChange);
+        renderer.material.mainTexture = GenerateTexture(newVertices, lowTerrainColour, hightTerrainColour, heightColorChange);
 
         MeshFilter filter = meshHolder.AddComponent<MeshFilter>();
 
@@ -424,7 +379,7 @@ public class TerrainGenerator : MonoBehaviour
                 float xPerlinCoord = (float)xCount / width;
                 float zPerlinCoord = (float)zCount / length;
 
-                float colourNoise = Mathf.PerlinNoise(xPerlinCoord * scale + OffsetX, zPerlinCoord * scale + OffsetZ);
+                float colourNoise = Mathf.PerlinNoise(xPerlinCoord * scale + Information.OffsetX, zPerlinCoord * scale + Information.OffsetZ);
 
                 float r = Mathf.Lerp(lowColor.r, highColor.r, colourNoise);
                 float g = Mathf.Lerp(lowColor.g, highColor.g, colourNoise);
