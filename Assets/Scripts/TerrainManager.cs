@@ -23,14 +23,22 @@ public class TerrainManager : MonoBehaviour
     void Start()
     {
         GenerateNewTerrainList(TerrainRenderDistance);
-
-        // CreateSpiralLoop(TerrainRenderDistance, out Vector3[] terrainPositions, out float[] perlinX, out float[] perlinZ);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            foreach (var terrain in TerrainsList)
+            {
+                Destroy(terrain.gameObject);
+            }
 
+            TerrainsList.Clear();
+
+            GenerateNewTerrainList(TerrainRenderDistance);
+        }
     }
 
     /// <summary>
@@ -68,9 +76,6 @@ public class TerrainManager : MonoBehaviour
                 GlobalTerrainInformation.EnableSmoothing,
                 GlobalTerrainInformation.Position + terrainPositions[i]
                 );
-
-
-            // Need to modify the information passed into the currentTerrainInformation TerrainInformation variable to reflect the perlin offsets, perlin scale, spacing and gridX and gridZ the object will need to maintain correct positioning and terrain continuation.
 
             // Pass the currentTerrainInformation, which should be a modified version of global data, to the terrainObject being generated.
             terrainObject.Information = currentTerrainInformation;
@@ -133,8 +138,12 @@ public class TerrainManager : MonoBehaviour
                             positionalOffsets[completedTerrains] = new Vector3(xCount * GlobalTerrainInformation.GridXLength, 0, zCount * GlobalTerrainInformation.GridZLength) * GlobalTerrainInformation.GridSpacing;
 
                             // Need to calculate the Perlin noise offset to apply here.
-                            perlinXOffset[completedTerrains] = zCount;
-                            perlinZOffset[completedTerrains] = xCount;
+                            perlinXOffset[completedTerrains] = (xCount * GlobalTerrainInformation.GridXLength / GlobalTerrainInformation.GridSpacing);
+                            perlinZOffset[completedTerrains] = (zCount * GlobalTerrainInformation.GridZLength / GlobalTerrainInformation.GridSpacing);
+
+                            Debug.Log($"Perlin X Offset for Terrain {completedTerrains}: {perlinXOffset[completedTerrains]}");
+                            Debug.Log($"Perlin Z Offset for Terrain {completedTerrains}: {perlinZOffset[completedTerrains]}");
+
 
                             completedTerrains++;
                         }
