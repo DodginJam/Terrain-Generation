@@ -297,7 +297,7 @@ public class TerrainObject : MonoBehaviour
     /// <returns></returns>
     IEnumerator UpdateMeshOnInputChange()
     {
-        float timeTillNextCheck = Time.deltaTime;
+        float timeTillNextCheck = 0.01f;
 
         int Old_GridXLength;
         int Old_GridZLength;
