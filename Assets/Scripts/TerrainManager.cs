@@ -24,7 +24,7 @@ public class TerrainManager : MonoBehaviour
     {
         GenerateNewTerrainList(TerrainRenderDistance);
 
-        CreateSpiralLoop(TerrainRenderDistance, out Vector3[] terrainPositions, out float[] perlinX, out float[] perlinZ);
+        // CreateSpiralLoop(TerrainRenderDistance, out Vector3[] terrainPositions, out float[] perlinX, out float[] perlinZ);
     }
 
     // Update is called once per frame
@@ -42,6 +42,8 @@ public class TerrainManager : MonoBehaviour
         // Calculate the number of terrain meshes to generate based on the render distance. Total Blocks = ((2 * renderdistance) + 1)POW2
         int numberOfTerrains = (int)Mathf.Pow((terrainRenderDistance * 2) + 1, 2);
 
+        GeneratePositionalOffsets(terrainRenderDistance, out Vector3[] terrainPositions, out float[] perlinX, out float[] perlinZ);
+
         for (int i = 0; i < numberOfTerrains; i++)
         {
             string terrainName = $"Terrain{i}";
@@ -56,15 +58,15 @@ public class TerrainManager : MonoBehaviour
                 GlobalTerrainInformation.GridZLength, 
                 GlobalTerrainInformation.GridSpacing, 
                 GlobalTerrainInformation.PerlinScale,
-                GlobalTerrainInformation.OffsetX,
-                GlobalTerrainInformation.OffsetZ,
+                GlobalTerrainInformation.OffsetX + perlinX[i],
+                GlobalTerrainInformation.OffsetZ + perlinZ[i],
                 GlobalTerrainInformation.GridYHeightRange,
                 GlobalTerrainInformation.GridYHeightMultiplier,
                 GlobalTerrainInformation.TerrainColourLow,
                 GlobalTerrainInformation.TerrainColourHigh,
                 GlobalTerrainInformation.HeightColorChange,
                 GlobalTerrainInformation.EnableSmoothing,
-                GlobalTerrainInformation.Position
+                GlobalTerrainInformation.Position + terrainPositions[i]
                 );
 
 
@@ -77,24 +79,30 @@ public class TerrainManager : MonoBehaviour
 
             TerrainsList.Add(currentTerrain);
 
-            currentTerrain.transform.position = new Vector3(0, 0, terrainObject.Information.GridXLength) * (i + 1) * terrainObject.Information.GridSpacing;
+            // currentTerrain.transform.position = new Vector3(0, 0, terrainObject.Information.GridXLength) * (i + 1) * terrainObject.Information.GridSpacing;
         }
     }
 
     /// <summary>
-    /// Create a set of Vector3 coordinates and perlin offsets based on the position of the Terrain in the spiral around the centre.
+    /// Create a set of Vector3 coordinates and perlin offsets based on the position of the Terrain around the centre.
     /// </summary>
-    /// <param name="distanceFromCentre"></param>
-    void CreateSpiralLoop(int maxDistanceFromCentre, out Vector3[] positionalOffsets, out float[] perlinXOffset, out float[] perlinZOffset)
+    /// <param name="maxDistanceFromCentre"></param>
+    /// <param name="positionalOffsets"></param>
+    /// <param name="perlinXOffset"></param>
+    /// <param name="perlinZOffset"></param>
+    void GeneratePositionalOffsets(int maxDistanceFromCentre, out Vector3[] positionalOffsets, out float[] perlinXOffset, out float[] perlinZOffset)
     {
         int totalTerrainsToRender = (int)Mathf.Pow((maxDistanceFromCentre * 2) + 1, 2);
 
+        // The arrays to be sent out of method.
         positionalOffsets = new Vector3[totalTerrainsToRender];
         perlinXOffset = new float[totalTerrainsToRender];
         perlinZOffset = new float[totalTerrainsToRender];
 
-        // The centre terrain needs no positional offset or Perlin offset.
-        Debug.Log($"Center Terrain: 1");
+        // The first centre position is always going to be centered with northing additonal to it's values.
+        positionalOffsets[0] = new Vector3(0, 0, 0);
+        perlinXOffset[0] = GlobalTerrainInformation.OffsetX;
+        perlinZOffset[0] = GlobalTerrainInformation.OffsetZ;
 
         int completedTerrains = 1; 
 
@@ -104,12 +112,33 @@ public class TerrainManager : MonoBehaviour
             {
                 int numberOfBlocksInCurrentLayer = currentLayer * 8;
 
-                for (int terrainNumber = 0; terrainNumber < numberOfBlocksInCurrentLayer; terrainNumber++)
+                // Treating the layer like a whole grid, and then performing boundry checks within the next for loop to ensure only the edge of the grid, the actual terrain of the layer, get's a positional and perlin offset generated.
+                int xLength = 2 * currentLayer + 1;
+                int zLength = 2 * currentLayer + 1;
+
+                int lowerXBoundry = -(xLength / 2);
+                int higherXBoundry = xLength / 2;
+
+                int lowerZBoundry = -(zLength / 2);
+                int higherZBoundry = zLength / 2;
+
+
+                for (int xCount = lowerXBoundry; xCount <= higherXBoundry; xCount++)
                 {
+                    for (int zCount = lowerZBoundry; zCount <= higherZBoundry; zCount++)
+                    {
+                        if (xCount == lowerXBoundry || zCount == lowerZBoundry || xCount == higherXBoundry || zCount == higherZBoundry)
+                        {
+                            // Apply the positional offset of the terrain objects.
+                            positionalOffsets[completedTerrains] = new Vector3(xCount * GlobalTerrainInformation.GridXLength, 0, zCount * GlobalTerrainInformation.GridZLength) * GlobalTerrainInformation.GridSpacing;
 
+                            // Need to calculate the Perlin noise offset to apply here.
+                            perlinXOffset[completedTerrains] = zCount;
+                            perlinZOffset[completedTerrains] = xCount;
 
-
-                    completedTerrains++;
+                            completedTerrains++;
+                        }
+                    }
                 }
 
                 Debug.Log($"Layer {currentLayer}, Terrains in Layer: {numberOfBlocksInCurrentLayer}, Terrains Completed: {completedTerrains}");

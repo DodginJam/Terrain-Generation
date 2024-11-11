@@ -37,11 +37,7 @@ public class TerrainObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Apply the terrainMesh mesh to the filter.
-        TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale);
-        TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
-        transform.position = Information.Position;
-
+        UpdateTerrain();
         StartCoroutine(UpdateMeshOnInputChange());
     }
 
@@ -49,6 +45,17 @@ public class TerrainObject : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void UpdateTerrain()
+    {
+        // Apply the terrainMesh mesh to the filter.
+        TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale);
+        TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
+        transform.position = Information.Position;
+
+        TerrainMeshFilter.mesh.RecalculateBounds();
+        TerrainMeshFilter.mesh.RecalculateNormals();
     }
 
     public Vector3[,] GenerateVertices(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float scale)
@@ -180,6 +187,8 @@ public class TerrainObject : MonoBehaviour
     /// Return an array of integers for drawing triangles for the mesh. The integers are the index positions of the vertices of the mesh when in a single array.
     /// </summary>
     /// <param name="verticesArray"></param>
+    /// <param name="width"></param>
+    /// <param name="length"></param>
     /// <returns></returns>
     public int[] ReturnTriangles(Vector3[] verticesArray, int width, int length)
     {
@@ -341,9 +350,7 @@ public class TerrainObject : MonoBehaviour
                 continue;
             }
 
-            TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale);
-            TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
-            transform.position = Information.Position;
+            UpdateTerrain();
         }
     }
 
