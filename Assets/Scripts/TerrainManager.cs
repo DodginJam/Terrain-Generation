@@ -67,8 +67,9 @@ public class TerrainManager : MonoBehaviour
 
             // Need to modify the information passed into the currentTerrainInformation TerrainInformation variable to reflect the perlin offsets, perlin scale, spacing and gridX and gridZ the object will need to maintain correct positioning and terrain continuation.
 
-            // Pass the currentTerrainInformation to the terrainObject being generated.
+            // Pass the currentTerrainInformation, which should be a modified version of global data, to the terrainObject being generated.
             terrainObject.Information = currentTerrainInformation;
+
             terrainObject.TerrainName = terrainName;
 
             TerrainsList.Add(currentTerrain);
