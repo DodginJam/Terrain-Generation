@@ -31,6 +31,10 @@ public class TerrainManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Generate a new list of TerrainObjects - assign them global information modifyed for their local positions in the world.
+    /// </summary>
+    /// <param name="terrainRenderDistance"></param>
     void GenerateNewTerrainList(int terrainRenderDistance)
     {
         // Calculate the number of terrain meshes to generate based on the render distance. Total Blocks = ((2 * renderdistance) + 1)POW2
@@ -40,45 +44,36 @@ public class TerrainManager : MonoBehaviour
         {
             string terrainName = $"Terrain{i}";
 
+            // Generate a new gameobject in the world for containing TerrainObject script and add the script.
             GameObject currentTerrain = new GameObject(terrainName);
             TerrainObject terrainObject = currentTerrain.AddComponent<TerrainObject>();
-            terrainObject.Information = GlobalTerrainInformation;
+
+            // Create a new TerrainInformation and pass the global variables to it.
+            TerrainInformation currentTerrainInformation = new TerrainInformation(
+                GlobalTerrainInformation.GridXLength, 
+                GlobalTerrainInformation.GridZLength, 
+                GlobalTerrainInformation.GridSpacing, 
+                GlobalTerrainInformation.PerlinScale,
+                GlobalTerrainInformation.OffsetX,
+                GlobalTerrainInformation.OffsetZ,
+                GlobalTerrainInformation.GridYHeightRange,
+                GlobalTerrainInformation.GridYHeightMultiplier,
+                GlobalTerrainInformation.TerrainColourLow,
+                GlobalTerrainInformation.TerrainColourHigh,
+                GlobalTerrainInformation.HeightColorChange,
+                GlobalTerrainInformation.EnableSmoothing
+                );
+
+
+            // Need to modify the information passed into the currentTerrainInformation TerrainInformation variable to reflect the perlin offsets, perlin scale, spacing and gridX and gridZ the object will need to maintain correct positioning and terrain continuation.
+
+            // Pass the currentTerrainInformation to the terrainObject being generated.
+            terrainObject.Information = currentTerrainInformation;
             terrainObject.TerrainName = terrainName;
 
             TerrainsList.Add(currentTerrain);
-        }
 
-    }
-
-    public void DisplayTerrain(int terrainRenderDistance)
-    {
-        // Clear out any exisiting terrain from the array and scene.
-        foreach (var terrain in TerrainsList)
-        {
-            Destroy(terrain);
-        }
-        TerrainsList.Clear();
-
-        // Calculate the number of terrain meshes to generate based on the render distance. Total Blocks = ((2 * renderdistance) + 1)POW2
-        int numberOfTerrains = (int)Mathf.Pow((terrainRenderDistance * 2) + 1, 2);
-
-        for (int i = 0; i < numberOfTerrains; i++)
-        {
-            string terrainName = $"Terrain{i}";
-
-            // Create new object to attach for terrain to be generated on.
-            GameObject currentTerrain = new GameObject(terrainName);
-
-            currentTerrain.AddComponent<TerrainObject>();
-            TerrainObject currentTerrainObject = currentTerrain.GetComponent<TerrainObject>();
-
-            currentTerrainObject.Information = GlobalTerrainInformation;
-            currentTerrainObject.TerrainName = terrainName;
-
-            TerrainsList.Add(currentTerrain);
-
-            // Set position in world.
-            currentTerrainObject.transform.position = new Vector3(0, 0, 0);
+            currentTerrain.transform.position = new Vector3(0, 0, terrainObject.Information.GridXLength) * (i + 1);
         }
     }
 }
