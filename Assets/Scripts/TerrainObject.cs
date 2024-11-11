@@ -8,16 +8,38 @@ using UnityEngine.UIElements;
 
 public class TerrainObject : MonoBehaviour
 {
+    [field: SerializeField]
     public TerrainInformation Information
     { get; set; }
 
+    [field: SerializeField]
     public string TerrainName
     { get; set; }
+
+    [field: SerializeField]
+    public MeshRenderer TerrainRenderer
+    { get; set; }
+
+    [field: SerializeField]
+    public MeshFilter TerrainMeshFilter
+    { get; set; }
+
+    public Vector3[,] Vertices2DArray
+    {get; private set; }
+
+
+    private void Awake()
+    {
+        TerrainRenderer = gameObject.AddComponent<MeshRenderer>();
+        TerrainMeshFilter = gameObject.AddComponent<MeshFilter>();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        GenerateTerrain(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.GridZLength, Information.PerlinScale, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
+        // Apply the terrainMesh mesh to the filter.
+        TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale);
+        TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
         StartCoroutine(UpdateMeshOnInputChange());
     }
 
@@ -264,7 +286,7 @@ public class TerrainObject : MonoBehaviour
     /// <returns></returns>
     IEnumerator UpdateMeshOnInputChange()
     {
-        float timeTillNextCheck = 0.01f;
+        float timeTillNextCheck = Time.deltaTime;
 
         int Old_GridXLength;
         int Old_GridZLength;
@@ -314,29 +336,19 @@ public class TerrainObject : MonoBehaviour
                 continue;
             }
 
-            GenerateTerrain(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.GridZLength, Information.PerlinScale, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
+            TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale);
+            TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
         }
     }
 
-    void GenerateTerrain(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float perlinScale, Color lowTerrainColour, Color hightTerrainColour, float heightColorChange)
+    Mesh GenerateMesh(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float perlinScale)
     {
         Vector3[,] newVertices = GenerateVertices(xLength, zLength, gridSpacing, gridYHeightRange, gridYHeightMultiplier, offsetX, offsetZ, perlinScale);
+
+        Vertices2DArray = newVertices;
+
         int width = newVertices.GetLength(0);
         int length = newVertices.GetLength(1);
-
-        if (GameObject.Find(TerrainName))
-        {
-            Destroy(GameObject.Find(TerrainName));
-        }
-
-        // Generate a new gameObject with mesh components.
-        GameObject meshHolder = new GameObject(TerrainName);
-        MeshRenderer renderer = meshHolder.AddComponent<MeshRenderer>();
-
-        //renderer.material.mainTexture = GenerateTexture(width, length, PerlinScale, TerrainColourLow, TerrainColourHigh);
-        renderer.material.mainTexture = GenerateTexture(newVertices, lowTerrainColour, hightTerrainColour, heightColorChange);
-
-        MeshFilter filter = meshHolder.AddComponent<MeshFilter>();
 
         // Mesh to be added to the meshHolder mesh filter.
         Mesh terrainMesh = new Mesh();
@@ -351,15 +363,11 @@ public class TerrainObject : MonoBehaviour
         // Grab normals for mesh - to help with how light interacts with the mesh.
         terrainMesh.normals = GenerateNormals(allVertices, terrainMesh.triangles);
 
-        //
+        // Gemerate UVs.
         Vector2[] allUV = GenerateUVs(newVertices);
         terrainMesh.uv = allUV;
 
-
-        // Apply the terrainMesh mesh to the filter of the gameObject holding the mesh.
-        filter.mesh = terrainMesh;
-
-        meshHolder.transform.position = Vector3.zero;
+        return terrainMesh;
     }
 
     /// <summary>
