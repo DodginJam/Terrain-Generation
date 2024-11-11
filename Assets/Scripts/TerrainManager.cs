@@ -23,6 +23,8 @@ public class TerrainManager : MonoBehaviour
     void Start()
     {
         GenerateNewTerrainList(TerrainRenderDistance);
+
+        CreateSpiralLoop(TerrainRenderDistance, out Vector3[] terrainPositions, out float[] perlinX, out float[] perlinZ);
     }
 
     // Update is called once per frame
@@ -61,7 +63,8 @@ public class TerrainManager : MonoBehaviour
                 GlobalTerrainInformation.TerrainColourLow,
                 GlobalTerrainInformation.TerrainColourHigh,
                 GlobalTerrainInformation.HeightColorChange,
-                GlobalTerrainInformation.EnableSmoothing
+                GlobalTerrainInformation.EnableSmoothing,
+                GlobalTerrainInformation.Position
                 );
 
 
@@ -74,7 +77,45 @@ public class TerrainManager : MonoBehaviour
 
             TerrainsList.Add(currentTerrain);
 
-            currentTerrain.transform.position = new Vector3(0, 0, terrainObject.Information.GridXLength) * (i + 1);
+            currentTerrain.transform.position = new Vector3(0, 0, terrainObject.Information.GridXLength) * (i + 1) * terrainObject.Information.GridSpacing;
+        }
+    }
+
+    /// <summary>
+    /// Create a set of Vector3 coordinates and perlin offsets based on the position of the Terrain in the spiral around the centre.
+    /// </summary>
+    /// <param name="distanceFromCentre"></param>
+    void CreateSpiralLoop(int maxDistanceFromCentre, out Vector3[] positionalOffsets, out float[] perlinXOffset, out float[] perlinZOffset)
+    {
+        int totalTerrainsToRender = (int)Mathf.Pow((maxDistanceFromCentre * 2) + 1, 2);
+
+        positionalOffsets = new Vector3[totalTerrainsToRender];
+        perlinXOffset = new float[totalTerrainsToRender];
+        perlinZOffset = new float[totalTerrainsToRender];
+
+        // The centre terrain needs no positional offset or Perlin offset.
+        Debug.Log($"Center Terrain: 1");
+
+        int completedTerrains = 1; 
+
+        if (maxDistanceFromCentre > 0)
+        {
+            for (int currentLayer = 1; currentLayer <= maxDistanceFromCentre; currentLayer++)
+            {
+                int numberOfBlocksInCurrentLayer = currentLayer * 8;
+
+                for (int terrainNumber = 0; terrainNumber < numberOfBlocksInCurrentLayer; terrainNumber++)
+                {
+
+
+
+                    completedTerrains++;
+                }
+
+                Debug.Log($"Layer {currentLayer}, Terrains in Layer: {numberOfBlocksInCurrentLayer}, Terrains Completed: {completedTerrains}");
+            }
+
+            Debug.Log($"Total Terrains Rendered: {completedTerrains}");
         }
     }
 }

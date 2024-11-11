@@ -40,6 +40,8 @@ public class TerrainObject : MonoBehaviour
         // Apply the terrainMesh mesh to the filter.
         TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale);
         TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
+        transform.position = Information.Position;
+
         StartCoroutine(UpdateMeshOnInputChange());
     }
 
@@ -300,6 +302,7 @@ public class TerrainObject : MonoBehaviour
         float Old_PerlinScale;
         float Old_OffsetX;
         float Old_OffsetZ;
+        Vector3 Old_Position;
         
         while (true)
         {
@@ -315,6 +318,7 @@ public class TerrainObject : MonoBehaviour
             Old_PerlinScale = Information.PerlinScale;
             Old_OffsetX = Information.OffsetX;
             Old_OffsetZ = Information.OffsetZ;
+            Old_Position = Information.Position;
 
             yield return new WaitForSeconds(timeTillNextCheck);
 
@@ -329,7 +333,8 @@ public class TerrainObject : MonoBehaviour
                                     && Old_EnableSmoothing == Information.EnableSmoothing
                                     && Old_PerlinScale == Information.PerlinScale
                                     && Old_OffsetX == Information.OffsetX
-                                    && Old_OffsetZ == Information.OffsetZ;
+                                    && Old_OffsetZ == Information.OffsetZ
+                                    && Old_Position == Information.Position;
 
             if (areValuesSame)
             {
@@ -338,6 +343,7 @@ public class TerrainObject : MonoBehaviour
 
             TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale);
             TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
+            transform.position = Information.Position;
         }
     }
 
@@ -426,8 +432,6 @@ public class TerrainObject : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log(expectedMaxHeight);
 
         for (int xCount = 0; xCount < width; xCount++)
         {
