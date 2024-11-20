@@ -65,21 +65,33 @@ public class TerrainInformation
     [field: SerializeField]
     public float GridYHeightMultiplier
     { get; private set; }
+    /// <summary>
+    /// The lower color in the singular gradiant applied to the terrain.
+    /// </summary>
     [field: SerializeField]
     public Color TerrainColourLow
     { get; private set; }
+    /// <summary>
+    /// The higher color in the singular gradiant applied to the terrain.
+    /// </summary>
     [field: SerializeField]
     public Color TerrainColourHigh
     { get; private set; }
+    /// <summary>
+    /// The height at which the mid-point of the gradient occurs.
+    /// </summary>
     [field: SerializeField]
     public float HeightColorChange
     { get; private set; }
     /// <summary>
-    /// 
+    /// Allows one pass of smoothing to be applied to the terrain.
     /// </summary>
     [field: SerializeField]
     public bool EnableSmoothing
     { get; private set; }
+    /// <summary>
+    /// The position of the Mesh in the world.
+    /// </summary>
     [field: SerializeField]
     public Vector3 Position
     { get; private set; }
