@@ -158,11 +158,11 @@ MonoBehaviour:
     <PerlinScale>k__BackingField: 5
     <OffsetX>k__BackingField: 0
     <OffsetZ>k__BackingField: 0
-    <GridYHeightRange>k__BackingField: 50
+    <GridYHeightRange>k__BackingField: 100
     <GridYHeightMultiplier>k__BackingField: 1
     <TerrainColourLow>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
     <TerrainColourHigh>k__BackingField: {r: 1, g: 1, b: 1, a: 0}
-    <HeightColorChange>k__BackingField: 35
+    <HeightColorChange>k__BackingField: 80
     <EnableSmoothing>k__BackingField: 0
     <Position>k__BackingField: {x: 0, y: 0, z: 0}
   <TerrainsList>k__BackingField: []

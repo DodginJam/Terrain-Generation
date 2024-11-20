@@ -72,10 +72,12 @@ public class TerrainObject : MonoBehaviour
                 float xCoord = xCount * gridSpacing;
                 float zCoord = zCount * gridSpacing;
 
+                // Getting the Perlin Coord for X and Z by normalising it's value - dividing the current vertices position by the total amounts of vertices in that axis.
                 float xPerlinCoord = (float)xCount / xVerticeCount;
                 float zPerlinCoord = (float)zCount / zVerticeCount;
 
-                float yCoord = Mathf.PerlinNoise(xPerlinCoord * scale + offsetX, zPerlinCoord * scale + offsetZ) * gridYHeightRange;
+                // The perlinNoise coord are multiplied by scale 
+                float yCoord = Mathf.PerlinNoise((xPerlinCoord * scale) + offsetX, (zPerlinCoord * scale) + offsetZ) * gridYHeightRange;
 
                 newVertices[xCount, zCount] = new Vector3(xCoord, yCoord * gridYHeightMultiplier, zCoord);
             }
