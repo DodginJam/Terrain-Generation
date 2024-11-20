@@ -89,6 +89,11 @@ public class TerrainObject : MonoBehaviour
         return newVertices;
     }
 
+    /// <summary>
+    /// Provides and returns 2D array containing Vector3s that have a Y value modified to reflect the average height for each vertices's based upon itself and it's surrounding neighbors.
+    /// </summary>
+    /// <param name="verticesArray"></param>
+    /// <returns></returns>
     public Vector3[,] AverageVertexHeights(Vector3[,] verticesArray)
     {
         int width = verticesArray.GetLength(0);
@@ -97,7 +102,7 @@ public class TerrainObject : MonoBehaviour
         // To be filled in with the averaged vertex heights for assigning to GridVertices vector3.Y.
         float[,] vertexAverageHeights = new float[width, length];
 
-        // Represent the indexes of all neighbouring adjacent vertices.
+        // Represent the indexes of all neighboring adjacent vertices's.
         int[,] directionalIndexes = new int[,]
         {
             { 0, 0 },
@@ -111,8 +116,8 @@ public class TerrainObject : MonoBehaviour
             { -1, 1 }
         };
 
-        // Floats are added up each vertices by the current Y value, one pre-smoothing and one post-smoothing.
-        // In the end, the average of each height is produced by dividing the total of all height positions by the number of vertices.
+        // Floats are added up each vertices's by the current Y value, one pre-smoothing and one post-smoothing.
+        // In the end, the average of each height is produced by dividing the total of all height positions by the number of vertices's.
         float originalAverageHeightForEveryVertices = 0;
         float newSmoothedAverageHeightForEveryVertices = 0;
 
@@ -121,10 +126,10 @@ public class TerrainObject : MonoBehaviour
         {
             for (int zCount = 0; zCount < length; zCount++)
             {
-                // List to contain all the valid vertices that are to be averaged for current vertices.
+                // List to contain all the valid vertices's that are to be averaged for current vertices's.
                 List<float> validVerticesHeightsToAverage = new List<float>();
 
-                // Add up the pre-Averaged heights for each vertices before it is averaged over all vertices later.
+                // Add up the pre-Averaged heights for each vertices's before it is averaged over all vertices's later.
                 float preAveragedHeight = verticesArray[xCount, zCount].y;
                 originalAverageHeightForEveryVertices += preAveragedHeight;
 
@@ -133,7 +138,7 @@ public class TerrainObject : MonoBehaviour
                 {
                     int[] currentIndexToCheck = { xCount + directionalIndexes[i, 0], zCount + directionalIndexes[i, 1] };
 
-                    // Check if the index being checked from is inside the bounds of the grid of vertices, and skip if it isn't.
+                    // Check if the index being checked from is inside the bounds of the grid of vertices's, and skip if it isn't.
                     if (currentIndexToCheck[0] >= 0 && currentIndexToCheck[0] < width && currentIndexToCheck[1] >= 0 && currentIndexToCheck[1] < length)
                     {
                         validVerticesHeightsToAverage.Add(verticesArray[currentIndexToCheck[0], currentIndexToCheck[1]].y);
@@ -142,12 +147,12 @@ public class TerrainObject : MonoBehaviour
 
                 float postAveragedHeight = validVerticesHeightsToAverage.Average();
                 vertexAverageHeights[xCount, zCount] = postAveragedHeight;
-                // Add up the post-Averaged heights for each vertices before it is averaged over all vertices later.
+                // Add up the post-Averaged heights for each vertices's before it is averaged over all vertices's later.
                 newSmoothedAverageHeightForEveryVertices += postAveragedHeight;
             }
         }
 
-        // Here the overall average heights are calculated after all the vertices heights have been added up.
+        // Here the overall average heights are calculated after all the vertices's heights have been added up.
         originalAverageHeightForEveryVertices /= width * length;
         newSmoothedAverageHeightForEveryVertices /= width * length;
 
@@ -166,7 +171,7 @@ public class TerrainObject : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns a single-dimensional array for containing the vertices positions of the terrain mesh. Due to order of generating the 2D vertices, the array contains one x position and all related y positions, followed by the next x position, followed by all related next x, y position, etc.
+    /// Returns a single-dimensional array for containing the vertices's positions of the terrain mesh. Due to order of generating the 2D vertices's, the array contains one x position and all related y positions, followed by the next x position, followed by all related next x, y position, etc.
     /// </summary>
     /// <param name="twoDimensionalVectors"></param>
     /// <returns></returns>
@@ -184,7 +189,7 @@ public class TerrainObject : MonoBehaviour
     }
 
     /// <summary>
-    /// Return an array of integers for drawing triangles for the mesh. The integers are the index positions of the vertices of the mesh when in a single array.
+    /// Return an array of integers for drawing triangles for the mesh. The integers are the index positions of the vertices's of the mesh when in a single array.
     /// </summary>
     /// <param name="verticesArray"></param>
     /// <param name="width"></param>
@@ -196,7 +201,7 @@ public class TerrainObject : MonoBehaviour
 
         for (int i = 0; i < verticesArray.Length - length; i++)
         {
-            // If the current index is an index in the last row, don't generate triangles as there are no vertices further in the array to connect to for creating a triangle.
+            // If the current index is an index in the last row, don't generate triangles as there are no vertices's further in the array to connect to for creating a triangle.
             if ((i + 1) % length == 0)
             {
                 continue;
@@ -224,7 +229,7 @@ public class TerrainObject : MonoBehaviour
     }
 
     /// <summary>
-    /// Generates normals for each vertices of a triangle within the mesh. Returns a respective array of normalised Vector3's for each vertices of the triangles.
+    /// Generates normals for each vertices's of a triangle within the mesh. Returns a respective array of normalized Vector3's for each vertices's of the triangles.
     /// </summary>
     /// <param name="vertices"></param>
     /// <param name="triangles"></param>
@@ -234,7 +239,7 @@ public class TerrainObject : MonoBehaviour
         // Create an array to hold the normals for each vertex
         Vector3[] normalsValuesForVertices = new Vector3[vertices.Length];
 
-        // Calculate normals for each triangle, looping in increments of 3 for each grouping of triangle vertices. 
+        // Calculate normals for each triangle, looping in increments of 3 for each grouping of triangle vertices's. 
         for (int i = 0; i < trianglesVerticesIndexes.Length; i += 3)
         {
             // Grab the indexes of the triangles vertices.
@@ -242,7 +247,7 @@ public class TerrainObject : MonoBehaviour
             int triangleIndex1 = trianglesVerticesIndexes[i + 1];
             int triangleIndex2 = trianglesVerticesIndexes[i + 2];
 
-            // Use these indexes to grab the actual vertices for a triangle.
+            // Use these indexes to grab the actual vertices's for a triangle.
             Vector3 vertex0 = vertices[triangleIndex0];
             Vector3 vertex1 = vertices[triangleIndex1];
             Vector3 vertex2 = vertices[triangleIndex2];
@@ -253,8 +258,8 @@ public class TerrainObject : MonoBehaviour
             Vector3 normal = Vector3.Cross(lengthOne, lengthTwo).normalized;
 
             // Add the normal to each vertex's normal.
-            // The normals values are added with past / future normal values calulated by adjorning triangles. This helps produces a smoothed out edge for the lighting,
-            // as each vertices takes into account the cross products of all edges it provides to triangles, before being normalised.
+            // The normals values are added with past / future normal values calculated by adjoining triangles. This helps produces a smoothed out edge for the lighting,
+            // as each vertices takes into account the cross products of all edges it provides to triangles, before being normalized.
             normalsValuesForVertices[triangleIndex0] += normal;
             normalsValuesForVertices[triangleIndex1] += normal;
             normalsValuesForVertices[triangleIndex2] += normal;
@@ -270,8 +275,8 @@ public class TerrainObject : MonoBehaviour
     }
 
     /// <summary>
-    /// The UV value is a normalised value that states where along the mesh, at a particular vertices point, should the texture project too for a certain indices.
-    /// The use of normalised values ensures that the textures is project in a 1:1 manner across the mesh surface
+    /// The UV value is a normalized value that states where along the mesh, at a particular vertices's point, should the texture project too for a certain indices.
+    /// The use of normalized values ensures that the textures is project in a 1:1 manner across the mesh surface
     /// </summary>
     /// <returns></returns>
     Vector2[] GenerateUVs(Vector3[,] vertices)
@@ -370,13 +375,13 @@ public class TerrainObject : MonoBehaviour
         Vector3[] allVertices = TwoDimensionalVectorsToOne(newVertices);
         terrainMesh.vertices = allVertices;
 
-        // Grab vertices and make triangles.
+        // Grab vertices's and make triangles.
         terrainMesh.triangles = ReturnTriangles(allVertices, width, length);
 
         // Grab normals for mesh - to help with how light interacts with the mesh.
         terrainMesh.normals = GenerateNormals(allVertices, terrainMesh.triangles);
 
-        // Gemerate UVs.
+        // Generate UVs.
         Vector2[] allUV = GenerateUVs(newVertices);
         terrainMesh.uv = allUV;
 

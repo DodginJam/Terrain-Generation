@@ -24,19 +24,19 @@ public class TerrainInformation
     }
 
     /// <summary>
-    /// The length of how many vertices in the X direction.
+    /// The length of how many vertices's in the X direction.
     /// </summary>
     [field: SerializeField]
     public int GridXLength
     { get; private set; }
     /// <summary>
-    /// The length of how many vertices in the Z direction.
+    /// The length of how many vertices's in the Z direction.
     /// </summary>
     [field: SerializeField]
     public int GridZLength
     { get; private set; }
     /// <summary>
-    /// GridSpacing determines the distance between the vertices - essentially the resolution of the grid.
+    /// GridSpacing determines the distance between the vertices's - essentially the resolution of the grid.
     /// </summary>
     [field: SerializeField]
     public float GridSpacing
@@ -74,6 +74,9 @@ public class TerrainInformation
     [field: SerializeField]
     public float HeightColorChange
     { get; private set; }
+    /// <summary>
+    /// 
+    /// </summary>
     [field: SerializeField]
     public bool EnableSmoothing
     { get; private set; }

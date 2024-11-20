@@ -42,7 +42,7 @@ public class TerrainManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Generate a new list of TerrainObjects - assign them global information modifyed for their local positions in the world.
+    /// Generate a new list of TerrainObjects - assign them global information modified for their local positions in the world.
     /// </summary>
     /// <param name="terrainRenderDistance"></param>
     void GenerateNewTerrainList(int terrainRenderDistance)
@@ -104,7 +104,7 @@ public class TerrainManager : MonoBehaviour
         perlinXOffset = new float[totalTerrainsToRender];
         perlinZOffset = new float[totalTerrainsToRender];
 
-        // The first centre position is always going to be centered with northing additonal to it's values.
+        // The first centre position is always going to be centered with northing additional to it's values.
         positionalOffsets[0] = new Vector3(0, 0, 0);
         perlinXOffset[0] = GlobalTerrainInformation.OffsetX;
         perlinZOffset[0] = GlobalTerrainInformation.OffsetZ;
@@ -117,7 +117,7 @@ public class TerrainManager : MonoBehaviour
             {
                 int numberOfBlocksInCurrentLayer = currentLayer * 8;
 
-                // Treating the layer like a whole grid, and then performing boundry checks within the next for loop to ensure only the edge of the grid, the actual terrain of the layer, get's a positional and perlin offset generated.
+                // Treating the layer like a whole grid, and then performing boundary checks within the next for loop to ensure only the edge of the grid, the actual terrain of the layer, get's a positional and perlin offset generated.
                 int xLength = 2 * currentLayer + 1;
                 int zLength = 2 * currentLayer + 1;
 
