@@ -152,8 +152,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <GlobalTerrainInformation>k__BackingField:
-    <GridXLength>k__BackingField: 50
-    <GridZLength>k__BackingField: 50
+    gridXLength: 50
+    gridZLength: 50
     <GridSpacing>k__BackingField: 10
     <PerlinScale>k__BackingField: 5
     <OffsetX>k__BackingField: 0
@@ -166,7 +166,7 @@ MonoBehaviour:
     <EnableSmoothing>k__BackingField: 0
     <Position>k__BackingField: {x: 0, y: 0, z: 0}
   <TerrainsList>k__BackingField: []
-  <TerrainRenderDistance>k__BackingField: 3
+  <TerrainRenderDistance>k__BackingField: 1
 --- !u!4 &105660420
 Transform:
   m_ObjectHideFlags: 0

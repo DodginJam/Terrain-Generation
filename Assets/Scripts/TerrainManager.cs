@@ -16,13 +16,11 @@ public class TerrainManager : MonoBehaviour
     public int TerrainRenderDistance
     { get; private set; } = 1;
 
-    public bool AllowTerrainUpdate
-    { get; private set; } = false;
-
     // Start is called before the first frame update
     void Start()
     {
         GenerateNewTerrainList(TerrainRenderDistance);
+        StartCoroutine(UpdateMeshOnInputChange());
     }
 
     // Update is called once per frame
@@ -58,6 +56,7 @@ public class TerrainManager : MonoBehaviour
 
             // Generate a new gameobject in the world for containing TerrainObject script and add the script.
             GameObject currentTerrain = new GameObject(terrainName);
+
             TerrainObject terrainObject = currentTerrain.AddComponent<TerrainObject>();
 
             // Create a new TerrainInformation and pass the global variables to it.
@@ -115,7 +114,7 @@ public class TerrainManager : MonoBehaviour
         {
             for (int currentLayer = 1; currentLayer <= maxDistanceFromCentre; currentLayer++)
             {
-                int numberOfBlocksInCurrentLayer = currentLayer * 8;
+                //int numberOfBlocksInCurrentLayer = currentLayer * 8;
 
                 // Treating the layer like a whole grid, and then performing boundary checks within the next for loop to ensure only the edge of the grid, the actual terrain of the layer, get's a positional and perlin offset generated.
                 int xLength = 2 * currentLayer + 1;
@@ -141,8 +140,8 @@ public class TerrainManager : MonoBehaviour
                             perlinXOffset[completedTerrains] = (xCount * GlobalTerrainInformation.GridXLength / GlobalTerrainInformation.GridSpacing);
                             perlinZOffset[completedTerrains] = (zCount * GlobalTerrainInformation.GridZLength / GlobalTerrainInformation.GridSpacing);
 
-                            Debug.Log($"Perlin X Offset for Terrain {completedTerrains}: {perlinXOffset[completedTerrains]}");
-                            Debug.Log($"Perlin Z Offset for Terrain {completedTerrains}: {perlinZOffset[completedTerrains]}");
+                            //Debug.Log($"Perlin X Offset for Terrain {completedTerrains}: {perlinXOffset[completedTerrains]}");
+                            //Debug.Log($"Perlin Z Offset for Terrain {completedTerrains}: {perlinZOffset[completedTerrains]}");
 
 
                             completedTerrains++;
@@ -150,10 +149,71 @@ public class TerrainManager : MonoBehaviour
                     }
                 }
 
-                Debug.Log($"Layer {currentLayer}, Terrains in Layer: {numberOfBlocksInCurrentLayer}, Terrains Completed: {completedTerrains}");
+                //Debug.Log($"Layer {currentLayer}, Terrains in Layer: {numberOfBlocksInCurrentLayer}, Terrains Completed: {completedTerrains}");
             }
 
-            Debug.Log($"Total Terrains Rendered: {completedTerrains}");
+            //Debug.Log($"Total Terrains Rendered: {completedTerrains}");
+        }
+    }
+
+    /// <summary>
+    /// For any value changed that impacts the mesh, remove the existing mesh and generate a new mesh.
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator UpdateMeshOnInputChange()
+    {
+        float timeTillNextCheck = 0.01f;
+
+        while (true)
+        {
+            TerrainInformation oldInformation = new TerrainInformation
+                                        (
+                                        GlobalTerrainInformation.GridXLength,
+                                        GlobalTerrainInformation.GridZLength,
+                                        GlobalTerrainInformation.GridSpacing,
+                                        GlobalTerrainInformation.PerlinScale,
+                                        GlobalTerrainInformation.OffsetX,
+                                        GlobalTerrainInformation.OffsetZ,
+                                        GlobalTerrainInformation.GridYHeightRange,
+                                        GlobalTerrainInformation.GridYHeightMultiplier,
+                                        GlobalTerrainInformation.TerrainColourLow,
+                                        GlobalTerrainInformation.TerrainColourHigh,
+                                        GlobalTerrainInformation.HeightColorChange,
+                                        GlobalTerrainInformation.EnableSmoothing,
+                                        GlobalTerrainInformation.Position
+                                        );
+
+            yield return new WaitForSeconds(timeTillNextCheck);
+
+            bool areValuesSame = oldInformation.GridXLength == GlobalTerrainInformation.GridXLength
+                        && oldInformation.GridZLength == GlobalTerrainInformation.GridZLength
+                        && oldInformation.GridSpacing == GlobalTerrainInformation.GridSpacing
+                        && oldInformation.GridYHeightRange == GlobalTerrainInformation.GridYHeightRange
+                        && oldInformation.TerrainColourLow == GlobalTerrainInformation.TerrainColourLow
+                        && oldInformation.TerrainColourHigh == GlobalTerrainInformation.TerrainColourHigh
+                        && oldInformation.HeightColorChange == GlobalTerrainInformation.HeightColorChange
+                        && oldInformation.GridYHeightMultiplier == GlobalTerrainInformation.GridYHeightMultiplier
+                        && oldInformation.EnableSmoothing == GlobalTerrainInformation.EnableSmoothing
+                        && oldInformation.PerlinScale == GlobalTerrainInformation.PerlinScale
+                        && oldInformation.OffsetX == GlobalTerrainInformation.OffsetX
+                        && oldInformation.OffsetZ == GlobalTerrainInformation.OffsetZ
+                        && oldInformation.Position == GlobalTerrainInformation.Position;
+
+            Debug.Log(areValuesSame);
+
+            if (areValuesSame)
+            {
+                continue;
+            }
+
+            foreach (GameObject terrain in TerrainsList)
+            {
+                Destroy(terrain.gameObject);
+            }
+
+            TerrainsList.Clear();
+
+            GenerateNewTerrainList(TerrainRenderDistance);
         }
     }
 }

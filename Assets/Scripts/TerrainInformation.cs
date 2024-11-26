@@ -23,18 +23,36 @@ public class TerrainInformation
         this.Position = position;
     }
 
+    [SerializeField, Range(0, 400)]
+    private int gridXLength;
     /// <summary>
     /// The length of how many vertices's in the X direction.
     /// </summary>
-    [field: SerializeField]
+    [SerializeField]
     public int GridXLength
-    { get; private set; }
+    { 
+        get { return gridXLength; }
+        private set 
+        {
+            gridXLength = Mathf.Clamp(value, 0, 400);
+        } 
+    }
+
+    [SerializeField, Range(0, 400)]
+    private int gridZLength;
     /// <summary>
     /// The length of how many vertices's in the Z direction.
     /// </summary>
-    [field: SerializeField]
+    [SerializeField]
     public int GridZLength
-    { get; private set; }
+    {
+        get { return gridZLength; }
+        private set
+        {
+            gridZLength = Mathf.Clamp(value, 0, 400);
+        }
+    }
+
     /// <summary>
     /// GridSpacing determines the distance between the vertices's - essentially the resolution of the grid.
     /// </summary>
