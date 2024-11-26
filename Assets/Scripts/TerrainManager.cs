@@ -31,7 +31,7 @@ public class TerrainManager : MonoBehaviour
         // Can manually re-generate the mesh on input.
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            foreach (var terrain in TerrainsList)
+            foreach (GameObject terrain in TerrainsList)
             {
                 Destroy(terrain.gameObject);
             }
@@ -77,7 +77,8 @@ public class TerrainManager : MonoBehaviour
                 GlobalTerrainInformation.TerrainGradient,
                 GlobalTerrainInformation.HeightColorChange,
                 GlobalTerrainInformation.EnableSmoothing,
-                GlobalTerrainInformation.Position + terrainPositions[i]
+                GlobalTerrainInformation.Position + terrainPositions[i],
+                GlobalTerrainInformation.TerrainMaterial
                 );
 
             // Pass the currentTerrainInformation, which should be a modified version of global data, to the terrainObject being generated.
@@ -185,7 +186,8 @@ public class TerrainManager : MonoBehaviour
                                         GlobalTerrainInformation.TerrainGradient,
                                         GlobalTerrainInformation.HeightColorChange,
                                         GlobalTerrainInformation.EnableSmoothing,
-                                        GlobalTerrainInformation.Position
+                                        GlobalTerrainInformation.Position,
+                                        GlobalTerrainInformation.TerrainMaterial
                                         );
 
             yield return new WaitForSeconds(timeTillNextCheck);
@@ -203,7 +205,8 @@ public class TerrainManager : MonoBehaviour
                         && oldInformation.PerlinScale == GlobalTerrainInformation.PerlinScale
                         && oldInformation.OffsetX == GlobalTerrainInformation.OffsetX
                         && oldInformation.OffsetZ == GlobalTerrainInformation.OffsetZ
-                        && oldInformation.Position == GlobalTerrainInformation.Position;
+                        && oldInformation.Position == GlobalTerrainInformation.Position
+                        && oldInformation.TerrainMaterial.Equals(GlobalTerrainInformation.TerrainMaterial);
 
             Debug.Log(areValuesSame);
 

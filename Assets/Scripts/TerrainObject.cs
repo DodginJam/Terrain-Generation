@@ -57,7 +57,7 @@ public class TerrainObject : MonoBehaviour
         // Apply the terrainMesh mesh to the filter.
         TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale, Information.TerrainGradient, Information.HeightColorChange);
         // TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainGradient, Information.HeightColorChange);
-        TerrainRenderer.material.mainTexture = Texture2D.normalTexture;
+        TerrainRenderer.material = Information.TerrainMaterial;
         transform.position = Information.Position;
 
         TerrainMeshFilter.mesh.RecalculateBounds();
@@ -335,7 +335,9 @@ public class TerrainObject : MonoBehaviour
         float Old_OffsetX;
         float Old_OffsetZ;
         Vector3 Old_Position;
-        
+        Material Old_TerrainMaterial;
+
+
         while (true)
         {
             Old_GridXLength = Information.GridXLength;
@@ -351,6 +353,8 @@ public class TerrainObject : MonoBehaviour
             Old_OffsetX = Information.OffsetX;
             Old_OffsetZ = Information.OffsetZ;
             Old_Position = Information.Position;
+            Old_TerrainMaterial = Information.TerrainMaterial;
+
 
             yield return new WaitForSeconds(timeTillNextCheck);
 
@@ -366,7 +370,8 @@ public class TerrainObject : MonoBehaviour
                                     && Old_PerlinScale == Information.PerlinScale
                                     && Old_OffsetX == Information.OffsetX
                                     && Old_OffsetZ == Information.OffsetZ
-                                    && Old_Position == Information.Position;
+                                    && Old_Position == Information.Position
+                                    && Old_TerrainMaterial.Equals(Information.TerrainMaterial);
 
             if (areValuesSame)
             {
@@ -404,7 +409,7 @@ public class TerrainObject : MonoBehaviour
         terrainMesh.uv = allUV;
 
         // Generate Colours.
-        Color[] colours = GenerateColour(newVertices, terrainGradient, heightColorChange);
+        Color[] colours = GenerateColour(newVertices, terrainGradient, TerrainHeightMin, TerrainHeightMax);
         terrainMesh.colors = colours;
 
         return terrainMesh;
@@ -520,7 +525,7 @@ public class TerrainObject : MonoBehaviour
     /// <param name="terrainGradient"></param>
     /// <param name="heightColorChange"></param>
     /// <returns></returns>
-    Color[] GenerateColour(Vector3[,] vertices, Gradient terrainGradient, float heightColorChange)
+    Color[] GenerateColour(Vector3[,] vertices, Gradient terrainGradient, float minHeight, float maxHeight)
     {
         int width = vertices.GetLength(0);
         int length = vertices.GetLength(1);
@@ -532,9 +537,7 @@ public class TerrainObject : MonoBehaviour
         {
             for (int zCount = 0; zCount < length; zCount++)
             {
-                // float noramlisedHeight = vertices[xCount, zCount].y / heightColorChange;
-
-                float noramlisedHeight = Mathf.InverseLerp(TerrainHeightMin, TerrainHeightMax, vertices[xCount, zCount].y);
+                float noramlisedHeight = Mathf.InverseLerp(minHeight, maxHeight, vertices[xCount, zCount].y);
 
                 Color normalisedColor = terrainGradient.Evaluate(noramlisedHeight);
 

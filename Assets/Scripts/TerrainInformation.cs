@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class TerrainInformation
 {
-    public TerrainInformation(int gridLengthX, int gridLengthZ, float gridSpacing, float perlinScale, float OffsetX, float OffsetZ, float gridYHeightRange, float gridYHeightMultiplier, Color terrainColourLow, Color terrainColourHigh, Gradient terrainGradient, float heightColorChange, bool enableSmoothing, Vector3 position)
+    public TerrainInformation(int gridLengthX, int gridLengthZ, float gridSpacing, float perlinScale, float OffsetX, float OffsetZ, float gridYHeightRange, float gridYHeightMultiplier, Color terrainColourLow, Color terrainColourHigh, Gradient terrainGradient, float heightColorChange, bool enableSmoothing, Vector3 position, Material terrainMaterial)
     {
         this.GridXLength = gridLengthX;
         this.GridZLength = gridLengthZ;
@@ -22,6 +22,7 @@ public class TerrainInformation
         this.HeightColorChange = heightColorChange;
         this.EnableSmoothing = enableSmoothing;
         this.Position = position;
+        this.TerrainMaterial = terrainMaterial;
     }
 
     [SerializeField, Range(0, 400)]
@@ -119,5 +120,11 @@ public class TerrainInformation
     /// </summary>
     [field: SerializeField]
     public Vector3 Position
+    { get; private set; }
+    /// <summary>
+    /// The material of the Mesh.
+    /// </summary>
+    [field: SerializeField]
+    public Material TerrainMaterial
     { get; private set; }
 }
