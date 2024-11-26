@@ -27,9 +27,10 @@ public class TerrainObject : MonoBehaviour
     public Vector3[,] Vertices2DArray
     { get; private set; }
 
-    [field: SerializeField]
-    public Gradient TerrainGradient
-    { get; set; }
+    public float TerrainHeightMin
+    { get; set; } = 0.0f;
+    public float TerrainHeightMax
+    { get; set; } = 0.0f;
 
 
     private void Awake()
@@ -54,9 +55,9 @@ public class TerrainObject : MonoBehaviour
     void UpdateTerrain()
     {
         // Apply the terrainMesh mesh to the filter.
-        TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale);
-        //TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
-        TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainGradient, Information.HeightColorChange);
+        TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale, Information.TerrainGradient, Information.HeightColorChange);
+        // TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainGradient, Information.HeightColorChange);
+        TerrainRenderer.material.mainTexture = Texture2D.normalTexture;
         transform.position = Information.Position;
 
         TerrainMeshFilter.mesh.RecalculateBounds();
@@ -85,6 +86,16 @@ public class TerrainObject : MonoBehaviour
                 float yCoord = Mathf.PerlinNoise((xPerlinCoord * scale) + offsetX, (zPerlinCoord * scale) + offsetZ) * gridYHeightRange;
 
                 newVertices[xCount, zCount] = new Vector3(xCoord, yCoord * gridYHeightMultiplier, zCoord);
+
+                // Max and Min height global reference
+                if (newVertices[xCount, zCount].y > TerrainHeightMax)
+                {
+                    TerrainHeightMax = newVertices[xCount, zCount].y;
+                }
+                if (newVertices[xCount, zCount].y < TerrainHeightMin)
+                {
+                    TerrainHeightMin = newVertices[xCount, zCount].y;
+                }
             }
         }
 
@@ -366,7 +377,7 @@ public class TerrainObject : MonoBehaviour
         }
     }
 
-    Mesh GenerateMesh(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float perlinScale)
+    Mesh GenerateMesh(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float perlinScale, Gradient terrainGradient, float heightColorChange)
     {
         Vector3[,] newVertices = GenerateVertices(xLength, zLength, gridSpacing, gridYHeightRange, gridYHeightMultiplier, offsetX, offsetZ, perlinScale);
 
@@ -391,6 +402,10 @@ public class TerrainObject : MonoBehaviour
         // Generate UVs.
         Vector2[] allUV = GenerateUVs(newVertices);
         terrainMesh.uv = allUV;
+
+        // Generate Colours.
+        Color[] colours = GenerateColour(newVertices, terrainGradient, heightColorChange);
+        terrainMesh.colors = colours;
 
         return terrainMesh;
     }
@@ -482,19 +497,6 @@ public class TerrainObject : MonoBehaviour
 
         Texture2D newTexture = new Texture2D(width, length);
 
-        float expectedMaxHeight = 0;
-
-        for (int xCount = 0; xCount < width; xCount++)
-        {
-            for (int zCount = 0; zCount < length; zCount++)
-            {
-                if (vertices[xCount, zCount].y > expectedMaxHeight)
-                {
-                    expectedMaxHeight = vertices[xCount, zCount].y;
-                }
-            }
-        }
-
         for (int xCount = 0; xCount < width; xCount++)
         {
             for (int zCount = 0; zCount < length; zCount++)
@@ -509,5 +511,39 @@ public class TerrainObject : MonoBehaviour
 
         newTexture.Apply();
         return newTexture;
+    }
+
+    /// <summary>
+    /// Gradient based texture generation.
+    /// </summary>
+    /// <param name="vertices"></param>
+    /// <param name="terrainGradient"></param>
+    /// <param name="heightColorChange"></param>
+    /// <returns></returns>
+    Color[] GenerateColour(Vector3[,] vertices, Gradient terrainGradient, float heightColorChange)
+    {
+        int width = vertices.GetLength(0);
+        int length = vertices.GetLength(1);
+
+        Color[] newColours = new Color[width * length];
+
+        int counter = 0;
+        for (int xCount = 0; xCount < width; xCount++)
+        {
+            for (int zCount = 0; zCount < length; zCount++)
+            {
+                // float noramlisedHeight = vertices[xCount, zCount].y / heightColorChange;
+
+                float noramlisedHeight = Mathf.InverseLerp(TerrainHeightMin, TerrainHeightMax, vertices[xCount, zCount].y);
+
+                Color normalisedColor = terrainGradient.Evaluate(noramlisedHeight);
+
+                newColours[counter] = normalisedColor;
+
+                counter++;
+            }
+        }
+
+        return newColours;
     }
 }
