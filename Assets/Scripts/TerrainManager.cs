@@ -19,13 +19,16 @@ public class TerrainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Generate a grid of terrain meshes
         GenerateNewTerrainList(TerrainRenderDistance);
+        // Coroutine here looks for changes in terrain information, and if detected, generates a new terrain mesh grid.
         StartCoroutine(UpdateMeshOnInputChange());
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Can manually re-generate the mesh on input.
         if (Input.GetKeyDown(KeyCode.Space))
         {
             foreach (var terrain in TerrainsList)
@@ -71,6 +74,7 @@ public class TerrainManager : MonoBehaviour
                 GlobalTerrainInformation.GridYHeightMultiplier,
                 GlobalTerrainInformation.TerrainColourLow,
                 GlobalTerrainInformation.TerrainColourHigh,
+                GlobalTerrainInformation.TerrainGradient,
                 GlobalTerrainInformation.HeightColorChange,
                 GlobalTerrainInformation.EnableSmoothing,
                 GlobalTerrainInformation.Position + terrainPositions[i]
@@ -178,6 +182,7 @@ public class TerrainManager : MonoBehaviour
                                         GlobalTerrainInformation.GridYHeightMultiplier,
                                         GlobalTerrainInformation.TerrainColourLow,
                                         GlobalTerrainInformation.TerrainColourHigh,
+                                        GlobalTerrainInformation.TerrainGradient,
                                         GlobalTerrainInformation.HeightColorChange,
                                         GlobalTerrainInformation.EnableSmoothing,
                                         GlobalTerrainInformation.Position
@@ -192,6 +197,7 @@ public class TerrainManager : MonoBehaviour
                         && oldInformation.TerrainColourLow == GlobalTerrainInformation.TerrainColourLow
                         && oldInformation.TerrainColourHigh == GlobalTerrainInformation.TerrainColourHigh
                         && oldInformation.HeightColorChange == GlobalTerrainInformation.HeightColorChange
+                        && oldInformation.TerrainGradient == GlobalTerrainInformation.TerrainGradient
                         && oldInformation.GridYHeightMultiplier == GlobalTerrainInformation.GridYHeightMultiplier
                         && oldInformation.EnableSmoothing == GlobalTerrainInformation.EnableSmoothing
                         && oldInformation.PerlinScale == GlobalTerrainInformation.PerlinScale

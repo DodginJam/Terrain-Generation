@@ -162,6 +162,36 @@ MonoBehaviour:
     <GridYHeightMultiplier>k__BackingField: 1
     <TerrainColourLow>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
     <TerrainColourHigh>k__BackingField: {r: 1, g: 1, b: 1, a: 0}
+    <TerrainGradient>k__BackingField:
+      serializedVersion: 2
+      key0: {r: 0.0061826706, g: 0, b: 1, a: 1}
+      key1: {r: 0.5734577, g: 0.5943396, b: 0.12615702, a: 1}
+      key2: {r: 0.1707013, g: 0.26415092, b: 0.19107598, a: 0}
+      key3: {r: 0.2660528, g: 0.5943396, b: 0.025231387, a: 0}
+      key4: {r: 1, g: 1, b: 1, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 12722
+      ctime1: 17348
+      ctime2: 28142
+      ctime3: 55705
+      ctime4: 65535
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 1
+      m_ColorSpace: -1
+      m_NumColorKeys: 5
+      m_NumAlphaKeys: 2
     <HeightColorChange>k__BackingField: 80
     <EnableSmoothing>k__BackingField: 0
     <Position>k__BackingField: {x: 0, y: 0, z: 0}

@@ -25,7 +25,11 @@ public class TerrainObject : MonoBehaviour
     { get; set; }
 
     public Vector3[,] Vertices2DArray
-    {get; private set; }
+    { get; private set; }
+
+    [field: SerializeField]
+    public Gradient TerrainGradient
+    { get; set; }
 
 
     private void Awake()
@@ -51,7 +55,8 @@ public class TerrainObject : MonoBehaviour
     {
         // Apply the terrainMesh mesh to the filter.
         TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale);
-        TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
+        //TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainColourLow, Information.TerrainColourHigh, Information.HeightColorChange);
+        TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainGradient, Information.HeightColorChange);
         transform.position = Information.Position;
 
         TerrainMeshFilter.mesh.RecalculateBounds();
@@ -454,6 +459,49 @@ public class TerrainObject : MonoBehaviour
                 float noramlisedHeight = vertices[xCount, zCount].y / heightColorChange;
 
                 Color normalisedColor = Color.Lerp(lowColor, highColor, noramlisedHeight);
+
+                newTexture.SetPixel(xCount, zCount, normalisedColor);
+            }
+        }
+
+        newTexture.Apply();
+        return newTexture;
+    }
+
+    /// <summary>
+    /// Gradient based texture generation.
+    /// </summary>
+    /// <param name="vertices"></param>
+    /// <param name="terrainGradient"></param>
+    /// <param name="heightColorChange"></param>
+    /// <returns></returns>
+    Texture2D GenerateTexture(Vector3[,] vertices, Gradient terrainGradient, float heightColorChange)
+    {
+        int width = vertices.GetLength(0);
+        int length = vertices.GetLength(1);
+
+        Texture2D newTexture = new Texture2D(width, length);
+
+        float expectedMaxHeight = 0;
+
+        for (int xCount = 0; xCount < width; xCount++)
+        {
+            for (int zCount = 0; zCount < length; zCount++)
+            {
+                if (vertices[xCount, zCount].y > expectedMaxHeight)
+                {
+                    expectedMaxHeight = vertices[xCount, zCount].y;
+                }
+            }
+        }
+
+        for (int xCount = 0; xCount < width; xCount++)
+        {
+            for (int zCount = 0; zCount < length; zCount++)
+            {
+                float noramlisedHeight = vertices[xCount, zCount].y / heightColorChange;
+
+                Color normalisedColor = terrainGradient.Evaluate(noramlisedHeight);
 
                 newTexture.SetPixel(xCount, zCount, normalisedColor);
             }

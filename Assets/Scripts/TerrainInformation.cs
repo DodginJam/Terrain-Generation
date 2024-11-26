@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class TerrainInformation
 {
-    public TerrainInformation(int gridLengthX, int gridLengthZ, float gridSpacing, float perlinScale, float OffsetX, float OffsetZ, float gridYHeightRange, float gridYHeightMultiplier, Color terrainColourLow, Color terrainColourHigh, float heightColorChange, bool enableSmoothing, Vector3 position)
+    public TerrainInformation(int gridLengthX, int gridLengthZ, float gridSpacing, float perlinScale, float OffsetX, float OffsetZ, float gridYHeightRange, float gridYHeightMultiplier, Color terrainColourLow, Color terrainColourHigh, Gradient terrainGradient, float heightColorChange, bool enableSmoothing, Vector3 position)
     {
         this.GridXLength = gridLengthX;
         this.GridZLength = gridLengthZ;
@@ -18,6 +18,7 @@ public class TerrainInformation
         this.GridYHeightMultiplier = gridYHeightMultiplier;
         this.TerrainColourLow = terrainColourLow;
         this.TerrainColourHigh = terrainColourHigh;
+        this.TerrainGradient = terrainGradient;
         this.HeightColorChange = heightColorChange;
         this.EnableSmoothing = enableSmoothing;
         this.Position = position;
@@ -94,6 +95,12 @@ public class TerrainInformation
     /// </summary>
     [field: SerializeField]
     public Color TerrainColourHigh
+    { get; private set; }
+    /// <summary>
+    /// Gradient for terrain colouring.
+    /// </summary>
+    [field: SerializeField]
+    public Gradient TerrainGradient
     { get; private set; }
     /// <summary>
     /// The height at which the mid-point of the gradient occurs.
