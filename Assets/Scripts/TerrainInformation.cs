@@ -86,13 +86,13 @@ public class TerrainInformation
     public float GridYHeightMultiplier
     { get; private set; }
     /// <summary>
-    /// The lower color in the singular gradiant applied to the terrain.
+    /// The lower color in the singular gradiant applied to the terrain. Redundant.
     /// </summary>
     [field: SerializeField]
     public Color TerrainColourLow
     { get; private set; }
     /// <summary>
-    /// The higher color in the singular gradiant applied to the terrain.
+    /// The higher color in the singular gradiant applied to the terrain. Redundant.
     /// </summary>
     [field: SerializeField]
     public Color TerrainColourHigh
@@ -104,7 +104,7 @@ public class TerrainInformation
     public Gradient TerrainGradient
     { get; private set; }
     /// <summary>
-    /// The height at which the mid-point of the gradient occurs.
+    /// The height at which the mid-point of the gradient occurs. Redundant.
     /// </summary>
     [field: SerializeField]
     public float HeightColorChange

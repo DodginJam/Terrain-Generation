@@ -519,11 +519,12 @@ public class TerrainObject : MonoBehaviour
     }
 
     /// <summary>
-    /// Gradient based texture generation.
+    /// Gradient based vertex colour generation for applying directly to the mesh.
     /// </summary>
     /// <param name="vertices"></param>
     /// <param name="terrainGradient"></param>
-    /// <param name="heightColorChange"></param>
+    /// <param name="minHeight"></param>
+    /// <param name="maxHeight"></param>
     /// <returns></returns>
     Color[] GenerateColour(Vector3[,] vertices, Gradient terrainGradient, float minHeight, float maxHeight)
     {
