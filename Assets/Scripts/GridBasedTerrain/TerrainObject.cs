@@ -394,6 +394,9 @@ public class TerrainObject : MonoBehaviour
         // Mesh to be added to the meshHolder mesh filter.
         Mesh terrainMesh = new Mesh();
 
+        // Set index format to 32 bit instead of 16 bit to support higher vertices count.
+        terrainMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+
         // Add required information to terrainMesh for mesh generation.
         Vector3[] allVertices = TwoDimensionalVectorsToOne(newVertices);
         terrainMesh.vertices = allVertices;

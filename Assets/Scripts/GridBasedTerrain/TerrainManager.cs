@@ -108,10 +108,10 @@ public class TerrainManager : MonoBehaviour
         perlinXOffset = new float[totalTerrainsToRender];
         perlinZOffset = new float[totalTerrainsToRender];
 
-        // The first centre position is always going to be centered with northing additional to it's values.
+        // The first centre position is always going to be centered with nothing additional to it's values.
         positionalOffsets[0] = new Vector3(0, 0, 0);
-        perlinXOffset[0] = GlobalTerrainInformation.OffsetX;
-        perlinZOffset[0] = GlobalTerrainInformation.OffsetZ;
+        perlinXOffset[0] = (GlobalTerrainInformation.GridXLength / GlobalTerrainInformation.GridXLength) * 4.93f * 0;
+        perlinZOffset[0] = (GlobalTerrainInformation.GridZLength / GlobalTerrainInformation.GridZLength) * 4.93f * 0;
 
         int completedTerrains = 1; 
 
@@ -141,9 +141,11 @@ public class TerrainManager : MonoBehaviour
                             // Apply the positional offset of the terrain objects.
                             positionalOffsets[completedTerrains] = new Vector3(xCount * GlobalTerrainInformation.GridXLength, 0, zCount * GlobalTerrainInformation.GridZLength) * GlobalTerrainInformation.GridSpacing;
 
-                            // Need to calculate the Perlin noise offset to apply here.
-                            perlinXOffset[completedTerrains] = (xCount * GlobalTerrainInformation.GridXLength / GlobalTerrainInformation.GridSpacing);
-                            perlinZOffset[completedTerrains] = (zCount * GlobalTerrainInformation.GridZLength / GlobalTerrainInformation.GridSpacing);
+                            // Need to calculate the Perlin noise offset to apply here - works but I need to understand the significance of the magic number 0.986f)
+                            perlinXOffset[completedTerrains] = (0.986f * GlobalTerrainInformation.PerlinScale) * xCount;
+                            perlinZOffset[completedTerrains] = (0.986f * GlobalTerrainInformation.PerlinScale) * zCount;
+
+
 
                             //Debug.Log($"Perlin X Offset for Terrain {completedTerrains}: {perlinXOffset[completedTerrains]}");
                             //Debug.Log($"Perlin Z Offset for Terrain {completedTerrains}: {perlinZOffset[completedTerrains]}");

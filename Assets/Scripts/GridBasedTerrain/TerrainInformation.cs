@@ -25,7 +25,7 @@ public class TerrainInformation
         this.TerrainMaterial = terrainMaterial;
     }
 
-    [SerializeField, Range(0, 400)]
+    [SerializeField, Range(0, 2000)]
     private int gridXLength;
     /// <summary>
     /// The length of how many vertices's in the X direction.
@@ -36,11 +36,11 @@ public class TerrainInformation
         get { return gridXLength; }
         private set 
         {
-            gridXLength = Mathf.Clamp(value, 0, 400);
+            gridXLength = Mathf.Clamp(value, 0, 2000);
         } 
     }
 
-    [SerializeField, Range(0, 400)]
+    [SerializeField, Range(0, 2000)]
     private int gridZLength;
     /// <summary>
     /// The length of how many vertices's in the Z direction.
@@ -51,7 +51,7 @@ public class TerrainInformation
         get { return gridZLength; }
         private set
         {
-            gridZLength = Mathf.Clamp(value, 0, 400);
+            gridZLength = Mathf.Clamp(value, 0, 2000);
         }
     }
 
