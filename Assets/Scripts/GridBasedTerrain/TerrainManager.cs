@@ -108,58 +108,38 @@ public class TerrainManager : MonoBehaviour
         perlinXOffset = new float[totalTerrainsToRender];
         perlinZOffset = new float[totalTerrainsToRender];
 
-        // The first centre position is always going to be centered with nothing additional to it's values.
-        positionalOffsets[0] = new Vector3(0, 0, 0);
-        perlinXOffset[0] = (GlobalTerrainInformation.GridXLength / GlobalTerrainInformation.GridXLength) * 4.93f * 0;
-        perlinZOffset[0] = (GlobalTerrainInformation.GridZLength / GlobalTerrainInformation.GridZLength) * 4.93f * 0;
+        int completedTerrains = 0;
 
-        int completedTerrains = 1; 
-
-        if (maxDistanceFromCentre > 0)
+        for (int currentLayer = 0; currentLayer <= maxDistanceFromCentre; currentLayer++)
         {
-            for (int currentLayer = 1; currentLayer <= maxDistanceFromCentre; currentLayer++)
+            // Treating the layer like a whole grid, and then performing boundary checks within the next for loop to ensure only the edge of the grid, the actual terrain of the layer, get's a positional and perlin offset generated.
+            int xLength = 2 * currentLayer + 1;
+            int zLength = 2 * currentLayer + 1;
+
+            int lowerXBoundry = -(xLength / 2);
+            int higherXBoundry = xLength / 2;
+
+            int lowerZBoundry = -(zLength / 2);
+            int higherZBoundry = zLength / 2;
+
+
+            for (int xCount = lowerXBoundry; xCount <= higherXBoundry; xCount++)
             {
-                //int numberOfBlocksInCurrentLayer = currentLayer * 8;
-
-                // Treating the layer like a whole grid, and then performing boundary checks within the next for loop to ensure only the edge of the grid, the actual terrain of the layer, get's a positional and perlin offset generated.
-                int xLength = 2 * currentLayer + 1;
-                int zLength = 2 * currentLayer + 1;
-
-                int lowerXBoundry = -(xLength / 2);
-                int higherXBoundry = xLength / 2;
-
-                int lowerZBoundry = -(zLength / 2);
-                int higherZBoundry = zLength / 2;
-
-
-                for (int xCount = lowerXBoundry; xCount <= higherXBoundry; xCount++)
+                for (int zCount = lowerZBoundry; zCount <= higherZBoundry; zCount++)
                 {
-                    for (int zCount = lowerZBoundry; zCount <= higherZBoundry; zCount++)
+                    if (xCount == lowerXBoundry || zCount == lowerZBoundry || xCount == higherXBoundry || zCount == higherZBoundry)
                     {
-                        if (xCount == lowerXBoundry || zCount == lowerZBoundry || xCount == higherXBoundry || zCount == higherZBoundry)
-                        {
-                            // Apply the positional offset of the terrain objects.
-                            positionalOffsets[completedTerrains] = new Vector3(xCount * GlobalTerrainInformation.GridXLength, 0, zCount * GlobalTerrainInformation.GridZLength) * GlobalTerrainInformation.GridSpacing;
+                        // Apply the positional offset of the terrain objects.
+                        positionalOffsets[completedTerrains] = new Vector3(xCount * GlobalTerrainInformation.GridXLength, 0, zCount * GlobalTerrainInformation.GridZLength) * GlobalTerrainInformation.GridSpacing;
 
-                            // Need to calculate the Perlin noise offset to apply here - works but I need to understand the significance of the magic number 0.986f)
-                            perlinXOffset[completedTerrains] = (0.986f * GlobalTerrainInformation.PerlinScale) * xCount;
-                            perlinZOffset[completedTerrains] = (0.986f * GlobalTerrainInformation.PerlinScale) * zCount;
+                        // Need to calculate the Perlin noise offset to apply here - works but I need to understand the significance of the magic number 0.986f - something to do with floating point rounding erros and Perlin sampling?)
+                        perlinXOffset[completedTerrains] = (0.99668f * GlobalTerrainInformation.PerlinScale) * xCount;
+                        perlinZOffset[completedTerrains] = (0.99668f * GlobalTerrainInformation.PerlinScale) * zCount;
 
-
-
-                            //Debug.Log($"Perlin X Offset for Terrain {completedTerrains}: {perlinXOffset[completedTerrains]}");
-                            //Debug.Log($"Perlin Z Offset for Terrain {completedTerrains}: {perlinZOffset[completedTerrains]}");
-
-
-                            completedTerrains++;
-                        }
+                        completedTerrains++;
                     }
                 }
-
-                //Debug.Log($"Layer {currentLayer}, Terrains in Layer: {numberOfBlocksInCurrentLayer}, Terrains Completed: {completedTerrains}");
             }
-
-            //Debug.Log($"Total Terrains Rendered: {completedTerrains}");
         }
     }
 
