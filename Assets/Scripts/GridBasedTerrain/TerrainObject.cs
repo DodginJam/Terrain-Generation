@@ -75,6 +75,7 @@ public class TerrainObject : MonoBehaviour
         {
             for (int zCount = 0; zCount < zVerticeCount; zCount++)
             {
+                // The coord positions are the local space location of the vertices, being the vertices count multiplyed by the spacing.
                 float xCoord = xCount * gridSpacing;
                 float zCoord = zCount * gridSpacing;
 
@@ -85,6 +86,7 @@ public class TerrainObject : MonoBehaviour
                 // The perlinNoise coord are multiplied by scale 
                 float yCoord = Mathf.PerlinNoise((xPerlinCoord * scale) + offsetX, (zPerlinCoord * scale) + offsetZ) * gridYHeightRange;
 
+                // The vertices of the mesh are set to the local space coordinates.
                 newVertices[xCount, zCount] = new Vector3(xCoord, yCoord * gridYHeightMultiplier, zCoord);
 
                 // Max and Min height global reference
