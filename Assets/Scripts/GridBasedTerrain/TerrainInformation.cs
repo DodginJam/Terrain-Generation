@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class TerrainInformation
 {
-    public TerrainInformation(int gridLengthX, int gridLengthZ, float gridSpacing, float perlinScale, float OffsetX, float OffsetZ, float gridYHeightRange, float gridYHeightMultiplier, Color terrainColourLow, Color terrainColourHigh, Gradient terrainGradient, float heightColorChange, bool enableSmoothing, Vector3 position, Material terrainMaterial)
+    public TerrainInformation(int gridLengthX, int gridLengthZ, float gridSpacing, float perlinScale, float OffsetX, float OffsetZ, float gridYHeightRange, float gridYHeightMultiplier, Color terrainColourLow, Color terrainColourHigh, Gradient terrainGradient, float heightColorChange, bool enableSmoothing, Vector3 position, Material terrainMaterial, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset)
     {
         this.GridXLength = gridLengthX;
         this.GridZLength = gridLengthZ;
@@ -23,6 +23,11 @@ public class TerrainInformation
         this.EnableSmoothing = enableSmoothing;
         this.Position = position;
         this.TerrainMaterial = terrainMaterial;
+        this.Seed = seed;
+        this.Octaves = octaves;
+        this.Persistance = persistance;
+        this.Lacunarity = lacunarity;
+        this.OctaveOffset = octaveOffset;
     }
 
     [SerializeField, Range(0, 2000)]
@@ -126,5 +131,16 @@ public class TerrainInformation
     /// </summary>
     [field: SerializeField]
     public Material TerrainMaterial
+    { get; private set; }
+
+    [field: SerializeField] public int Seed
+    { get; private set; }
+    [field: SerializeField] public int Octaves
+    { get; private set; }
+    [field: SerializeField] public float Persistance
+    { get; private set; }
+    [field: SerializeField] public float Lacunarity
+    { get; private set; }
+    [field: SerializeField] public Vector2 OctaveOffset
     { get; private set; }
 }

@@ -78,7 +78,12 @@ public class TerrainManager : MonoBehaviour
                 GlobalTerrainInformation.HeightColorChange,
                 GlobalTerrainInformation.EnableSmoothing,
                 GlobalTerrainInformation.Position + terrainPositions[i],
-                GlobalTerrainInformation.TerrainMaterial
+                GlobalTerrainInformation.TerrainMaterial,
+                GlobalTerrainInformation.Seed,
+                GlobalTerrainInformation.Octaves,
+                GlobalTerrainInformation.Persistance,
+                GlobalTerrainInformation.Lacunarity,
+                GlobalTerrainInformation.OctaveOffset
                 );
 
             // Pass the currentTerrainInformation, which should be a modified version of global data, to the terrainObject being generated.
@@ -169,7 +174,12 @@ public class TerrainManager : MonoBehaviour
                                         GlobalTerrainInformation.HeightColorChange,
                                         GlobalTerrainInformation.EnableSmoothing,
                                         GlobalTerrainInformation.Position,
-                                        GlobalTerrainInformation.TerrainMaterial
+                                        GlobalTerrainInformation.TerrainMaterial,
+                                        GlobalTerrainInformation.Seed,
+                                        GlobalTerrainInformation.Octaves,
+                                        GlobalTerrainInformation.Persistance,
+                                        GlobalTerrainInformation.Lacunarity,
+                                        GlobalTerrainInformation.OctaveOffset
                                         );
 
             yield return new WaitForSeconds(timeTillNextCheck);
@@ -188,7 +198,12 @@ public class TerrainManager : MonoBehaviour
                         && oldInformation.OffsetX == GlobalTerrainInformation.OffsetX
                         && oldInformation.OffsetZ == GlobalTerrainInformation.OffsetZ
                         && oldInformation.Position == GlobalTerrainInformation.Position
-                        && oldInformation.TerrainMaterial.Equals(GlobalTerrainInformation.TerrainMaterial);
+                        && oldInformation.TerrainMaterial.Equals(GlobalTerrainInformation.TerrainMaterial)
+                        && oldInformation.Seed == GlobalTerrainInformation.Seed
+                        && oldInformation.Octaves == GlobalTerrainInformation.Octaves
+                        && oldInformation.Persistance == GlobalTerrainInformation.Persistance
+                        && oldInformation.Lacunarity == GlobalTerrainInformation.Lacunarity
+                        && oldInformation.OctaveOffset == GlobalTerrainInformation.OctaveOffset;
 
             Debug.Log(areValuesSame);
 

@@ -28,9 +28,9 @@ public class TerrainObject : MonoBehaviour
     { get; private set; }
 
     public float TerrainHeightMin
-    { get; set; } = 0.0f;
+    { get; private set; } = float.MaxValue;
     public float TerrainHeightMax
-    { get; set; } = 0.0f;
+    { get; private set; } = float.MinValue;
 
 
     private void Awake()
@@ -55,7 +55,7 @@ public class TerrainObject : MonoBehaviour
     void UpdateTerrain()
     {
         // Apply the terrainMesh mesh to the filter.
-        TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale, Information.TerrainGradient, Information.HeightColorChange);
+        TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale, Information.TerrainGradient, Information.HeightColorChange, Information.Seed, Information.Octaves, Information.Persistance, Information.Lacunarity, Information.OctaveOffset);
         // TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainGradient, Information.HeightColorChange);
         TerrainRenderer.material = Information.TerrainMaterial;
         transform.position = Information.Position;
@@ -64,10 +64,29 @@ public class TerrainObject : MonoBehaviour
         TerrainMeshFilter.mesh.RecalculateNormals();
     }
 
-    public Vector3[,] GenerateVertices(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float scale)
+    public Vector3[,] GenerateVertices(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float scale, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset)
     {
         int xVerticeCount = xLength + 1;
         int zVerticeCount = zLength + 1;
+
+        // These values are stored for scaling perlin from centre point of meshes - they are minused from the X and Z count during normalisation for perlin co-ords calculation.
+        float halfLength = xVerticeCount / 2f;
+        float halfWidth = zVerticeCount / 2f;
+
+        TerrainHeightMax = float.MinValue;
+        TerrainHeightMin = float.MaxValue;
+
+        // Sampled from Sebastian Lague Procedural Landmass Generation (E03: Octaves). Link: https://youtu.be/MRNFcywkUSA?si=-IN_Y8heM2EOnWIs
+        // Provides offsets per octave layer to be randomised.
+        System.Random prng = new System.Random(seed);
+        Vector2[] octaveOffsets = new Vector2[octaves];
+        for (int i = 0; i < octaves; i++)
+        {
+            float octaveOffsetX = prng.Next(-1000000, 1000000) + octaveOffset.x;
+            float octaveOffsetZ = prng.Next(-1000000, 1000000) + octaveOffset.y;
+
+            octaveOffsets[i] = new Vector2(octaveOffsetX, octaveOffsetZ);
+        }
 
         Vector3[,] newVertices = new Vector3[xVerticeCount, zVerticeCount];
 
@@ -75,29 +94,65 @@ public class TerrainObject : MonoBehaviour
         {
             for (int zCount = 0; zCount < zVerticeCount; zCount++)
             {
-                // The coord positions are the local space location of the vertices, being the vertices count multiplyed by the spacing.
-                float xCoord = xCount * gridSpacing;
-                float zCoord = zCount * gridSpacing;
+                // Amplitude is how much off an effect the lesser octaves have an impact in overall height values - this is affected by the persistance value.
+                float amplitude = 1;
+                // Frequency is the level of detail each ocatave passes through to the overall noise height values - this is affected by the lacunarity value.
+                float frequency = 1;
+                // The noise height is added up over multiple layers - octaves - and the later normalised to allow it to be projected as a value for perlin noise.
+                float noiseHeight = 0;
 
-                // Getting the Perlin Coord for X and Z by normalising it's value - dividing the current vertices position by the total amounts of vertices in that axis.
-                float xPerlinCoord = (float)xCount / xVerticeCount;
-                float zPerlinCoord = (float)zCount / zVerticeCount;
+                float xCoord = 0;
+                float zCoord = 0;
 
-                // The perlinNoise coord are multiplied by scale 
-                float yCoord = Mathf.PerlinNoise((xPerlinCoord * scale) + offsetX, (zPerlinCoord * scale) + offsetZ) * gridYHeightRange;
+                // Octaves are the layers of Perlin Noise we generate.
+                for (int i = 0; i < octaves; i++)
+                {
+                    // The coord positions are the local space location of the vertices, being the vertices count multiplyed by the spacing.
+                    xCoord = (float)xCount * gridSpacing;
+                    zCoord = (float)zCount * gridSpacing;
+
+                    // Getting the Perlin Coord for X and Z by normalising it's value - dividing the current vertices position by the total amounts of vertices in that axis.
+                    // The count is offset by half the axis length to let perlin scale from centre of mesh.
+                    float xPerlinCoord = ((float)xCount - halfLength) / (scale * frequency) + octaveOffsets[i].x + offsetX;
+                    float zPerlinCoord = ((float)zCount - halfWidth) / (scale * frequency) + octaveOffsets[i].y + offsetZ;
+
+                    // The perlinNoise coord are multiplied by scale.
+                    // The scale is timesed by the frequency to affect the detail of the respective octave layers, with higher frequency allowing more
+                    // finer detail to emerge in the noise.
+                                                                                      // Helps to allow negative values of the Perlin Noise.
+                    float perlinValue = Mathf.PerlinNoise(xPerlinCoord, zPerlinCoord) /* * 2 - 1 */;
+
+                    // The perlin value is timesed by amplitude to effect how much the other octaves have impact in the overall 
+                    // height - i.e. how persistant they are. Lower octaves should propertioanlly have lesser impact.
+                    noiseHeight += perlinValue * amplitude;
+
+                    // Per each loop of the octaves, we times the amplitude and frequency by the respective persistance
+                    // and lacunarity values to affect the amplitude and the frequency these have per octave layer on the overall height value generated.
+                    amplitude *= persistance;
+                    frequency *= lacunarity;
+                }
+                
+                // Max and Min height global reference
+                if (noiseHeight > TerrainHeightMax)
+                {
+                    TerrainHeightMax = noiseHeight;
+                }
+                if (noiseHeight < TerrainHeightMin)
+                {
+                    TerrainHeightMin = noiseHeight;
+                }
 
                 // The vertices of the mesh are set to the local space coordinates.
-                newVertices[xCount, zCount] = new Vector3(xCoord, yCoord * gridYHeightMultiplier, zCoord);
+                newVertices[xCount, zCount] = new Vector3(xCoord, noiseHeight, zCoord);
+            }
+        }
 
-                // Max and Min height global reference
-                if (newVertices[xCount, zCount].y > TerrainHeightMax)
-                {
-                    TerrainHeightMax = newVertices[xCount, zCount].y;
-                }
-                if (newVertices[xCount, zCount].y < TerrainHeightMin)
-                {
-                    TerrainHeightMin = newVertices[xCount, zCount].y;
-                }
+        // Loop through the heightvalues and noramalise Y value due to the previous addition above.
+        for (int x = 0; x < newVertices.GetLength(0); x++)
+        {
+            for (int z = 0; z < newVertices.GetLength(1); z++)
+            {
+                newVertices[x, z].y = Mathf.Lerp(TerrainHeightMax, TerrainHeightMin, newVertices[x, z].y) * gridYHeightRange;
             }
         }
 
@@ -338,6 +393,11 @@ public class TerrainObject : MonoBehaviour
         float Old_OffsetZ;
         Vector3 Old_Position;
         Material Old_TerrainMaterial;
+        int Old_Seed;
+        int Old_Octaves;
+        float Old_Persistance;
+        float Old_Lacunarity;
+        Vector2 Old_OctaveOffset;
 
 
         while (true)
@@ -356,6 +416,11 @@ public class TerrainObject : MonoBehaviour
             Old_OffsetZ = Information.OffsetZ;
             Old_Position = Information.Position;
             Old_TerrainMaterial = Information.TerrainMaterial;
+            Old_Seed = Information.Seed;
+            Old_Octaves = Information.Octaves;
+            Old_Persistance = Information.Persistance;
+            Old_Lacunarity = Information.Lacunarity;
+            Old_OctaveOffset = Information.OctaveOffset;
 
 
             yield return new WaitForSeconds(timeTillNextCheck);
@@ -373,7 +438,12 @@ public class TerrainObject : MonoBehaviour
                                     && Old_OffsetX == Information.OffsetX
                                     && Old_OffsetZ == Information.OffsetZ
                                     && Old_Position == Information.Position
-                                    && Old_TerrainMaterial.Equals(Information.TerrainMaterial);
+                                    && Old_TerrainMaterial.Equals(Information.TerrainMaterial)
+                                    && Old_Seed == Information.Seed
+                                    && Old_Octaves == Information.Octaves
+                                    && Old_Persistance == Information.Persistance
+                                    && Old_Lacunarity == Information.Lacunarity
+                                    && Old_OctaveOffset == Information.OctaveOffset;
 
             if (areValuesSame)
             {
@@ -384,9 +454,9 @@ public class TerrainObject : MonoBehaviour
         }
     }
 
-    Mesh GenerateMesh(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float perlinScale, Gradient terrainGradient, float heightColorChange)
+    Mesh GenerateMesh(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float perlinScale, Gradient terrainGradient, float heightColorChange, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset)
     {
-        Vector3[,] newVertices = GenerateVertices(xLength, zLength, gridSpacing, gridYHeightRange, gridYHeightMultiplier, offsetX, offsetZ, perlinScale);
+        Vector3[,] newVertices = GenerateVertices(xLength, zLength, gridSpacing, gridYHeightRange, gridYHeightMultiplier, offsetX, offsetZ, perlinScale, seed, octaves, persistance, lacunarity, octaveOffset);
 
         Vertices2DArray = newVertices;
 
@@ -543,7 +613,8 @@ public class TerrainObject : MonoBehaviour
         {
             for (int zCount = 0; zCount < length; zCount++)
             {
-                float noramlisedHeight = Mathf.InverseLerp(minHeight, maxHeight, vertices[xCount, zCount].y);
+                // Lazy fix for colour - re-work
+                float noramlisedHeight = Mathf.InverseLerp(minHeight * Information.GridYHeightRange, maxHeight * Information.GridYHeightRange, vertices[xCount, zCount].y);
 
                 Color normalisedColor = terrainGradient.Evaluate(noramlisedHeight);
 

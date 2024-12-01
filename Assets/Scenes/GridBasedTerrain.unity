@@ -196,8 +196,13 @@ MonoBehaviour:
     <EnableSmoothing>k__BackingField: 0
     <Position>k__BackingField: {x: 0, y: 65.61, z: 0}
     <TerrainMaterial>k__BackingField: {fileID: -876546973899608171, guid: e0cc447a66be7914595b98e3b39ca86d, type: 3}
+    <Seed>k__BackingField: 0
+    <Octaves>k__BackingField: 1
+    <Persistance>k__BackingField: 0
+    <Lacunarity>k__BackingField: 0
+    <OctaveOffset>k__BackingField: {x: 0, y: 0}
   <TerrainsList>k__BackingField: []
-  <TerrainRenderDistance>k__BackingField: 2
+  <TerrainRenderDistance>k__BackingField: 1
 --- !u!4 &105660420
 Transform:
   m_ObjectHideFlags: 0

@@ -46,7 +46,7 @@ public static class Noise
                 for(int i = 0; i < octaves; i++)
                 {
                     // The scale is timesed by the frequency to affect the detail of the respective octave layers, with higher frequency allowing more
-                    // finder detail to emerge in the noise.
+                    // finer detail to emerge in the noise.
                     float sampleX = ((float)x - halfLength)/ (scale * frequency) + octaveOffsets[i].x;
                     float sampleZ = ((float)z - halfWidth)/ (scale * frequency) + octaveOffsets[i].y;
 
