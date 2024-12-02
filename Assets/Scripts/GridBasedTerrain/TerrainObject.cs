@@ -599,8 +599,7 @@ public class TerrainObject : MonoBehaviour
     /// </summary>
     /// <param name="vertices"></param>
     /// <param name="terrainGradient"></param>
-    /// <param name="minHeight"></param>
-    /// <param name="maxHeight"></param>
+    /// <param name="heightColorChange"></param>
     /// <returns></returns>
     Color[] GenerateColour(Vector3[,] vertices, Gradient terrainGradient, float heightColorChange)
     {
@@ -614,6 +613,7 @@ public class TerrainObject : MonoBehaviour
         {
             for (int zCount = 0; zCount < length; zCount++)
             {
+                // This ensures that the values of the terrain colour that are set between the world height values of zero and the allowed set value for changing colour via the heightColourChange variable.
                 float normalisedHeight = Mathf.InverseLerp(0, heightColorChange, vertices[xCount, zCount].y);
 
                 Color normalisedColor = terrainGradient.Evaluate(normalisedHeight);
