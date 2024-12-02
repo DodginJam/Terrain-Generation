@@ -155,10 +155,10 @@ MonoBehaviour:
     gridXLength: 300
     gridZLength: 300
     <GridSpacing>k__BackingField: 10
-    <PerlinScale>k__BackingField: 5
-    <OffsetX>k__BackingField: 156
-    <OffsetZ>k__BackingField: 545
-    <GridYHeightRange>k__BackingField: 100
+    <PerlinScale>k__BackingField: 12.97
+    <OffsetX>k__BackingField: 0
+    <OffsetZ>k__BackingField: 0
+    <GridYHeightRange>k__BackingField: 280
     <GridYHeightMultiplier>k__BackingField: 1
     <TerrainColourLow>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
     <TerrainColourHigh>k__BackingField: {r: 1, g: 1, b: 1, a: 0}
@@ -196,13 +196,13 @@ MonoBehaviour:
     <EnableSmoothing>k__BackingField: 0
     <Position>k__BackingField: {x: 0, y: 65.61, z: 0}
     <TerrainMaterial>k__BackingField: {fileID: -876546973899608171, guid: e0cc447a66be7914595b98e3b39ca86d, type: 3}
-    <Seed>k__BackingField: 0
-    <Octaves>k__BackingField: 1
-    <Persistance>k__BackingField: 0
-    <Lacunarity>k__BackingField: 0
+    <Seed>k__BackingField: 20
+    <Octaves>k__BackingField: 3
+    <Persistance>k__BackingField: 0.24
+    <Lacunarity>k__BackingField: 0.65
     <OctaveOffset>k__BackingField: {x: 0, y: 0}
   <TerrainsList>k__BackingField: []
-  <TerrainRenderDistance>k__BackingField: 1
+  <TerrainRenderDistance>k__BackingField: 0
 --- !u!4 &105660420
 Transform:
   m_ObjectHideFlags: 0

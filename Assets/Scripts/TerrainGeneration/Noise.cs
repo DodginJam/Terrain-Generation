@@ -45,7 +45,7 @@ public static class Noise
                 // Octaves are the layers of Perlin Noise we generate.
                 for(int i = 0; i < octaves; i++)
                 {
-                    // The scale is timesed by the frequency to affect the detail of the respective octave layers, with higher frequency allowing more
+                    // The scale is multiplied by the frequency to affect the detail of the respective octave layers, with higher frequency allowing more
                     // finer detail to emerge in the noise.
                     float sampleX = ((float)x - halfLength)/ (scale * frequency) + octaveOffsets[i].x;
                     float sampleZ = ((float)z - halfWidth)/ (scale * frequency) + octaveOffsets[i].y;
@@ -53,7 +53,7 @@ public static class Noise
                                                                             // Helps to allow negative values of the Perlin Noise.
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleZ) * 2 - 1;
 
-                    // The perlin value is timesed by amplitude to effect how much the other octaves have impact in the overall 
+                    // The perlin value is multiplied by amplitude to effect how much the other octaves have impact in the overall 
                     // height - i.e. how persistant they are. Lower octaves should propertioanlly have lesser impact.
                     noiseHeight += perlinValue * amplitude;
 

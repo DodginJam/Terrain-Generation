@@ -120,7 +120,7 @@ public class TerrainObject : MonoBehaviour
                     // The scale is timesed by the frequency to affect the detail of the respective octave layers, with higher frequency allowing more
                     // finer detail to emerge in the noise.
                                                                                       // Helps to allow negative values of the Perlin Noise.
-                    float perlinValue = Mathf.PerlinNoise(xPerlinCoord, zPerlinCoord) /* * 2 - 1 */;
+                    float perlinValue = Mathf.PerlinNoise(xPerlinCoord, zPerlinCoord)  * 2 - 1 ;
 
                     // The perlin value is timesed by amplitude to effect how much the other octaves have impact in the overall 
                     // height - i.e. how persistant they are. Lower octaves should propertioanlly have lesser impact.
@@ -152,7 +152,7 @@ public class TerrainObject : MonoBehaviour
         {
             for (int z = 0; z < newVertices.GetLength(1); z++)
             {
-                newVertices[x, z].y = Mathf.Lerp(TerrainHeightMax, TerrainHeightMin, newVertices[x, z].y) * gridYHeightRange;
+                newVertices[x, z].y = Mathf.InverseLerp(TerrainHeightMax, TerrainHeightMin, newVertices[x, z].y) * gridYHeightRange;
             }
         }
 
