@@ -120,7 +120,7 @@ public class TerrainObject : MonoBehaviour
                     // The scale is timesed by the frequency to affect the detail of the respective octave layers, with higher frequency allowing more
                     // finer detail to emerge in the noise.
                                                                                       // Helps to allow negative values of the Perlin Noise.
-                    float perlinValue = Mathf.PerlinNoise(xPerlinCoord, zPerlinCoord)  * 2 - 1 ;
+                    float perlinValue = Mathf.PerlinNoise(xPerlinCoord, zPerlinCoord) * 2 - 1 ;
 
                     // The perlin value is timesed by amplitude to effect how much the other octaves have impact in the overall 
                     // height - i.e. how persistant they are. Lower octaves should propertioanlly have lesser impact.
@@ -155,6 +155,7 @@ public class TerrainObject : MonoBehaviour
                 newVertices[x, z].y = Mathf.InverseLerp(TerrainHeightMax, TerrainHeightMin, newVertices[x, z].y) * gridYHeightRange;
             }
         }
+
 
         if (Information.EnableSmoothing)
         {
@@ -484,7 +485,7 @@ public class TerrainObject : MonoBehaviour
         terrainMesh.uv = allUV;
 
         // Generate Colours.
-        Color[] colours = GenerateColour(newVertices, terrainGradient, TerrainHeightMin, TerrainHeightMax);
+        Color[] colours = GenerateColour(newVertices, terrainGradient, heightColorChange);
         terrainMesh.colors = colours;
 
         return terrainMesh;
@@ -601,7 +602,7 @@ public class TerrainObject : MonoBehaviour
     /// <param name="minHeight"></param>
     /// <param name="maxHeight"></param>
     /// <returns></returns>
-    Color[] GenerateColour(Vector3[,] vertices, Gradient terrainGradient, float minHeight, float maxHeight)
+    Color[] GenerateColour(Vector3[,] vertices, Gradient terrainGradient, float heightColorChange)
     {
         int width = vertices.GetLength(0);
         int length = vertices.GetLength(1);
@@ -613,10 +614,9 @@ public class TerrainObject : MonoBehaviour
         {
             for (int zCount = 0; zCount < length; zCount++)
             {
-                // Lazy fix for colour - re-work
-                float noramlisedHeight = Mathf.InverseLerp(minHeight * Information.GridYHeightRange, maxHeight * Information.GridYHeightRange, vertices[xCount, zCount].y) * 2 - 1;
+                float normalisedHeight = Mathf.InverseLerp(0, heightColorChange, vertices[xCount, zCount].y);
 
-                Color normalisedColor = terrainGradient.Evaluate(noramlisedHeight);
+                Color normalisedColor = terrainGradient.Evaluate(normalisedHeight);
 
                 newColours[counter] = normalisedColor;
 
