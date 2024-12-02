@@ -614,7 +614,7 @@ public class TerrainObject : MonoBehaviour
             for (int zCount = 0; zCount < length; zCount++)
             {
                 // Lazy fix for colour - re-work
-                float noramlisedHeight = Mathf.InverseLerp(minHeight * Information.GridYHeightRange, maxHeight * Information.GridYHeightRange, vertices[xCount, zCount].y);
+                float noramlisedHeight = Mathf.InverseLerp(minHeight * Information.GridYHeightRange, maxHeight * Information.GridYHeightRange, vertices[xCount, zCount].y) * 2 - 1;
 
                 Color normalisedColor = terrainGradient.Evaluate(noramlisedHeight);
 
