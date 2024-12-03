@@ -384,8 +384,6 @@ public class TerrainObject : MonoBehaviour
         int Old_GridZLength;
         float Old_GridSpacing;
         float Old_GridYHeightRange;
-        Color Old_TerrainColourLow;
-        Color Old_TerrainColourHigh;
         float Old_HeightColorChange;
         float Old_GridYHeightMultiplier;
         bool Old_EnableSmoothing;
@@ -407,8 +405,6 @@ public class TerrainObject : MonoBehaviour
             Old_GridZLength = Information.GridZLength;
             Old_GridSpacing = Information.GridSpacing;
             Old_GridYHeightRange = Information.GridYHeightRange;
-            Old_TerrainColourLow = Information.TerrainColourLow;
-            Old_TerrainColourHigh = Information.TerrainColourHigh;
             Old_HeightColorChange = Information.HeightColorChange;
             Old_GridYHeightMultiplier = Information.GridYHeightMultiplier;
             Old_EnableSmoothing = Information.EnableSmoothing;
@@ -430,8 +426,6 @@ public class TerrainObject : MonoBehaviour
                                     && Old_GridZLength == Information.GridZLength
                                     && Old_GridSpacing == Information.GridSpacing
                                     && Old_GridYHeightRange == Information.GridYHeightRange
-                                    && Old_TerrainColourLow == Information.TerrainColourLow
-                                    && Old_TerrainColourHigh == Information.TerrainColourHigh
                                     && Old_HeightColorChange == Information.HeightColorChange
                                     && Old_GridYHeightMultiplier == Information.GridYHeightMultiplier
                                     && Old_EnableSmoothing == Information.EnableSmoothing

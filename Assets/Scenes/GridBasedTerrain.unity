@@ -159,9 +159,6 @@ MonoBehaviour:
     <OffsetX>k__BackingField: 0
     <OffsetZ>k__BackingField: 0
     <GridYHeightRange>k__BackingField: 551.3
-    <GridYHeightMultiplier>k__BackingField: 1
-    <TerrainColourLow>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
-    <TerrainColourHigh>k__BackingField: {r: 1, g: 1, b: 1, a: 0}
     <TerrainGradient>k__BackingField:
       serializedVersion: 2
       key0: {r: 0.0061826706, g: 0, b: 1, a: 1}
@@ -197,7 +194,7 @@ MonoBehaviour:
     <Position>k__BackingField: {x: 0, y: 0, z: 0}
     <TerrainMaterial>k__BackingField: {fileID: -876546973899608171, guid: e0cc447a66be7914595b98e3b39ca86d, type: 3}
     <Seed>k__BackingField: 9
-    octaves: 1
+    octaves: 4
     persistance: 0.1
     lacunarity: 0.4
     <OctaveOffset>k__BackingField: {x: 0, y: 0}

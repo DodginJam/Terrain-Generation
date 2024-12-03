@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class TerrainInformation
 {
-    public TerrainInformation(int gridLengthX, int gridLengthZ, float gridSpacing, float perlinScale, float OffsetX, float OffsetZ, float gridYHeightRange, float gridYHeightMultiplier, Color terrainColourLow, Color terrainColourHigh, Gradient terrainGradient, float heightColorChange, bool enableSmoothing, Vector3 position, Material terrainMaterial, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset)
+    public TerrainInformation(int gridLengthX, int gridLengthZ, float gridSpacing, float perlinScale, float OffsetX, float OffsetZ, float gridYHeightRange, float gridYHeightMultiplier, Gradient terrainGradient, float heightColorChange, bool enableSmoothing, Vector3 position, Material terrainMaterial, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset)
     {
         this.GridXLength = gridLengthX;
         this.GridZLength = gridLengthZ;
@@ -16,8 +16,6 @@ public class TerrainInformation
         this.OffsetZ = OffsetZ;
         this.GridYHeightRange = gridYHeightRange;
         this.GridYHeightMultiplier = gridYHeightMultiplier;
-        this.TerrainColourLow = terrainColourLow;
-        this.TerrainColourHigh = terrainColourHigh;
         this.TerrainGradient = terrainGradient;
         this.HeightColorChange = heightColorChange;
         this.EnableSmoothing = enableSmoothing;
@@ -30,7 +28,7 @@ public class TerrainInformation
         this.OctaveOffset = octaveOffset;
     }
 
-    [SerializeField, Range(0, 2000)]
+    [SerializeField, Range(0, 2000), Tooltip("The length of how many vertices's in the X direction.")]
     private int gridXLength;
     /// <summary>
     /// The length of how many vertices's in the X direction.
@@ -45,7 +43,7 @@ public class TerrainInformation
         } 
     }
 
-    [SerializeField, Range(0, 2000)]
+    [SerializeField, Range(0, 2000), Tooltip("The length of how many vertices's in the Z direction.")]
     private int gridZLength;
     /// <summary>
     /// The length of how many vertices's in the Z direction.
@@ -63,77 +61,83 @@ public class TerrainInformation
     /// <summary>
     /// GridSpacing determines the distance between the vertices's - essentially the resolution of the grid.
     /// </summary>
-    [field: SerializeField]
+    [field: SerializeField, Tooltip("The distance between the vertices of the mesh")]
     public float GridSpacing
     { get; private set; }
+
     /// <summary>
     /// PerlinScale changes the detail or resolution of the perlin noise being used in application to the height of the terrain.
     /// </summary>
-    [field: SerializeField]
+    [field: SerializeField, Tooltip("The scale of the perlin noise being used in application to the height of the terrain")]
     public float PerlinScale
     { get; private set; }
-    [field: SerializeField]
+
+    /// <summary>
+    /// Offset the PerlinNoise data being applied to the mesh via the X axis.
+    /// </summary>
+    [field: SerializeField, Tooltip("Offset the PerlinNoise data being applied to the mesh via the X axis.")]
     public float OffsetX
     { get; private set; }
-    [field: SerializeField]
+
+    /// <summary>
+    /// Offset the PerlinNoise data being applied to the mesh via the Z axis.
+    /// </summary>
+    [field: SerializeField, Tooltip("Offset the PerlinNoise data being applied to the mesh via the Z axis.")]
     public float OffsetZ
     { get; private set; }
+
     /// <summary>
-    /// Real height range pre-smoothing.
+    /// The maximum height value that can be produced by the generated Mesh Y vertices - pre-smoothing.
     /// </summary>
-    [field: SerializeField]
+    [field: SerializeField, Tooltip("The maximum height value that can be produced by the generated Mesh Y vertices")]
     public float GridYHeightRange
     { get; private set; }
+
     /// <summary>
-    /// Multiplier tied to the height range.
+    /// Multiplier tied to the height range - currently unused.
     /// </summary>
-    [field: SerializeField]
     public float GridYHeightMultiplier
     { get; private set; }
+
     /// <summary>
-    /// The lower color in the singular gradiant applied to the terrain. Redundant.
+    /// Gradient colours that are applied to the Mesh - these values are mapped out onto the mesh with colour determnined by height of Y vertices.
     /// </summary>
-    [field: SerializeField]
-    public Color TerrainColourLow
+    [field: SerializeField, Tooltip("Gradient colours that are applied to the Mesh - these values are mapped out onto the mesh with colour determnined by height of Y vertices.\r\n")] public Gradient TerrainGradient
     { get; private set; }
+
     /// <summary>
-    /// The higher color in the singular gradiant applied to the terrain. Redundant.
+    /// The height at which the mid-point of the gradient occurs.
     /// </summary>
-    [field: SerializeField]
-    public Color TerrainColourHigh
-    { get; private set; }
-    /// <summary>
-    /// Gradient for terrain colouring.
-    /// </summary>
-    [field: SerializeField]
-    public Gradient TerrainGradient
-    { get; private set; }
-    /// <summary>
-    /// The height at which the mid-point of the gradient occurs. Redundant.
-    /// </summary>
-    [field: SerializeField]
+    [field: SerializeField, Tooltip("Change the height value at which the gradient colours are applied to the mesh.")]
     public float HeightColorChange
     { get; private set; }
+
     /// <summary>
     /// Allows one pass of smoothing to be applied to the terrain.
     /// </summary>
-    [field: SerializeField]
+    [field: SerializeField, Tooltip("Allow height smoothing of the meshes vertices.")]
     public bool EnableSmoothing
     { get; private set; }
+
     /// <summary>
     /// The position of the Mesh in the world.
     /// </summary>
-    [field: SerializeField]
+    [field: SerializeField, Tooltip("The position of the Mesh in the world")]
     public Vector3 Position
     { get; private set; }
+
     /// <summary>
     /// The material of the Mesh.
     /// </summary>
-    [field: SerializeField]
+    [field: SerializeField, Tooltip("The material to apply to the mesh - ideally a Shader Graph shader")]
     public Material TerrainMaterial
     { get; private set; }
 
-    [field: SerializeField] public int Seed
+    /// <summary>
+    /// The seed here is fed into a new initialisation of the System.Random class to provide reproducable outcomes.
+    /// Provides offsets per octave layer to be randomised -  too be re-looked at its application.
+    /// </summary>
+    [field: SerializeField, Tooltip("Provides offsets per octave layer to be randomised - too be re-looked at its application")] public int Seed
     { get; private set; }
 
     [SerializeField, Range(1, 20)] 
@@ -148,9 +152,6 @@ public class TerrainInformation
     }
     [SerializeField, Range(0f, 1f)]
     private float persistance;
-    /// <summary>
-    /// The length of how many vertices's in the Z direction.
-    /// </summary>
     public float Persistance
     {
         get { return persistance; }

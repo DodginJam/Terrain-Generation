@@ -72,8 +72,6 @@ public class TerrainManager : MonoBehaviour
                 GlobalTerrainInformation.OffsetZ + perlinZ[i],
                 GlobalTerrainInformation.GridYHeightRange,
                 GlobalTerrainInformation.GridYHeightMultiplier,
-                GlobalTerrainInformation.TerrainColourLow,
-                GlobalTerrainInformation.TerrainColourHigh,
                 GlobalTerrainInformation.TerrainGradient,
                 GlobalTerrainInformation.HeightColorChange,
                 GlobalTerrainInformation.EnableSmoothing,
@@ -168,8 +166,6 @@ public class TerrainManager : MonoBehaviour
                                         GlobalTerrainInformation.OffsetZ,
                                         GlobalTerrainInformation.GridYHeightRange,
                                         GlobalTerrainInformation.GridYHeightMultiplier,
-                                        GlobalTerrainInformation.TerrainColourLow,
-                                        GlobalTerrainInformation.TerrainColourHigh,
                                         GlobalTerrainInformation.TerrainGradient,
                                         GlobalTerrainInformation.HeightColorChange,
                                         GlobalTerrainInformation.EnableSmoothing,
@@ -188,8 +184,6 @@ public class TerrainManager : MonoBehaviour
                         && oldInformation.GridZLength == GlobalTerrainInformation.GridZLength
                         && oldInformation.GridSpacing == GlobalTerrainInformation.GridSpacing
                         && oldInformation.GridYHeightRange == GlobalTerrainInformation.GridYHeightRange
-                        && oldInformation.TerrainColourLow == GlobalTerrainInformation.TerrainColourLow
-                        && oldInformation.TerrainColourHigh == GlobalTerrainInformation.TerrainColourHigh
                         && oldInformation.HeightColorChange == GlobalTerrainInformation.HeightColorChange
                         && oldInformation.TerrainGradient == GlobalTerrainInformation.TerrainGradient
                         && oldInformation.GridYHeightMultiplier == GlobalTerrainInformation.GridYHeightMultiplier
