@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class TerrainInformation
 {
-    public TerrainInformation(int gridLengthX, int gridLengthZ, float gridSpacing, float perlinScale, float OffsetX, float OffsetZ, float gridYHeightRange, float gridYHeightMultiplier, Gradient terrainGradient, float heightColorChange, bool enableSmoothing, Vector3 position, Material terrainMaterial, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset)
+    public TerrainInformation(int gridLengthX, int gridLengthZ, float gridSpacing, float perlinScale, float OffsetX, float OffsetZ, float gridYHeightRange, float gridYHeightMultiplier, Gradient terrainGradient, float heightColorChange, bool enableSmoothing, Vector3 position, Material terrainMaterial, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset, AnimationCurve terrainCurve)
     {
         this.GridXLength = gridLengthX;
         this.GridZLength = gridLengthZ;
@@ -26,6 +26,7 @@ public class TerrainInformation
         this.Persistance = persistance;
         this.Lacunarity = lacunarity;
         this.OctaveOffset = octaveOffset;
+        this.TerrainCurve = terrainCurve;
     }
 
     [SerializeField, Range(0, 2000), Tooltip("The length of how many vertices's in the X direction.")]
@@ -172,5 +173,12 @@ public class TerrainInformation
         }
     }
     [field: SerializeField] public Vector2 OctaveOffset
+    { get; private set; }
+
+    /// <summary>
+    /// Animation curve will affect the normalised height value before being multiplied by the Height Range to alllow modified terrain in certain ranges of the normalised height scale.
+    /// </summary>
+    [field: SerializeField, Tooltip("Animation curve will affect the normalised height value before being multiplied by the Height Range to alllow modified terrain in certain ranges of the normalised height scale.")] 
+    public AnimationCurve TerrainCurve
     { get; private set; }
 }

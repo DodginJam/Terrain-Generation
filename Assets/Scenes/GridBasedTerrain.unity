@@ -185,7 +185,7 @@ MonoBehaviour:
       atime5: 0
       atime6: 0
       atime7: 0
-      m_Mode: 0
+      m_Mode: 1
       m_ColorSpace: -1
       m_NumColorKeys: 5
       m_NumAlphaKeys: 3
@@ -198,6 +198,39 @@ MonoBehaviour:
     persistance: 0.1
     lacunarity: 0.4
     <OctaveOffset>k__BackingField: {x: 0, y: 0}
+    <TerrainCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0.0066670566
+        value: 0.007080078
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.3999999
+        value: 0.0094338
+        inSlope: 0.0000037395962
+        outSlope: 0.0000037395962
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.08705406
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   <TerrainsList>k__BackingField: []
   <TerrainRenderDistance>k__BackingField: 0
 --- !u!4 &105660420

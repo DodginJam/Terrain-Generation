@@ -9,8 +9,8 @@ public class TerrainManager : MonoBehaviour
     { get; private set; }
 
     [field: SerializeField]
-    public List<GameObject> TerrainsList
-    { get; private set; } = null;
+    public static List<GameObject> TerrainsList
+    { get; private set; } = new List<GameObject>();
 
     [field: SerializeField]
     public int TerrainRenderDistance
@@ -81,7 +81,8 @@ public class TerrainManager : MonoBehaviour
                 GlobalTerrainInformation.Octaves,
                 GlobalTerrainInformation.Persistance,
                 GlobalTerrainInformation.Lacunarity,
-                GlobalTerrainInformation.OctaveOffset
+                GlobalTerrainInformation.OctaveOffset,
+                GlobalTerrainInformation.TerrainCurve
                 );
 
             // Pass the currentTerrainInformation, which should be a modified version of global data, to the terrainObject being generated.
@@ -133,11 +134,11 @@ public class TerrainManager : MonoBehaviour
                     if (xCount == lowerXBoundry || zCount == lowerZBoundry || xCount == higherXBoundry || zCount == higherZBoundry)
                     {
                         // Apply the positional offset of the terrain objects.
-                        positionalOffsets[completedTerrains] = new Vector3(xCount * GlobalTerrainInformation.GridXLength, 0, zCount * GlobalTerrainInformation.GridZLength) * GlobalTerrainInformation.GridSpacing;
+                        positionalOffsets[completedTerrains] = new Vector3((float)xCount * GlobalTerrainInformation.GridXLength, 0, (float)zCount * GlobalTerrainInformation.GridZLength) * (float)GlobalTerrainInformation.GridSpacing;
 
-                        // Need to calculate the Perlin noise offset to apply here - works but I need to understand the significance of the magic number 0.986f - something to do with floating point rounding erros and Perlin sampling?)
-                        perlinXOffset[completedTerrains] = (0.99668f * GlobalTerrainInformation.PerlinScale) * xCount;
-                        perlinZOffset[completedTerrains] = (0.99668f * GlobalTerrainInformation.PerlinScale) * zCount;
+                        // Assign the perlin offsets that would be required for the meshes adjacent and further away from centre.
+                        perlinXOffset[completedTerrains] = (positionalOffsets[completedTerrains].x / GlobalTerrainInformation.GridSpacing / GlobalTerrainInformation.PerlinScale);
+                        perlinZOffset[completedTerrains] = (positionalOffsets[completedTerrains].z / GlobalTerrainInformation.GridSpacing / GlobalTerrainInformation.PerlinScale);
 
                         completedTerrains++;
                     }
@@ -175,7 +176,8 @@ public class TerrainManager : MonoBehaviour
                                         GlobalTerrainInformation.Octaves,
                                         GlobalTerrainInformation.Persistance,
                                         GlobalTerrainInformation.Lacunarity,
-                                        GlobalTerrainInformation.OctaveOffset
+                                        GlobalTerrainInformation.OctaveOffset,
+                                        GlobalTerrainInformation.TerrainCurve
                                         );
 
             yield return new WaitForSeconds(timeTillNextCheck);
@@ -185,21 +187,29 @@ public class TerrainManager : MonoBehaviour
                         && oldInformation.GridSpacing == GlobalTerrainInformation.GridSpacing
                         && oldInformation.GridYHeightRange == GlobalTerrainInformation.GridYHeightRange
                         && oldInformation.HeightColorChange == GlobalTerrainInformation.HeightColorChange
+
+                        // The below doesn't work as it is a reference comparision.
                         && oldInformation.TerrainGradient == GlobalTerrainInformation.TerrainGradient
+
                         && oldInformation.GridYHeightMultiplier == GlobalTerrainInformation.GridYHeightMultiplier
                         && oldInformation.EnableSmoothing == GlobalTerrainInformation.EnableSmoothing
                         && oldInformation.PerlinScale == GlobalTerrainInformation.PerlinScale
                         && oldInformation.OffsetX == GlobalTerrainInformation.OffsetX
                         && oldInformation.OffsetZ == GlobalTerrainInformation.OffsetZ
                         && oldInformation.Position == GlobalTerrainInformation.Position
+
+                        // The below doesn't work as it is a reference comparision.
                         && oldInformation.TerrainMaterial.Equals(GlobalTerrainInformation.TerrainMaterial)
+
                         && oldInformation.Seed == GlobalTerrainInformation.Seed
                         && oldInformation.Octaves == GlobalTerrainInformation.Octaves
                         && oldInformation.Persistance == GlobalTerrainInformation.Persistance
                         && oldInformation.Lacunarity == GlobalTerrainInformation.Lacunarity
-                        && oldInformation.OctaveOffset == GlobalTerrainInformation.OctaveOffset;
+                        && oldInformation.OctaveOffset == GlobalTerrainInformation.OctaveOffset
 
-            Debug.Log(areValuesSame);
+                        // The below doesn't work as it is a reference comparision.
+                        && oldInformation.TerrainCurve == GlobalTerrainInformation.TerrainCurve;
+
 
             if (areValuesSame)
             {
@@ -214,6 +224,7 @@ public class TerrainManager : MonoBehaviour
             TerrainsList.Clear();
 
             GenerateNewTerrainList(TerrainRenderDistance);
+
         }
     }
 }

@@ -55,7 +55,7 @@ public class TerrainObject : MonoBehaviour
     void UpdateTerrain()
     {
         // Apply the terrainMesh mesh to the filter.
-        TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale, Information.TerrainGradient, Information.HeightColorChange, Information.Seed, Information.Octaves, Information.Persistance, Information.Lacunarity, Information.OctaveOffset);
+        TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale, Information.TerrainGradient, Information.HeightColorChange, Information.Seed, Information.Octaves, Information.Persistance, Information.Lacunarity, Information.OctaveOffset, Information.TerrainCurve);
         // TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainGradient, Information.HeightColorChange);
         TerrainRenderer.material = Information.TerrainMaterial;
         transform.position = Information.Position;
@@ -64,7 +64,7 @@ public class TerrainObject : MonoBehaviour
         TerrainMeshFilter.mesh.RecalculateNormals();
     }
 
-    public Vector3[,] GenerateVertices(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float scale, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset)
+    public Vector3[,] GenerateVertices(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float scale, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset, AnimationCurve heightCurve)
     {
         int xVerticeCount = xLength + 1;
         int zVerticeCount = zLength + 1;
@@ -152,7 +152,9 @@ public class TerrainObject : MonoBehaviour
         {
             for (int z = 0; z < newVertices.GetLength(1); z++)
             {
-                newVertices[x, z].y = Mathf.InverseLerp(TerrainHeightMax, TerrainHeightMin, newVertices[x, z].y) * gridYHeightRange;
+                newVertices[x, z].y = Mathf.InverseLerp(TerrainHeightMax, TerrainHeightMin, newVertices[x, z].y);
+                // Animation curve will affect the normalised height value before being multiplied by the Height Range to alllow modified terrain in certain ranges of the normalised height scale.
+                newVertices[x, z].y = heightCurve.Evaluate(newVertices[x, z].y) * gridYHeightRange;
             }
         }
 
@@ -380,65 +382,50 @@ public class TerrainObject : MonoBehaviour
     {
         float timeTillNextCheck = 0.01f;
 
-        int Old_GridXLength;
-        int Old_GridZLength;
-        float Old_GridSpacing;
-        float Old_GridYHeightRange;
-        float Old_HeightColorChange;
-        float Old_GridYHeightMultiplier;
-        bool Old_EnableSmoothing;
-        float Old_PerlinScale;
-        float Old_OffsetX;
-        float Old_OffsetZ;
-        Vector3 Old_Position;
-        Material Old_TerrainMaterial;
-        int Old_Seed;
-        int Old_Octaves;
-        float Old_Persistance;
-        float Old_Lacunarity;
-        Vector2 Old_OctaveOffset;
-
-
         while (true)
         {
-            Old_GridXLength = Information.GridXLength;
-            Old_GridZLength = Information.GridZLength;
-            Old_GridSpacing = Information.GridSpacing;
-            Old_GridYHeightRange = Information.GridYHeightRange;
-            Old_HeightColorChange = Information.HeightColorChange;
-            Old_GridYHeightMultiplier = Information.GridYHeightMultiplier;
-            Old_EnableSmoothing = Information.EnableSmoothing;
-            Old_PerlinScale = Information.PerlinScale;
-            Old_OffsetX = Information.OffsetX;
-            Old_OffsetZ = Information.OffsetZ;
-            Old_Position = Information.Position;
-            Old_TerrainMaterial = Information.TerrainMaterial;
-            Old_Seed = Information.Seed;
-            Old_Octaves = Information.Octaves;
-            Old_Persistance = Information.Persistance;
-            Old_Lacunarity = Information.Lacunarity;
-            Old_OctaveOffset = Information.OctaveOffset;
-
+            TerrainInformation oldInformation = new TerrainInformation
+                                            (
+                                            Information.GridXLength,
+                                            Information.GridZLength,
+                                            Information.GridSpacing,
+                                            Information.PerlinScale,
+                                            Information.OffsetX,
+                                            Information.OffsetZ,
+                                            Information.GridYHeightRange,
+                                            Information.GridYHeightMultiplier,
+                                            Information.TerrainGradient,
+                                            Information.HeightColorChange,
+                                            Information.EnableSmoothing,
+                                            Information.Position,
+                                            Information.TerrainMaterial,
+                                            Information.Seed,
+                                            Information.Octaves,
+                                            Information.Persistance,
+                                            Information.Lacunarity,
+                                            Information.OctaveOffset,
+                                            Information.TerrainCurve
+                                            );
 
             yield return new WaitForSeconds(timeTillNextCheck);
 
-            bool areValuesSame = Old_GridXLength == Information.GridXLength
-                                    && Old_GridZLength == Information.GridZLength
-                                    && Old_GridSpacing == Information.GridSpacing
-                                    && Old_GridYHeightRange == Information.GridYHeightRange
-                                    && Old_HeightColorChange == Information.HeightColorChange
-                                    && Old_GridYHeightMultiplier == Information.GridYHeightMultiplier
-                                    && Old_EnableSmoothing == Information.EnableSmoothing
-                                    && Old_PerlinScale == Information.PerlinScale
-                                    && Old_OffsetX == Information.OffsetX
-                                    && Old_OffsetZ == Information.OffsetZ
-                                    && Old_Position == Information.Position
-                                    && Old_TerrainMaterial.Equals(Information.TerrainMaterial)
-                                    && Old_Seed == Information.Seed
-                                    && Old_Octaves == Information.Octaves
-                                    && Old_Persistance == Information.Persistance
-                                    && Old_Lacunarity == Information.Lacunarity
-                                    && Old_OctaveOffset == Information.OctaveOffset;
+            bool areValuesSame = oldInformation.GridXLength == Information.GridXLength
+                                    && oldInformation.GridZLength == Information.GridZLength
+                                    && oldInformation.GridSpacing == Information.GridSpacing
+                                    && oldInformation.GridYHeightRange == Information.GridYHeightRange
+                                    && oldInformation.HeightColorChange == Information.HeightColorChange
+                                    && oldInformation.GridYHeightMultiplier == Information.GridYHeightMultiplier
+                                    && oldInformation.EnableSmoothing == Information.EnableSmoothing
+                                    && oldInformation.PerlinScale == Information.PerlinScale
+                                    && oldInformation.OffsetX == Information.OffsetX
+                                    && oldInformation.OffsetZ == Information.OffsetZ
+                                    && oldInformation.Position == Information.Position
+                                    && oldInformation.TerrainMaterial.Equals(Information.TerrainMaterial)
+                                    && oldInformation.Seed == Information.Seed
+                                    && oldInformation.Octaves == Information.Octaves
+                                    && oldInformation.Persistance == Information.Persistance
+                                    && oldInformation.Lacunarity == Information.Lacunarity
+                                    && oldInformation.OctaveOffset == Information.OctaveOffset;
 
             if (areValuesSame)
             {
@@ -449,9 +436,9 @@ public class TerrainObject : MonoBehaviour
         }
     }
 
-    Mesh GenerateMesh(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float perlinScale, Gradient terrainGradient, float heightColorChange, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset)
+    Mesh GenerateMesh(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float perlinScale, Gradient terrainGradient, float heightColorChange, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset, AnimationCurve terrainCurve)
     {
-        Vector3[,] newVertices = GenerateVertices(xLength, zLength, gridSpacing, gridYHeightRange, gridYHeightMultiplier, offsetX, offsetZ, perlinScale, seed, octaves, persistance, lacunarity, octaveOffset);
+        Vector3[,] newVertices = GenerateVertices(xLength, zLength, gridSpacing, gridYHeightRange, gridYHeightMultiplier, offsetX, offsetZ, perlinScale, seed, octaves, persistance, lacunarity, octaveOffset, terrainCurve);
 
         Vertices2DArray = newVertices;
 
