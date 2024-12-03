@@ -197,9 +197,9 @@ MonoBehaviour:
     <Position>k__BackingField: {x: 0, y: 0, z: 0}
     <TerrainMaterial>k__BackingField: {fileID: -876546973899608171, guid: e0cc447a66be7914595b98e3b39ca86d, type: 3}
     <Seed>k__BackingField: 9
-    <Octaves>k__BackingField: 6
-    persistance: 0.101
-    <Lacunarity>k__BackingField: 0.84
+    octaves: 1
+    persistance: 0.1
+    lacunarity: 0.4
     <OctaveOffset>k__BackingField: {x: 0, y: 0}
   <TerrainsList>k__BackingField: []
   <TerrainRenderDistance>k__BackingField: 0

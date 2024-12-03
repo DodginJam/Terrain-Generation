@@ -135,14 +135,22 @@ public class TerrainInformation
 
     [field: SerializeField] public int Seed
     { get; private set; }
-    [field: SerializeField] public int Octaves
-    { get; private set; }
+
+    [SerializeField, Range(1, 20)] 
+    public int octaves;
+    public int Octaves
+    {
+        get { return octaves; }
+        private set
+        {
+            octaves = Mathf.Clamp(value, 1, 20);
+        }
+    }
     [SerializeField, Range(0f, 1f)]
     private float persistance;
     /// <summary>
     /// The length of how many vertices's in the Z direction.
     /// </summary>
-    [SerializeField]
     public float Persistance
     {
         get { return persistance; }
@@ -152,9 +160,16 @@ public class TerrainInformation
         }
     }
 
-    
-    [field: SerializeField] public float Lacunarity
-    { get; private set; }
+    [SerializeField, Range(0.1f, 5.0f)]
+    private float lacunarity;
+    public float Lacunarity
+    {
+        get { return lacunarity; }
+        private set
+        {
+            lacunarity = Mathf.Clamp(value, 0.1f, 5.0f);
+        }
+    }
     [field: SerializeField] public Vector2 OctaveOffset
     { get; private set; }
 }
