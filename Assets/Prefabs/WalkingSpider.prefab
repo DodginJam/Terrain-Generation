@@ -1449,20 +1449,8 @@ MonoBehaviour:
   <BodyOffset>k__BackingField: {x: 0, y: 1, z: 0}
   <MovementSpeed>k__BackingField: 5
   <RotationSpeed>k__BackingField: 50
-  <LimbsEndPoints>k__BackingField:
-  - {fileID: 1654908789156223230}
-  - {fileID: 7425626309630326022}
-  - {fileID: 6516836750539745536}
-  - {fileID: 4186703596876150288}
-  - {fileID: 1447828981949964698}
-  - {fileID: 5792954993561120213}
-  - {fileID: 1654908789156223230}
-  - {fileID: 7425626309630326022}
-  - {fileID: 6516836750539745536}
-  - {fileID: 4186703596876150288}
-  - {fileID: 1447828981949964698}
-  - {fileID: 5792954993561120213}
-  toggleIKMeshVisual: 1
+  <LimbsEndPoints>k__BackingField: []
+  toggleIKMeshVisual: 0
 --- !u!1 &1560996744282265119
 GameObject:
   m_ObjectHideFlags: 0

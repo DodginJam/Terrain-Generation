@@ -61,6 +61,8 @@ public class SpiderController : MonoBehaviour
 
     private void Awake()
     {
+        ToggleIKMeshVisual = false;
+
         FastIKFabric[] limbList = transform.GetComponentsInChildren<DitzelGames.FastIK.FastIKFabric>();
 
         foreach(FastIKFabric script in limbList)
