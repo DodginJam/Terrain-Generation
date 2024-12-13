@@ -4,5 +4,20 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MenuScene.unity
+    guid: 612d9846d70e74d49a0f7ac953864ce6
+  - enabled: 1
+    path: Assets/Scenes/GameScene.unity
+    guid: fc86d0c98ef96a04dabfeb003682244d
+  - enabled: 1
+    path: Assets/Scenes/GridBasedTerrainTest.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/InverseKinematicsTest.unity
+    guid: fe62aefcab71cee44b3da52880aee638
+  - enabled: 1
+    path: Assets/Scenes/PoissonSceneTest.unity
+    guid: a8bb3efd2bbbb3a41a39afd63b851935
   m_configObjects: {}
