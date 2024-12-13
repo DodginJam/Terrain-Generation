@@ -62,6 +62,8 @@ public class TerrainObject : MonoBehaviour
 
         TerrainMeshFilter.mesh.RecalculateBounds();
         TerrainMeshFilter.mesh.RecalculateNormals();
+
+        transform.AddComponent<MeshCollider>();
     }
 
     public Vector3[,] GenerateVertices(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float scale, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset, AnimationCurve heightCurve)

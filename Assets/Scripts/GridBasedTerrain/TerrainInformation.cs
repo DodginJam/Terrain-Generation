@@ -69,7 +69,7 @@ public class TerrainInformation
     /// <summary>
     /// PerlinScale changes the detail or resolution of the perlin noise being used in application to the height of the terrain.
     /// </summary>
-    [field: SerializeField, Tooltip("The scale of the perlin noise being used in application to the height of the terrain")]
+    [field: SerializeField, Tooltip("The scale of the perlin noise being used in application to the height of the terrain"), Range(0.01f, 300f)]
     public float PerlinScale
     { get; private set; }
 

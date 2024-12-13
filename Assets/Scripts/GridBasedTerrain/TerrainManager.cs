@@ -31,14 +31,7 @@ public class TerrainManager : MonoBehaviour
         // Can manually re-generate the mesh on input.
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            foreach (GameObject terrain in TerrainsList)
-            {
-                Destroy(terrain.gameObject);
-            }
-
-            TerrainsList.Clear();
-
-            GenerateNewTerrainList(TerrainRenderDistance);
+            ClearAndLoad();
         }
     }
 
@@ -216,15 +209,24 @@ public class TerrainManager : MonoBehaviour
                 continue;
             }
 
-            foreach (GameObject terrain in TerrainsList)
-            {
-                Destroy(terrain.gameObject);
-            }
-
-            TerrainsList.Clear();
-
-            GenerateNewTerrainList(TerrainRenderDistance);
+            ClearAndLoad();
 
         }
+    }
+    void ClearTerrainData()
+    {
+        foreach (GameObject terrain in TerrainsList)
+        {
+            Destroy(terrain.gameObject);
+        }
+
+        TerrainsList.Clear();
+    }
+
+    public void ClearAndLoad()
+    {
+        ClearTerrainData();
+
+        GenerateNewTerrainList(TerrainRenderDistance);
     }
 }
