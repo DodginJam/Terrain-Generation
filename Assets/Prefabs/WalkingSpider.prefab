@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 8991580974230182008}
   m_Layer: 2
   m_Name: FrontLeftTarget
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 8742841618202285002}
   m_Layer: 2
   m_Name: BackLeftPredictedTarget
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -381,7 +381,7 @@ GameObject:
   - component: {fileID: 5388499807419616242}
   m_Layer: 2
   m_Name: BackRight
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -640,7 +640,7 @@ GameObject:
   - component: {fileID: 5025697995212930431}
   m_Layer: 2
   m_Name: FrontLeftPole
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -745,7 +745,7 @@ GameObject:
   - component: {fileID: 7170561523625812304}
   m_Layer: 2
   m_Name: MidLeftPole
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1094,7 +1094,7 @@ GameObject:
   - component: {fileID: 848874588699721219}
   m_Layer: 2
   m_Name: MidLeftPredictedTarget
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1462,6 +1462,7 @@ MonoBehaviour:
   - {fileID: 4186703596876150288}
   - {fileID: 1447828981949964698}
   - {fileID: 5792954993561120213}
+  toggleIKMeshVisual: 1
 --- !u!1 &1560996744282265119
 GameObject:
   m_ObjectHideFlags: 0
@@ -1558,7 +1559,7 @@ GameObject:
   - component: {fileID: 6803396126232419124}
   m_Layer: 2
   m_Name: BackLeft
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1741,7 +1742,7 @@ GameObject:
   - component: {fileID: 6802977979476895545}
   m_Layer: 2
   m_Name: MidLeftTarget
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1847,7 +1848,7 @@ GameObject:
   - component: {fileID: 8175990712369595506}
   m_Layer: 2
   m_Name: FrontRightPredictedTarget
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2036,7 +2037,7 @@ GameObject:
   - component: {fileID: 1493870916683200769}
   m_Layer: 2
   m_Name: FrontLeft
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2219,7 +2220,7 @@ GameObject:
   - component: {fileID: 221357065511407254}
   m_Layer: 2
   m_Name: FrontRightTarget
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2535,7 +2536,7 @@ GameObject:
   - component: {fileID: 5472135022058019564}
   m_Layer: 2
   m_Name: BackRightPredictedTarget
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2691,7 +2692,7 @@ GameObject:
   - component: {fileID: 4414621575029669064}
   m_Layer: 2
   m_Name: MidLeft
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3342,7 +3343,7 @@ GameObject:
   - component: {fileID: 6335785656183240293}
   m_Layer: 2
   m_Name: MidRightPole
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3447,7 +3448,7 @@ GameObject:
   - component: {fileID: 3048510522679104382}
   m_Layer: 2
   m_Name: BackRightPole
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3883,7 +3884,7 @@ GameObject:
   - component: {fileID: 8646536247968461016}
   m_Layer: 2
   m_Name: FrontRightPole
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4070,7 +4071,7 @@ GameObject:
   - component: {fileID: 8377514968917340059}
   m_Layer: 2
   m_Name: FrontRight
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4259,7 +4260,7 @@ GameObject:
   - component: {fileID: 7347119966407992561}
   m_Layer: 2
   m_Name: BackLeftTarget
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4364,7 +4365,7 @@ GameObject:
   - component: {fileID: 4042062501806509148}
   m_Layer: 2
   m_Name: BackRightTarget
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4730,7 +4731,7 @@ GameObject:
   - component: {fileID: 1182129726276849952}
   m_Layer: 2
   m_Name: FrontLeftPredictedTarget
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5130,7 +5131,7 @@ GameObject:
   - component: {fileID: 3878112745131111}
   m_Layer: 2
   m_Name: BackLeftPole
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5236,7 +5237,7 @@ GameObject:
   - component: {fileID: 591707843293930225}
   m_Layer: 2
   m_Name: MidRightPredictedTarget
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5393,7 +5394,7 @@ GameObject:
   - component: {fileID: 8114747507622884685}
   m_Layer: 2
   m_Name: MidRightTarget
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5744,7 +5745,7 @@ GameObject:
   - component: {fileID: 4180787439513780862}
   m_Layer: 2
   m_Name: MidRight
-  m_TagString: Untagged
+  m_TagString: IK_Helper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

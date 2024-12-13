@@ -45,6 +45,20 @@ public class SpiderController : MonoBehaviour
     public List<GameObject> LimbsEndPoints
     { get; private set; }
 
+    [SerializeField]
+    private bool toggleIKMeshVisual; // Backing field for the property.
+
+    // Property to handle changes.
+    public bool ToggleIKMeshVisual
+    {
+        get { return toggleIKMeshVisual; }
+        set
+        {
+            toggleIKMeshVisual = value;
+            MeshVisableSet(value);
+        }
+    }
+
     private void Awake()
     {
         FastIKFabric[] limbList = transform.GetComponentsInChildren<DitzelGames.FastIK.FastIKFabric>();
@@ -69,10 +83,10 @@ public class SpiderController : MonoBehaviour
         HorizontalInput = Input.GetAxisRaw("Horizontal");
 
         // Forward and back movement.
-        gameObject.transform.position += Time.deltaTime * MovementSpeed * VerticalInput * gameObject.transform.forward;
+        gameObject.transform.localPosition += Time.deltaTime * MovementSpeed * VerticalInput * gameObject.transform.forward;
 
         // Rotational movement.
-        gameObject.transform.rotation *= Quaternion.Euler(Time.deltaTime * RotationSpeed * HorizontalInput * gameObject.transform.up);
+        gameObject.transform.localRotation *= Quaternion.Euler(Time.deltaTime * RotationSpeed * HorizontalInput * gameObject.transform.up);
 
         // Set the body to the average of the leg positions plus offset.
         transform.position = new Vector3(transform.position.x, CalulateAveragePosition(LimbsEndPoints).y + BodyOffset.y, transform.position.z);
@@ -93,5 +107,16 @@ public class SpiderController : MonoBehaviour
         }
 
         return totalPositions / limbPositions.Count;
+    }
+
+    private void MeshVisableSet(bool setToVisable)
+    {
+        Debug.Log($"Mesh visibility set to: {setToVisable}");
+        GameObject[] ikHelpers = GameObject.FindGameObjectsWithTag("IK_Helper");
+
+        foreach (GameObject ikHelper in ikHelpers)
+        {
+            ikHelper.GetComponent<MeshRenderer>().enabled = setToVisable;
+        }
     }
 }
