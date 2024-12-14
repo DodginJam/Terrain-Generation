@@ -29,13 +29,10 @@ public class TerrainManager : MonoBehaviour
         StartCoroutine(UpdateMeshOnInputChange());
 
         // Trying to grab reference to UI in the scene - not flexable, UI object script needs polymorphism.
-        if (GameObject.Find("UIManager").TryGetComponent<TerrainManagerUI>(out TerrainManagerUI terrainUI))
+        if (GameObject.Find("UIManager").TryGetComponent<UIManager>(out UIManager ui))
         {
-            UIGameObject = terrainUI.gameObject;
-        }
-        else if (GameObject.Find("UIManager").TryGetComponent<GameManagerUI>(out GameManagerUI gameUI))
-        {
-            UIGameObject = gameUI.gameObject;
+            UIGameObject = ui.gameObject;
+            UIGameObject.GetComponent<UIManager>().InitUIValues();
         }
     }
 
@@ -58,15 +55,7 @@ public class TerrainManager : MonoBehaviour
         // Update UI if it exists.
         if (UIGameObject != null)
         {
-            // Trying to grab reference to UI in the scene - not flexable, UI object script needs polymorphism.
-            if (UIGameObject.TryGetComponent<TerrainManagerUI>(out TerrainManagerUI terrainUI))
-            {
-                terrainUI.InitUIValues();
-            }
-            else if (UIGameObject.TryGetComponent<GameManagerUI>(out GameManagerUI gameUI))
-            {
-                gameUI.InitUIValues();
-            }
+            UIGameObject.GetComponent<UIManager>().InitUIValues();
         }
 
         // Calculate the number of terrain meshes to generate based on the render distance. Total Blocks = ((2 * renderdistance) + 1)POW2

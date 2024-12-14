@@ -29,7 +29,7 @@ public class TerrainInformation
         this.TerrainCurve = terrainCurve;
     }
 
-    [SerializeField, Range(0, 2000), Tooltip("The length of how many vertices's in the X direction.")]
+    [SerializeField, Range(1, 2000), Tooltip("The length of how many vertices's in the X direction.")]
     private int gridXLength;
     /// <summary>
     /// The length of how many vertices's in the X direction.
@@ -40,11 +40,11 @@ public class TerrainInformation
         get { return gridXLength; }
         set 
         {
-            gridXLength = Mathf.Clamp(value, 0, 2000);
+            gridXLength = Mathf.Clamp(value, 1, 2000);
         } 
     }
 
-    [SerializeField, Range(0, 2000), Tooltip("The length of how many vertices's in the Z direction.")]
+    [SerializeField, Range(1, 2000), Tooltip("The length of how many vertices's in the Z direction.")]
     private int gridZLength;
     /// <summary>
     /// The length of how many vertices's in the Z direction.
@@ -55,7 +55,7 @@ public class TerrainInformation
         get { return gridZLength; }
         set
         {
-            gridZLength = Mathf.Clamp(value, 0, 2000);
+            gridZLength = Mathf.Clamp(value, 1, 2000);
         }
     }
 

@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManagerUI : MonoBehaviour
+public class GameManagerUI : UIManager
 {
+    public override void Awake()
+    {
+        base.Awake();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,13 +26,8 @@ public class GameManagerUI : MonoBehaviour
         }
     }
 
-    public void LoadScene(string sceneName)
+    public override void InitUIValues()
     {
-        SceneManager.LoadScene(sceneName);
-    }
-
-    public void InitUIValues()
-    {
-
+        base.InitUIValues();
     }
 }

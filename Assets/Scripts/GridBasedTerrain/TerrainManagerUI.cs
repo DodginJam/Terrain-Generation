@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor.UI;
 using UnityEngine.UI;
+using TMPro;
 
-public class TerrainManagerUI : MonoBehaviour
+public class TerrainManagerUI : UIManager
 {
     public TerrainManager TerrainManagerScript
     {  get; private set; }
@@ -18,8 +19,9 @@ public class TerrainManagerUI : MonoBehaviour
     public Slider GridXLengthSlider
     { get; private set; }
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         TerrainManagerScript = GameObject.FindFirstObjectByType<TerrainManager>();
         TerrainManagerInformation = TerrainManagerScript.GlobalTerrainInformation;
     }
@@ -27,6 +29,7 @@ public class TerrainManagerUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SetListeners();
     }
 
     // Update is called once per frame
@@ -43,11 +46,6 @@ public class TerrainManagerUI : MonoBehaviour
         }
     }
 
-    public void LoadScene(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName);
-    }
-
     public void SetObjectInactive(GameObject uiObject)
     {
         bool isActive = uiObject.activeInHierarchy;
@@ -55,15 +53,19 @@ public class TerrainManagerUI : MonoBehaviour
         uiObject.SetActive(!isActive);
     }
 
-    public void SetSliderValues(Slider slider, int min, int max, float newValue)
+    public override void InitUIValues()
     {
-        slider.minValue = min;
-        slider.maxValue = max;
-        slider.value = newValue;
+        base.InitUIValues();
+        SetSliderValues(GridXLengthSlider, 1, 2000, TerrainManagerInformation.GridXLength);
     }
 
-    public void InitUIValues()
+    public void SetListeners()
     {
-        SetSliderValues(GridXLengthSlider, 0, 2000, (int)GridXLengthSlider.value);
+        GridXLengthSlider.onValueChanged.AddListener(value =>
+        {
+            TerrainManagerInformation.GridXLength = (int)value;
+            SetTextBoxValue(GridXLengthSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), value);
+        });
+        
     }
 }

@@ -63,6 +63,7 @@ public class TerrainObject : MonoBehaviour
         TerrainMeshFilter.mesh.RecalculateBounds();
         TerrainMeshFilter.mesh.RecalculateNormals();
 
+        // Add the mesh collider component gameobject only once it has had all calculations completed on the mesh.
         transform.AddComponent<MeshCollider>();
     }
 
