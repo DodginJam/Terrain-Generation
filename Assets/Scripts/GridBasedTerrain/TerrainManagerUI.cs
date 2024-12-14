@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEditor.UI;
+using UnityEngine.UI;
 
 public class TerrainManagerUI : MonoBehaviour
 {
@@ -12,11 +14,14 @@ public class TerrainManagerUI : MonoBehaviour
     public TerrainInformation TerrainManagerInformation
     { get; private set; }
 
+    [field: SerializeField]
+    public Slider GridXLengthSlider
+    { get; private set; }
+
     private void Awake()
     {
         TerrainManagerScript = GameObject.FindFirstObjectByType<TerrainManager>();
         TerrainManagerInformation = TerrainManagerScript.GlobalTerrainInformation;
-
     }
 
     // Start is called before the first frame update
@@ -47,6 +52,18 @@ public class TerrainManagerUI : MonoBehaviour
     {
         bool isActive = uiObject.activeInHierarchy;
 
-        uiObject.SetActive(isActive);
+        uiObject.SetActive(!isActive);
+    }
+
+    public void SetSliderValues(Slider slider, int min, int max, float newValue)
+    {
+        slider.minValue = min;
+        slider.maxValue = max;
+        slider.value = newValue;
+    }
+
+    public void InitUIValues()
+    {
+        SetSliderValues(GridXLengthSlider, 0, 2000, (int)GridXLengthSlider.value);
     }
 }

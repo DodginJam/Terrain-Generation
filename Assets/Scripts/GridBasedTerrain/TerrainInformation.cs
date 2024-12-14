@@ -38,7 +38,7 @@ public class TerrainInformation
     public int GridXLength
     { 
         get { return gridXLength; }
-        private set 
+        set 
         {
             gridXLength = Mathf.Clamp(value, 0, 2000);
         } 
@@ -53,7 +53,7 @@ public class TerrainInformation
     public int GridZLength
     {
         get { return gridZLength; }
-        private set
+        set
         {
             gridZLength = Mathf.Clamp(value, 0, 2000);
         }
@@ -64,89 +64,89 @@ public class TerrainInformation
     /// </summary>
     [field: SerializeField, Tooltip("The distance between the vertices of the mesh")]
     public float GridSpacing
-    { get; private set; }
+    { get; set; }
 
     /// <summary>
     /// PerlinScale changes the detail or resolution of the perlin noise being used in application to the height of the terrain.
     /// </summary>
     [field: SerializeField, Tooltip("The scale of the perlin noise being used in application to the height of the terrain"), Range(0.01f, 300f)]
     public float PerlinScale
-    { get; private set; }
+    { get; set; }
 
     /// <summary>
     /// Offset the PerlinNoise data being applied to the mesh via the X axis.
     /// </summary>
     [field: SerializeField, Tooltip("Offset the PerlinNoise data being applied to the mesh via the X axis.")]
     public float OffsetX
-    { get; private set; }
+    { get; set; }
 
     /// <summary>
     /// Offset the PerlinNoise data being applied to the mesh via the Z axis.
     /// </summary>
     [field: SerializeField, Tooltip("Offset the PerlinNoise data being applied to the mesh via the Z axis.")]
     public float OffsetZ
-    { get; private set; }
+    { get; set; }
 
     /// <summary>
     /// The maximum height value that can be produced by the generated Mesh Y vertices - pre-smoothing.
     /// </summary>
     [field: SerializeField, Tooltip("The maximum height value that can be produced by the generated Mesh Y vertices")]
     public float GridYHeightRange
-    { get; private set; }
+    { get; set; }
 
     /// <summary>
     /// Multiplier tied to the height range - currently unused.
     /// </summary>
     public float GridYHeightMultiplier
-    { get; private set; }
+    { get; set; }
 
     /// <summary>
     /// Gradient colours that are applied to the Mesh - these values are mapped out onto the mesh with colour determnined by height of Y vertices.
     /// </summary>
     [field: SerializeField, Tooltip("Gradient colours that are applied to the Mesh - these values are mapped out onto the mesh with colour determnined by height of Y vertices.\r\n")] public Gradient TerrainGradient
-    { get; private set; }
+    { get; set; }
 
     /// <summary>
     /// The height at which the mid-point of the gradient occurs.
     /// </summary>
     [field: SerializeField, Tooltip("Change the height value at which the gradient colours are applied to the mesh.")]
     public float HeightColorChange
-    { get; private set; }
+    { get; set; }
 
     /// <summary>
     /// Allows one pass of smoothing to be applied to the terrain.
     /// </summary>
     [field: SerializeField, Tooltip("Allow height smoothing of the meshes vertices.")]
     public bool EnableSmoothing
-    { get; private set; }
+    { get; set; }
 
     /// <summary>
     /// The position of the Mesh in the world.
     /// </summary>
     [field: SerializeField, Tooltip("The position of the Mesh in the world")]
     public Vector3 Position
-    { get; private set; }
+    { get; set; }
 
     /// <summary>
     /// The material of the Mesh.
     /// </summary>
     [field: SerializeField, Tooltip("The material to apply to the mesh - ideally a Shader Graph shader")]
     public Material TerrainMaterial
-    { get; private set; }
+    { get; set; }
 
     /// <summary>
     /// The seed here is fed into a new initialisation of the System.Random class to provide reproducable outcomes.
     /// Provides offsets per octave layer to be randomised -  too be re-looked at its application.
     /// </summary>
     [field: SerializeField, Tooltip("Provides offsets per octave layer to be randomised - too be re-looked at its application")] public int Seed
-    { get; private set; }
+    { get; set; }
 
     [SerializeField, Range(1, 20)] 
-    public int octaves;
+    private int octaves;
     public int Octaves
     {
         get { return octaves; }
-        private set
+        set
         {
             octaves = Mathf.Clamp(value, 1, 20);
         }
@@ -156,7 +156,7 @@ public class TerrainInformation
     public float Persistance
     {
         get { return persistance; }
-        private set
+        set
         {
             persistance = Mathf.Clamp(value, 0f, 1f);
         }
@@ -167,18 +167,18 @@ public class TerrainInformation
     public float Lacunarity
     {
         get { return lacunarity; }
-        private set
+        set
         {
             lacunarity = Mathf.Clamp(value, 0.1f, 5.0f);
         }
     }
     [field: SerializeField] public Vector2 OctaveOffset
-    { get; private set; }
+    { get; set; }
 
     /// <summary>
     /// Animation curve will affect the normalised height value before being multiplied by the Height Range to alllow modified terrain in certain ranges of the normalised height scale.
     /// </summary>
     [field: SerializeField, Tooltip("Animation curve will affect the normalised height value before being multiplied by the Height Range to alllow modified terrain in certain ranges of the normalised height scale.")] 
     public AnimationCurve TerrainCurve
-    { get; private set; }
+    { get; set; }
 }

@@ -16,6 +16,10 @@ public class TerrainManager : MonoBehaviour
     public int TerrainRenderDistance
     { get; private set; } = 1;
 
+    [field: SerializeField]
+    public GameObject UIGameObject
+    { get; private set; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +27,16 @@ public class TerrainManager : MonoBehaviour
         GenerateNewTerrainList(TerrainRenderDistance);
         // Coroutine here looks for changes in terrain information, and if detected, generates a new terrain mesh grid.
         StartCoroutine(UpdateMeshOnInputChange());
+
+        // Trying to grab reference to UI in the scene - not flexable, UI object script needs polymorphism.
+        if (GameObject.Find("UIManager").TryGetComponent<TerrainManagerUI>(out TerrainManagerUI terrainUI))
+        {
+            UIGameObject = terrainUI.gameObject;
+        }
+        else if (GameObject.Find("UIManager").TryGetComponent<GameManagerUI>(out GameManagerUI gameUI))
+        {
+            UIGameObject = gameUI.gameObject;
+        }
     }
 
     // Update is called once per frame
@@ -41,6 +55,20 @@ public class TerrainManager : MonoBehaviour
     /// <param name="terrainRenderDistance"></param>
     void GenerateNewTerrainList(int terrainRenderDistance)
     {
+        // Update UI if it exists.
+        if (UIGameObject != null)
+        {
+            // Trying to grab reference to UI in the scene - not flexable, UI object script needs polymorphism.
+            if (UIGameObject.TryGetComponent<TerrainManagerUI>(out TerrainManagerUI terrainUI))
+            {
+                terrainUI.InitUIValues();
+            }
+            else if (UIGameObject.TryGetComponent<GameManagerUI>(out GameManagerUI gameUI))
+            {
+                gameUI.InitUIValues();
+            }
+        }
+
         // Calculate the number of terrain meshes to generate based on the render distance. Total Blocks = ((2 * renderdistance) + 1)POW2
         int numberOfTerrains = (int)Mathf.Pow((terrainRenderDistance * 2) + 1, 2);
 
@@ -84,8 +112,6 @@ public class TerrainManager : MonoBehaviour
             terrainObject.TerrainName = terrainName;
 
             TerrainsList.Add(currentTerrain);
-
-            // currentTerrain.transform.position = new Vector3(0, 0, terrainObject.Information.GridXLength) * (i + 1) * terrainObject.Information.GridSpacing;
         }
     }
 

@@ -25,4 +25,9 @@ public class GameManagerUI : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
     }
+
+    public void InitUIValues()
+    {
+
+    }
 }
