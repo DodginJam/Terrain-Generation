@@ -407,7 +407,8 @@ public class TerrainObject : MonoBehaviour
                                             Information.Persistance,
                                             Information.Lacunarity,
                                             Information.OctaveOffset,
-                                            Information.TerrainCurve
+                                            Information.TerrainCurve,
+                                            Information.ColourLockToHeight
                                             );
 
             yield return new WaitForSeconds(timeTillNextCheck);
@@ -428,7 +429,8 @@ public class TerrainObject : MonoBehaviour
                                     && oldInformation.Octaves == Information.Octaves
                                     && oldInformation.Persistance == Information.Persistance
                                     && oldInformation.Lacunarity == Information.Lacunarity
-                                    && oldInformation.OctaveOffset == Information.OctaveOffset;
+                                    && oldInformation.OctaveOffset == Information.OctaveOffset
+                                    && oldInformation.ColourLockToHeight == Information.ColourLockToHeight;
 
             if (areValuesSame)
             {

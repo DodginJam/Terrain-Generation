@@ -37,7 +37,7 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public void SetSliderValues(Slider slider, int min, int max, float newValue)
+    public void SetSliderValues(Slider slider, float min, float max, float newValue)
     {
         slider.minValue = min;
         slider.maxValue = max;
@@ -52,6 +52,11 @@ public class UIManager : MonoBehaviour
     }
 
     public void SetTextBoxValue(TextMeshProUGUI textDisplay, float value)
+    {
+        textDisplay.text = value.ToString();
+    }
+
+    public void SetTextBoxValue(TextMeshProUGUI textDisplay, string value)
     {
         textDisplay.text = value.ToString();
     }

@@ -14,7 +14,7 @@ public class TerrainManager : MonoBehaviour
 
     [field: SerializeField]
     public int TerrainRenderDistance
-    { get; private set; } = 1;
+    { get; set; } = 1;
 
     [field: SerializeField]
     public GameObject UIGameObject
@@ -40,11 +40,7 @@ public class TerrainManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Can manually re-generate the mesh on input.
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ClearAndLoad();
-        }
+
     }
 
     /// <summary>
@@ -93,7 +89,8 @@ public class TerrainManager : MonoBehaviour
                 GlobalTerrainInformation.Persistance,
                 GlobalTerrainInformation.Lacunarity,
                 GlobalTerrainInformation.OctaveOffset,
-                GlobalTerrainInformation.TerrainCurve
+                GlobalTerrainInformation.TerrainCurve,
+                GlobalTerrainInformation.ColourLockToHeight
                 );
 
             // Pass the currentTerrainInformation, which should be a modified version of global data, to the terrainObject being generated.
@@ -186,8 +183,11 @@ public class TerrainManager : MonoBehaviour
                                         GlobalTerrainInformation.Persistance,
                                         GlobalTerrainInformation.Lacunarity,
                                         GlobalTerrainInformation.OctaveOffset,
-                                        GlobalTerrainInformation.TerrainCurve
+                                        GlobalTerrainInformation.TerrainCurve,
+                                        GlobalTerrainInformation.ColourLockToHeight
                                         );
+
+            int oldTerrainRenderDistance = TerrainRenderDistance;
 
             yield return new WaitForSeconds(timeTillNextCheck);
 
@@ -215,9 +215,12 @@ public class TerrainManager : MonoBehaviour
                         && oldInformation.Persistance == GlobalTerrainInformation.Persistance
                         && oldInformation.Lacunarity == GlobalTerrainInformation.Lacunarity
                         && oldInformation.OctaveOffset == GlobalTerrainInformation.OctaveOffset
+                        && oldInformation.ColourLockToHeight == GlobalTerrainInformation.ColourLockToHeight
 
                         // The below doesn't work as it is a reference comparision.
-                        && oldInformation.TerrainCurve == GlobalTerrainInformation.TerrainCurve;
+                        && oldInformation.TerrainCurve == GlobalTerrainInformation.TerrainCurve
+
+                        && oldTerrainRenderDistance == TerrainRenderDistance;
 
 
             if (areValuesSame)

@@ -6,13 +6,13 @@ using UnityEditor.UI;
 using UnityEngine.UI;
 using TMPro;
 using static UnityEngine.Rendering.DebugUI;
+using System;
 
 public class TerrainManagerUI : UIManager
 {
     public TerrainManager TerrainManagerScript
     {  get; private set; }
 
-    [field: SerializeField]
     public TerrainInformation TerrainManagerInformation
     { get; private set; }
 
@@ -48,6 +48,33 @@ public class TerrainManagerUI : UIManager
     public Slider PerlinSeedSlider
     { get; private set; }
 
+    [field: SerializeField]
+    public TMP_InputField RenderDistanceInput
+    { get; private set; }
+
+    [field: SerializeField, Header("Perlin Based UI Elements Second Panel")]
+    public Slider OctavesSlider
+    { get; private set; }
+
+    [field: SerializeField]
+    public Slider PersistanceSlider
+    { get; private set; }
+
+    [field: SerializeField]
+    public Slider LacunaritySlider
+    { get; private set; }
+
+    [field: SerializeField]
+    public Toggle SmoothingToggle
+    { get; private set; }
+
+    [field: SerializeField, Header("Colour Mesh UI Elements")]
+    public Toggle ColourMatchHeightToggle
+    { get; private set; }
+
+    [field: SerializeField]
+    public Slider ColourHeightChangeSlider
+    { get; private set; }
 
 
     public override void Awake()
@@ -114,6 +141,20 @@ public class TerrainManagerUI : UIManager
 
         SetSliderValues(PerlinSeedSlider, -500, 500, TerrainManagerInformation.Seed);
         SetTextBoxValue(PerlinSeedSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), TerrainManagerInformation.Seed);
+
+        // Perlin Based Slider Values Second Panel Values.
+        SetSliderValues(OctavesSlider, 1, 20, TerrainManagerInformation.Octaves);
+        SetTextBoxValue(OctavesSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), TerrainManagerInformation.Octaves);
+
+        SetSliderValues(PersistanceSlider, 0, 1, TerrainManagerInformation.Persistance);
+        SetTextBoxValue(PersistanceSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), TerrainManagerInformation.Persistance);
+
+        SetSliderValues(LacunaritySlider, 0.15f, 5, TerrainManagerInformation.Lacunarity);
+        SetTextBoxValue(LacunaritySlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), TerrainManagerInformation.Lacunarity);
+
+        // Colour Based Slider Values.
+        SetSliderValues(ColourHeightChangeSlider, 0, TerrainManagerInformation.GridYHeightRange * 10.0f, TerrainManagerInformation.HeightColorChange);
+        SetTextBoxValue(ColourHeightChangeSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), TerrainManagerInformation.HeightColorChange);
     }
 
     public void SetListeners()
@@ -166,6 +207,61 @@ public class TerrainManagerUI : UIManager
         {
             TerrainManagerInformation.Seed = (int)value;
             SetTextBoxValue(PerlinSeedSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), value);
+        });
+
+        RenderDistanceInput.onEndEdit.AddListener(value =>
+        {
+            int intValue;
+
+            if (Int32.TryParse(value, out intValue))
+            {
+                intValue = Mathf.Clamp(intValue, 0, 5);
+                TerrainManagerScript.TerrainRenderDistance = intValue;
+            }
+            else
+            {
+                intValue = 0;
+                TerrainManagerScript.TerrainRenderDistance = intValue;
+            }
+
+            RenderDistanceInput.text = intValue.ToString();
+        });
+
+        // Perlin Based Slider Values Second Panel Values.
+        OctavesSlider.onValueChanged.AddListener(value =>
+        {
+            TerrainManagerInformation.Octaves = (int)value;
+            SetTextBoxValue(OctavesSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), value);
+        });
+
+        PersistanceSlider.onValueChanged.AddListener(value =>
+        {
+            TerrainManagerInformation.Persistance = value;
+            SetTextBoxValue(PersistanceSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), value);
+        });
+
+        LacunaritySlider.onValueChanged.AddListener(value =>
+        {
+            TerrainManagerInformation.Lacunarity = value;
+            SetTextBoxValue(LacunaritySlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), value);
+        });
+
+        // Toggle Smoothing.
+        SmoothingToggle.onValueChanged.AddListener(value =>
+        {
+            TerrainManagerInformation.EnableSmoothing = value;
+        });
+
+        // Colour Based Values.
+        ColourMatchHeightToggle.onValueChanged.AddListener(value =>
+        {
+            TerrainManagerInformation.ColourLockToHeight = value;
+        });
+
+        ColourHeightChangeSlider.onValueChanged.AddListener(value =>
+        {
+            TerrainManagerInformation.HeightColorChange = value;
+            SetTextBoxValue(ColourHeightChangeSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), value);
         });
     }
 }
