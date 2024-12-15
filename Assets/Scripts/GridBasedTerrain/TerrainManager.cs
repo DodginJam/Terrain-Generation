@@ -28,10 +28,11 @@ public class TerrainManager : MonoBehaviour
         // Coroutine here looks for changes in terrain information, and if detected, generates a new terrain mesh grid.
         StartCoroutine(UpdateMeshOnInputChange());
 
-        // Trying to grab reference to UI in the scene - not flexable, UI object script needs polymorphism.
+        // Grab reference to UI Manager script in the scene.
         if (GameObject.Find("UIManager").TryGetComponent<UIManager>(out UIManager ui))
         {
             UIGameObject = ui.gameObject;
+            // Initalise the UI values of the current UI manager for the - these UI values will reflect and influence the Terrain Information of the Terrain Manager.
             UIGameObject.GetComponent<UIManager>().InitUIValues();
         }
     }
