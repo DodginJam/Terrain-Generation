@@ -25,8 +25,6 @@ public class ToggleOtherColorMenus : MonoBehaviour
         TerrainInformation GlobalTerrainInfo = GameObject.Find("TerrainManager").GetComponent<TerrainManager>().GlobalTerrainInformation;
 
         TerrainGradient = GlobalTerrainInfo.TerrainGradient;
-
-        TerrainGradient = GameObject.Find("TerrainManager").GetComponent<TerrainManager>().GlobalTerrainInformation.TerrainGradient;
     }
 
     // Start is called before the first frame update
@@ -34,7 +32,7 @@ public class ToggleOtherColorMenus : MonoBehaviour
     {
         GrabColourReferences();
         GrabTimeReference();
-        SetColoursAndTimeToGradient();
+        SetColoursAndTimeToGradient(TerrainColours, TerrainTimeValues);
     }
 
     // Update is called once per frame
@@ -53,6 +51,9 @@ public class ToggleOtherColorMenus : MonoBehaviour
         currentObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Fill the colour array in the script to the colours set in a childs script.
+    /// </summary>
     public void GrabColourReferences()
     {
         SetColourDisplay[] coloursArray = GetComponentsInChildren<SetColourDisplay>();
@@ -68,6 +69,9 @@ public class ToggleOtherColorMenus : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Fill the time array in the script to the colours set in a childs script.
+    /// </summary>
     public void GrabTimeReference()
     {
         SetColourDisplay[] coloursArray = GetComponentsInChildren<SetColourDisplay>();
@@ -82,6 +86,9 @@ public class ToggleOtherColorMenus : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set the Gradient values in this script to the Colour and Time arrays already in the script.
+    /// </summary>
     public void SetColoursAndTimeToGradient()
     {
         GradientColorKey[] newColourKeys = new GradientColorKey[TerrainColours.Length];
@@ -95,5 +102,35 @@ public class ToggleOtherColorMenus : MonoBehaviour
         }
 
         TerrainGradient.SetKeys(newColourKeys, newAlphaKeys);
+    }
+
+    /// <summary>
+    /// Set the gradient values in this scipt to the Colour and Time arrays passed as arguments.
+    /// </summary>
+    /// <param name="newColorArray"></param>
+    /// <param name="newTimeValues"></param>
+    public void SetColoursAndTimeToGradient(Color[] newColorArray, float[] newTimeValues)
+    {
+        GradientColorKey[] newColourKeys = new GradientColorKey[newColorArray.Length];
+        GradientAlphaKey[] newAlphaKeys = new GradientAlphaKey[newColorArray.Length];
+
+        for (int i = 0; i < newColorArray.Length; i++)
+        {
+            newColourKeys[i] = new GradientColorKey(newColorArray[i], newTimeValues[i]);
+
+            newAlphaKeys[i] = new GradientAlphaKey(1, (float)i / newColorArray.Length);
+        }
+
+        TerrainGradient.SetKeys(newColourKeys, newAlphaKeys);
+    }
+
+    public void SetColourReferences()
+    {
+
+    }
+
+    public void SetTimeReference()
+    {
+
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -163,7 +164,7 @@ public class TerrainManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator UpdateMeshOnInputChange()
     {
-        float timeTillNextCheck = 0.01f;
+        float timeTillNextCheck = 0.1f;
 
         while (true)
         {
@@ -191,9 +192,81 @@ public class TerrainManager : MonoBehaviour
                                         GlobalTerrainInformation.ColourLockToHeight
                                         );
 
+            // Storing the old Colours/Time and Alpha/Time values.
+            GradientColorKey[] oldColours = new GradientColorKey[GlobalTerrainInformation.TerrainGradient.colorKeys.Length];
+            GradientAlphaKey[] oldAlphas = new GradientAlphaKey[GlobalTerrainInformation.TerrainGradient.alphaKeys.Length];
+
+            for (int i = 0; i < GlobalTerrainInformation.TerrainGradient.colorKeys.Length; i++)
+            {
+                oldColours[i].color = GlobalTerrainInformation.TerrainGradient.colorKeys[i].color;
+                oldColours[i].time = GlobalTerrainInformation.TerrainGradient.colorKeys[i].time;
+
+                oldAlphas[i].alpha = GlobalTerrainInformation.TerrainGradient.alphaKeys[i].alpha;
+                oldAlphas[i].time = GlobalTerrainInformation.TerrainGradient.alphaKeys[i].time;
+            }
+
+
             int oldTerrainRenderDistance = TerrainRenderDistance;
 
             yield return new WaitForSeconds(timeTillNextCheck);
+
+            // Storing the new Colours/Time and Alpha/Time values.
+            GradientColorKey[] newColours = new GradientColorKey[GlobalTerrainInformation.TerrainGradient.colorKeys.Length];
+            GradientAlphaKey[] newAlphas = new GradientAlphaKey[GlobalTerrainInformation.TerrainGradient.alphaKeys.Length];
+
+            for (int i = 0; i < GlobalTerrainInformation.TerrainGradient.colorKeys.Length; i++)
+            {
+                newColours[i].color = GlobalTerrainInformation.TerrainGradient.colorKeys[i].color;
+                newColours[i].time = GlobalTerrainInformation.TerrainGradient.colorKeys[i].time;
+
+                newAlphas[i].alpha = GlobalTerrainInformation.TerrainGradient.alphaKeys[i].alpha;
+                newAlphas[i].time = GlobalTerrainInformation.TerrainGradient.alphaKeys[i].time;
+            }
+
+            static bool AreValuesTheSameGC(GradientColorKey[] arrayOld, GradientColorKey[] arrayNew)
+            {
+                if (arrayOld.Length != arrayNew.Length)
+                {
+                    return false;
+                }
+
+                for (int i = 0; i < arrayOld.Length; i++)
+                {
+                    if (arrayNew[i].color != arrayOld[i].color)
+                    {
+                        return false;
+                    }
+                    if (arrayNew[i].time != arrayOld[i].time)
+                    {
+                        return false;
+
+                    }
+                }
+
+                return true;
+            }
+
+            static bool AreValuesTheSameGA(GradientAlphaKey[] arrayOld, GradientAlphaKey[] arrayNew)
+            {
+                if (arrayOld.Length != arrayNew.Length)
+                {
+                    return false;
+                }
+
+                for (int i = 0; i < arrayOld.Length; i++)
+                {
+                    if (arrayNew[i].alpha != arrayOld[i].alpha)
+                    {
+                        return false;
+                    }
+                    if (arrayNew[i].time != arrayOld[i].time)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
 
             bool areValuesSame = oldInformation.GridXLength == GlobalTerrainInformation.GridXLength
                         && oldInformation.GridZLength == GlobalTerrainInformation.GridZLength
@@ -224,7 +297,8 @@ public class TerrainManager : MonoBehaviour
                         // The below doesn't work as it is a reference comparision.
                         && oldInformation.TerrainCurve == GlobalTerrainInformation.TerrainCurve
 
-                        && oldTerrainRenderDistance == TerrainRenderDistance;
+                        && oldTerrainRenderDistance == TerrainRenderDistance
+                        && AreValuesTheSameGC(oldColours, newColours) && AreValuesTheSameGA(oldAlphas, newAlphas);
 
 
             if (areValuesSame)
