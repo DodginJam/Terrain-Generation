@@ -40,7 +40,11 @@ public class TerrainManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        // Can manually re-generate the mesh on input.
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ClearAndLoad();
+        }
     }
 
     /// <summary>
@@ -232,6 +236,7 @@ public class TerrainManager : MonoBehaviour
 
         }
     }
+
     void ClearTerrainData()
     {
         foreach (GameObject terrain in TerrainsList)

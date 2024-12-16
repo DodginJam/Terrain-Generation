@@ -123,7 +123,7 @@ public class TerrainManagerUI : UIManager
         SetSliderValues(GridZLengthSlider, 1, 500, TerrainManagerInformation.GridZLength);
         SetTextBoxValue(GridZLengthSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), TerrainManagerInformation.GridZLength);
 
-        SetSliderValues(GridSpacingSlider, 1, 500, TerrainManagerInformation.GridSpacing);
+        SetSliderValues(GridSpacingSlider, 1, 10, TerrainManagerInformation.GridSpacing);
         SetTextBoxValue(GridSpacingSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), TerrainManagerInformation.GridSpacing);
 
         SetSliderValues(GridHeightSlider, 0, 500, TerrainManagerInformation.GridYHeightRange);
@@ -153,7 +153,7 @@ public class TerrainManagerUI : UIManager
         SetTextBoxValue(LacunaritySlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), TerrainManagerInformation.Lacunarity);
 
         // Colour Based Slider Values.
-        SetSliderValues(ColourHeightChangeSlider, 0, TerrainManagerInformation.GridYHeightRange * 10.0f, TerrainManagerInformation.HeightColorChange);
+        SetSliderValues(ColourHeightChangeSlider, 0, TerrainManagerInformation.GridYHeightRange * 2f, TerrainManagerInformation.HeightColorChange);
         SetTextBoxValue(ColourHeightChangeSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), TerrainManagerInformation.HeightColorChange);
     }
 
@@ -253,9 +253,35 @@ public class TerrainManagerUI : UIManager
         });
 
         // Colour Based Values.
+        // This listner for the toggle, when set to true, tanks the framerate - needs investigating.
         ColourMatchHeightToggle.onValueChanged.AddListener(value =>
         {
             TerrainManagerInformation.ColourLockToHeight = value;
+            
+            if (ColourHeightChangeSlider != null)
+            {
+                if (value)
+                {
+                    ChangeSliderColours(ColourHeightChangeSlider, Color.grey);
+                }
+                else
+                {
+                    ChangeSliderColours(ColourHeightChangeSlider, Color.white);
+                }
+            }
+
+            void ChangeSliderColours(Slider slider, Color newColor)
+            {
+                GameObject parent = slider.transform.parent.gameObject;
+                TextMeshProUGUI[] texts = parent.GetComponentsInChildren<TextMeshProUGUI>();
+
+                foreach (TextMeshProUGUI text in texts)
+                {
+                    text.color = newColor;
+                }
+            }
+
+
         });
 
         ColourHeightChangeSlider.onValueChanged.AddListener(value =>
