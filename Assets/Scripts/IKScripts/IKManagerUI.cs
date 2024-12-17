@@ -62,7 +62,7 @@ public class IKManagerUI : UIManager
             SetTextBoxValue(StrideSlider.transform.parent.Find("Value").GetComponent<TextMeshProUGUI>(), SpiderModifiableValues.StrideLength.ToString("F2"));
         });
 
-        SetSliderValues(StrideSlider, 0.1f, 2.0f, SpiderModifiableValues.StrideLength);
+        SetSliderValues(StrideSlider, 0.1f, 2.0f * SpiderModifiableValues.transform.localScale.x, SpiderModifiableValues.StrideLength);
         SetTextBoxValue(StrideSlider.transform.parent.Find("Value").GetComponent<TextMeshProUGUI>(), SpiderModifiableValues.StrideLength.ToString("F2"));
 
         // Time to move leg.
@@ -72,7 +72,7 @@ public class IKManagerUI : UIManager
             SetTextBoxValue(LegMoveSlider.transform.parent.Find("Value").GetComponent<TextMeshProUGUI>(), SpiderModifiableValues.TimeToMoveLeg.ToString("F2"));
         });
 
-        SetSliderValues(LegMoveSlider, 0.01f, 0.6f, SpiderModifiableValues.TimeToMoveLeg);
+        SetSliderValues(LegMoveSlider, 0.01f, 0.6f * SpiderModifiableValues.transform.localScale.x, SpiderModifiableValues.TimeToMoveLeg);
         SetTextBoxValue(LegMoveSlider.transform.parent.Find("Value").GetComponent<TextMeshProUGUI>(), SpiderModifiableValues.TimeToMoveLeg.ToString("F2"));
 
         // Offset body from ground.
@@ -82,7 +82,7 @@ public class IKManagerUI : UIManager
             SetTextBoxValue(BodyOffsetSlider.transform.parent.Find("Value").GetComponent<TextMeshProUGUI>(), SpiderModifiableValues.BodyOffset.y.ToString("F2"));
         });
 
-        SetSliderValues(BodyOffsetSlider, 0.0f, 1.75f, SpiderModifiableValues.BodyOffset.y);
+        SetSliderValues(BodyOffsetSlider, 0.0f, 1.75f * SpiderModifiableValues.transform.localScale.x, SpiderModifiableValues.BodyOffset.y);
         SetTextBoxValue(BodyOffsetSlider.transform.parent.Find("Value").GetComponent<TextMeshProUGUI>(), SpiderModifiableValues.BodyOffset.y.ToString("F2"));
 
         // Movement Speed.
@@ -92,7 +92,7 @@ public class IKManagerUI : UIManager
             SetTextBoxValue(MovementSlider.transform.parent.Find("Value").GetComponent<TextMeshProUGUI>(), SpiderModifiableValues.MovementSpeed.ToString("F2"));
         });
 
-        SetSliderValues(MovementSlider, 0.0f, 10.0f, SpiderModifiableValues.MovementSpeed);
+        SetSliderValues(MovementSlider, 0.0f, 10.0f * SpiderModifiableValues.transform.localScale.x, SpiderModifiableValues.MovementSpeed);
         SetTextBoxValue(MovementSlider.transform.parent.Find("Value").GetComponent<TextMeshProUGUI>(), SpiderModifiableValues.MovementSpeed.ToString("F2"));
 
         // Movement Speed.
@@ -102,7 +102,7 @@ public class IKManagerUI : UIManager
             SetTextBoxValue(RotationSlider.transform.parent.Find("Value").GetComponent<TextMeshProUGUI>(), SpiderModifiableValues.RotationSpeed.ToString("F2"));
         });
 
-        SetSliderValues(RotationSlider, 0.0f, 100.0f, SpiderModifiableValues.RotationSpeed);
+        SetSliderValues(RotationSlider, 0.0f, 100.0f * SpiderModifiableValues.transform.localScale.x, SpiderModifiableValues.RotationSpeed);
         SetTextBoxValue(RotationSlider.transform.parent.Find("Value").GetComponent<TextMeshProUGUI>(), SpiderModifiableValues.RotationSpeed.ToString("F2"));
     }
 }

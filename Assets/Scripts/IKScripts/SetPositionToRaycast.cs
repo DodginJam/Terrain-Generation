@@ -76,11 +76,11 @@ public class SetPositionToRaycast : MonoBehaviour
 
         float targetToPredictedStepDistance = Vector3.Distance(EndEffectorTarget.position, TargetPredicted.position);
 
+        // Only start moving the leg if it is not moving, it's paired leg is not moving, and the distance from current leg position to predicted position is greater then given value.
         if (targetToPredictedStepDistance > (SpiderModifiableValues.StrideLength * LegStrideLengthModifier) && LegMoving == false && PairedLeg.LegMoving == false)
         {
+            // Start the movement lerp of the current end effector target to moves position towards the target predicted position.
             StartCoroutine(TransitionLegs(SpiderModifiableValues.TimeToMoveLeg * TimeToMoveLegModifier));
-
-            // EndEffectorTarget.position = TargetPredicted.position;
         }
     }
 
