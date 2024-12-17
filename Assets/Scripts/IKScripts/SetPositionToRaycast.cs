@@ -5,19 +5,13 @@ using UnityEngine;
 
 public class SetPositionToRaycast : MonoBehaviour
 {
-    /// <summary>
-    /// The distance required between the leg end effector and predicted target positions before the feet move.
-    /// </summary>
-    [field: SerializeField] 
-    public float StrideLength
+    [field: SerializeField]
+    public float LegStrideLengthModifier
     { get; private set; } = 1.0f;
 
-    /// <summary>
-    /// Time taken to lerp legs position to new position.
-    /// </summary>
     [field: SerializeField]
-    public float TimeToMoveLeg
-    { get; private set; } = 0.2f;
+    public float TimeToMoveLegModifier
+    { get; private set; } = 1.0f;
 
     /// <summary>
     /// The transform component for the predicted target gameobject for the current limb.
@@ -58,6 +52,14 @@ public class SetPositionToRaycast : MonoBehaviour
     public GameObject RayCastEmitter
     { get; private set; }
 
+    [field: SerializeField]
+    public SpiderModifiableValues SpiderModifiableValues
+    { get; private set; }
+
+    private void Awake()
+    {
+
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -74,9 +76,9 @@ public class SetPositionToRaycast : MonoBehaviour
 
         float targetToPredictedStepDistance = Vector3.Distance(EndEffectorTarget.position, TargetPredicted.position);
 
-        if (targetToPredictedStepDistance > StrideLength && LegMoving == false && PairedLeg.LegMoving == false)
+        if (targetToPredictedStepDistance > (SpiderModifiableValues.StrideLength * LegStrideLengthModifier) && LegMoving == false && PairedLeg.LegMoving == false)
         {
-            StartCoroutine(TransitionLegs(TimeToMoveLeg));
+            StartCoroutine(TransitionLegs(SpiderModifiableValues.TimeToMoveLeg * TimeToMoveLegModifier));
 
             // EndEffectorTarget.position = TargetPredicted.position;
         }

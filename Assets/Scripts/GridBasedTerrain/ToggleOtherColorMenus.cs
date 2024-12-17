@@ -22,18 +22,18 @@ public class ToggleOtherColorMenus : MonoBehaviour
 
     void Awake()
     {
-
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
         // Ensure the TerrainGradient property of this script points to the same Gradient as the global TerrainManager script.
         TerrainInformation GlobalTerrainInfo = GameObject.Find("TerrainManager").GetComponent<TerrainManager>().GlobalTerrainInformation;
         TerrainGradient = GlobalTerrainInfo.TerrainGradient;
 
         // Set the colours, alpha and times floats into the relevent objects in the colour UI game objects.
         SetColourAndAlphaReferences(TerrainGradient.colorKeys, TerrainGradient.alphaKeys);
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+
 
         
         // Grab the reference to the colour UI game objects and set them to the gradient attached.

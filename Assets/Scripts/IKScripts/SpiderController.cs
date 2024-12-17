@@ -18,36 +18,15 @@ public class SpiderController : MonoBehaviour
     { get; private set; }
 
     /// <summary>
-    /// The offset of the body the average leg position.
-    /// </summary>
-    [field: SerializeField]
-    public Vector3 BodyOffset
-    { get; private set; }
-
-    /// <summary>
-    /// Speed of the translate of the spider body.
-    /// </summary>
-    [field: SerializeField]
-    public float MovementSpeed
-    { get; private set; }
-
-    /// <summary>
-    /// Speed of the rotation of the spider body.
-    /// </summary>
-    [field: SerializeField]
-    public float RotationSpeed
-    { get; private set; }
-
-    /// <summary>
     /// The limb end points for purpose of body height calculation.
     /// </summary>
     [field: SerializeField]
     public List<GameObject> LimbsEndPoints
     { get; private set; }
 
+    // Backing field for the property.
     [SerializeField]
-    private bool toggleIKMeshVisual; // Backing field for the property.
-
+    private bool toggleIKMeshVisual; 
     // Property to handle changes.
     public bool ToggleIKMeshVisual
     {
@@ -58,6 +37,10 @@ public class SpiderController : MonoBehaviour
             MeshVisableSet(value);
         }
     }
+
+    [field: SerializeField]
+    public SpiderModifiableValues SpiderModifiableValues
+    { get; private set; }
 
     private void Awake()
     {
@@ -85,13 +68,13 @@ public class SpiderController : MonoBehaviour
         HorizontalInput = Input.GetAxisRaw("Horizontal");
 
         // Forward and back movement.
-        gameObject.transform.localPosition += Time.deltaTime * MovementSpeed * VerticalInput * gameObject.transform.forward;
+        gameObject.transform.localPosition += Time.deltaTime * SpiderModifiableValues.MovementSpeed * VerticalInput * gameObject.transform.forward;
 
         // Rotational movement.
-        gameObject.transform.localRotation *= Quaternion.Euler(Time.deltaTime * RotationSpeed * HorizontalInput * gameObject.transform.up);
+        gameObject.transform.localRotation *= Quaternion.Euler(Time.deltaTime * SpiderModifiableValues.RotationSpeed * HorizontalInput * gameObject.transform.up);
 
         // Set the body to the average of the leg positions plus offset.
-        transform.position = new Vector3(transform.position.x, CalulateAveragePosition(LimbsEndPoints).y + BodyOffset.y, transform.position.z);
+        transform.position = new Vector3(transform.position.x, CalulateAveragePosition(LimbsEndPoints).y + SpiderModifiableValues.BodyOffset.y, transform.position.z);
     }
 
     /// <summary>

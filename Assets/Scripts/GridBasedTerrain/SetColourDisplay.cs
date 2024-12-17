@@ -99,6 +99,10 @@ public class SetColourDisplay : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Updates the CurrentColour and DisplayColour variables of this script based on the current Red, Green and Blue values (the RGB values are updated via slider listeners).
+    /// Then calls method from the parent object script to update the relevent colour array and then terrain gradient.
+    /// </summary>
     public void UpdateColour()
     {
         Color newColor = new Color(RedValue, GreenValue, BlueValue);
@@ -111,29 +115,35 @@ public class SetColourDisplay : MonoBehaviour
         gameObject.transform.parent.GetComponent<ToggleOtherColorMenus>().SetGradientColoursAndTime();
     }
 
+    /// <summary>
+    /// Calls method from the parent object script to update the relevent Time array and then terrain gradient.
+    /// </summary>
     public void UpdateTime()
     {
         gameObject.transform.parent.GetComponent<ToggleOtherColorMenus>().GrabTimeReference();
         gameObject.transform.parent.GetComponent<ToggleOtherColorMenus>().SetGradientColoursAndTime();
     }
 
+    // Currently trying to set the slider values for the colours will cause and out of index exception error.
     public void SetColour(Color newColor)
     {
         ColourDisplay.color = newColor;
 
         CurrentColour = newColor;
 
-        /*
-        RedSlider.value = newColor.r;
-        Greenlider.value = newColor.g;
-        BlueSlider.value = newColor.b;
-        */
+        RedValue = newColor.r;
+        GreenValue = newColor.g;
+        BlueValue = newColor.b;
     }
 
+    /// <summary>
+    /// Called from parent script for setting the time values to the master value on start.
+    /// </summary>
+    /// <param name="newTime"></param>
     public void SetTime(float newTime)
     {
         CurrentTime = newTime;
 
-        // TimeSlider.value = newTime;
+        TimeSlider.value = newTime;
     }
 }

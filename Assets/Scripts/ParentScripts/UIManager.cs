@@ -7,22 +7,24 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public virtual void Awake()
+    protected virtual void Awake()
     {
 
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             LoadScene("MenuScene");
         }
     }

@@ -326,6 +326,9 @@ public class TerrainManager : MonoBehaviour
         TerrainsList.Clear();
     }
 
+    /// <summary>
+    /// Used to clear out the terrain gameobject and re-load a new set of meshes.
+    /// </summary>
     public void ClearAndLoad()
     {
         ClearTerrainData();

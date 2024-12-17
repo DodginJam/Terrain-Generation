@@ -5,20 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class GameManagerUI : UIManager
 {
-    public override void Awake()
+    protected override void Awake()
     {
         base.Awake();
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
 
 
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {

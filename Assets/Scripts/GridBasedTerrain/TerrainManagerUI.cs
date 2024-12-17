@@ -77,7 +77,7 @@ public class TerrainManagerUI : UIManager
     { get; private set; }
 
 
-    public override void Awake()
+    protected override void Awake()
     {
         base.Awake();
         TerrainManagerScript = GameObject.FindFirstObjectByType<TerrainManager>();
@@ -85,14 +85,17 @@ public class TerrainManagerUI : UIManager
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         SetListeners();
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (Input.GetKeyDown(KeyCode.P))
         {
             LoadScene("MenuScene");
