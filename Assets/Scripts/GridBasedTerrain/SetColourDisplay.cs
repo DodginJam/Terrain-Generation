@@ -108,13 +108,13 @@ public class SetColourDisplay : MonoBehaviour
         CurrentColour = newColor;
 
         gameObject.transform.parent.GetComponent<ToggleOtherColorMenus>().GrabColourReferences();
-        gameObject.transform.parent.GetComponent<ToggleOtherColorMenus>().SetColoursAndTimeToGradient();
+        gameObject.transform.parent.GetComponent<ToggleOtherColorMenus>().SetGradientColoursAndTime();
     }
 
     public void UpdateTime()
     {
         gameObject.transform.parent.GetComponent<ToggleOtherColorMenus>().GrabTimeReference();
-        gameObject.transform.parent.GetComponent<ToggleOtherColorMenus>().SetColoursAndTimeToGradient();
+        gameObject.transform.parent.GetComponent<ToggleOtherColorMenus>().SetGradientColoursAndTime();
     }
 
     public void SetColour(Color newColor)
@@ -123,8 +123,17 @@ public class SetColourDisplay : MonoBehaviour
 
         CurrentColour = newColor;
 
-        gameObject.transform.parent.GetComponent<ToggleOtherColorMenus>().GrabColourReferences();
-        gameObject.transform.parent.GetComponent<ToggleOtherColorMenus>().SetColoursAndTimeToGradient();
+        /*
+        RedSlider.value = newColor.r;
+        Greenlider.value = newColor.g;
+        BlueSlider.value = newColor.b;
+        */
+    }
 
+    public void SetTime(float newTime)
+    {
+        CurrentTime = newTime;
+
+        // TimeSlider.value = newTime;
     }
 }

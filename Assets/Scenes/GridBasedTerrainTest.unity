@@ -313,12 +313,12 @@ MonoBehaviour:
       serializedVersion: 2
       key0: {r: 0.0061826706, g: 0, b: 1, a: 1}
       key1: {r: 0.5734577, g: 0.5943396, b: 0.12615702, a: 1}
-      key2: {r: 0.1707013, g: 0.26415092, b: 0.19107598, a: 0}
-      key3: {r: 0.2660528, g: 0.5943396, b: 0.025231387, a: 0}
-      key4: {r: 0.2660528, g: 0.5943396, b: 0.025231387, a: 0}
-      key5: {r: 0.2660528, g: 0.5943396, b: 0.025231387, a: 0}
-      key6: {r: 1, g: 1, b: 1, a: 0}
-      key7: {r: 1, g: 1, b: 1, a: 0}
+      key2: {r: 0.1707013, g: 0.26415092, b: 0.19107598, a: 1}
+      key3: {r: 0.2660528, g: 0.5943396, b: 0.025231387, a: 1}
+      key4: {r: 0.26666668, g: 0.59607846, b: 0.023529414, a: 1}
+      key5: {r: 0.2660528, g: 0.5943396, b: 0.025231387, a: 1}
+      key6: {r: 1, g: 1, b: 1, a: 1}
+      key7: {r: 1, g: 1, b: 1, a: 1}
       ctime0: 1157
       ctime1: 20432
       ctime2: 25443
@@ -328,17 +328,17 @@ MonoBehaviour:
       ctime6: 61102
       ctime7: 65535
       atime0: 0
-      atime1: 65535
-      atime2: 0
-      atime3: 0
-      atime4: 0
-      atime5: 0
-      atime6: 0
-      atime7: 0
+      atime1: 7325
+      atime2: 10794
+      atime3: 16769
+      atime4: 24479
+      atime5: 31804
+      atime6: 35659
+      atime7: 65535
       m_Mode: 1
       m_ColorSpace: -1
       m_NumColorKeys: 8
-      m_NumAlphaKeys: 2
+      m_NumAlphaKeys: 8
     <HeightColorChange>k__BackingField: 400
     <EnableSmoothing>k__BackingField: 0
     <Position>k__BackingField: {x: 0, y: 0, z: 0}

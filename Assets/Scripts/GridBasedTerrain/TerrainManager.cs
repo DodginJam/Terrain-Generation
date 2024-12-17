@@ -21,8 +21,7 @@ public class TerrainManager : MonoBehaviour
     public GameObject UIGameObject
     { get; private set; }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         // Generate a grid of terrain meshes
         GenerateNewTerrainList(TerrainRenderDistance);
@@ -36,6 +35,12 @@ public class TerrainManager : MonoBehaviour
             // Initalise the UI values of the current UI manager for the - these UI values will reflect and influence the Terrain Information of the Terrain Manager.
             UIGameObject.GetComponent<UIManager>().InitUIValues();
         }
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+
     }
 
     // Update is called once per frame

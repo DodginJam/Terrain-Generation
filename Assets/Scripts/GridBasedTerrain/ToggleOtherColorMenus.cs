@@ -22,17 +22,25 @@ public class ToggleOtherColorMenus : MonoBehaviour
 
     void Awake()
     {
-        TerrainInformation GlobalTerrainInfo = GameObject.Find("TerrainManager").GetComponent<TerrainManager>().GlobalTerrainInformation;
 
-        TerrainGradient = GlobalTerrainInfo.TerrainGradient;
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        // Ensure the TerrainGradient property of this script points to the same Gradient as the global TerrainManager script.
+        TerrainInformation GlobalTerrainInfo = GameObject.Find("TerrainManager").GetComponent<TerrainManager>().GlobalTerrainInformation;
+        TerrainGradient = GlobalTerrainInfo.TerrainGradient;
+
+        // Set the colours, alpha and times floats into the relevent objects in the colour UI game objects.
+        SetColourAndAlphaReferences(TerrainGradient.colorKeys, TerrainGradient.alphaKeys);
+
+        
+        // Grab the reference to the colour UI game objects and set them to the gradient attached.
         GrabColourReferences();
         GrabTimeReference();
-        SetColoursAndTimeToGradient(TerrainColours, TerrainTimeValues);
+        
+        SetGradientColoursAndTime(TerrainColours, TerrainTimeValues);
     }
 
     // Update is called once per frame
@@ -89,7 +97,7 @@ public class ToggleOtherColorMenus : MonoBehaviour
     /// <summary>
     /// Set the Gradient values in this script to the Colour and Time arrays already in the script.
     /// </summary>
-    public void SetColoursAndTimeToGradient()
+    public void SetGradientColoursAndTime()
     {
         GradientColorKey[] newColourKeys = new GradientColorKey[TerrainColours.Length];
         GradientAlphaKey[] newAlphaKeys = new GradientAlphaKey[TerrainColours.Length];
@@ -109,7 +117,7 @@ public class ToggleOtherColorMenus : MonoBehaviour
     /// </summary>
     /// <param name="newColorArray"></param>
     /// <param name="newTimeValues"></param>
-    public void SetColoursAndTimeToGradient(Color[] newColorArray, float[] newTimeValues)
+    public void SetGradientColoursAndTime(Color[] newColorArray, float[] newTimeValues)
     {
         GradientColorKey[] newColourKeys = new GradientColorKey[newColorArray.Length];
         GradientAlphaKey[] newAlphaKeys = new GradientAlphaKey[newColorArray.Length];
@@ -124,13 +132,14 @@ public class ToggleOtherColorMenus : MonoBehaviour
         TerrainGradient.SetKeys(newColourKeys, newAlphaKeys);
     }
 
-    public void SetColourReferences()
+    public void SetColourAndAlphaReferences(GradientColorKey[] colourKeys, GradientAlphaKey[] alphaKeys)
     {
+        SetColourDisplay[] coloursArray = GetComponentsInChildren<SetColourDisplay>();
 
-    }
-
-    public void SetTimeReference()
-    {
-
+        for (int i = 0; i < colourKeys.Length; i++)
+        {
+            coloursArray[i].SetColour(colourKeys[i].color);
+            coloursArray[i].SetTime(colourKeys[i].time);
+        }
     }
 }
