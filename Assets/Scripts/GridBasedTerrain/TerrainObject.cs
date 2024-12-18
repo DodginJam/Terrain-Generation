@@ -99,6 +99,7 @@ public class TerrainObject : MonoBehaviour
         TerrainHeightMin = float.MaxValue;
 
         float maxPossibleHeight = 0;
+        float minPossibleHeight = 0;
         // Amplitude is how much off an effect the lesser octaves have an impact in overall height values - this is affected by the persistance value.
         float amplitude = 1;
         // Frequency is the level of detail each ocatave passes through to the overall noise height values - this is affected by the lacunarity value.
@@ -107,17 +108,19 @@ public class TerrainObject : MonoBehaviour
         // Sampled from Sebastian Lague Procedural Landmass Generation (E03: Octaves). Link: https://youtu.be/MRNFcywkUSA?si=-IN_Y8heM2EOnWIs
         // Provides offsets per octave layer to be randomised.
         System.Random prng = new System.Random(seed);
-        Vector2[] octaveOffsets = new Vector2[octaves];
+
+        float octaveOffsetX = 0;
+        float octaveOffsetZ = 0;
+
         for (int i = 0; i < octaves; i++)
         {
-            float octaveOffsetX = prng.Next(-100000, 100000) + octaveOffset.x;
-            float octaveOffsetZ = prng.Next(-100000, 100000) + octaveOffset.y;
-
-            octaveOffsets[i] = new Vector2(octaveOffsetX, octaveOffsetZ);
+            octaveOffsetX = prng.Next(-100000, 100000) + offsetX;
+            octaveOffsetZ = prng.Next(-100000, 100000) + offsetZ;
 
             maxPossibleHeight += amplitude;
+            minPossibleHeight -= amplitude;
             amplitude *= persistance;
-        }
+        };
 
         Vector3[,] newVertices = new Vector3[xVerticeCount, zVerticeCount];
 
@@ -144,8 +147,8 @@ public class TerrainObject : MonoBehaviour
 
                     // Getting the Perlin Coord for X and Z by normalising it's value - dividing the current vertices position by the total amounts of vertices in that axis.
                     // The count is offset by half the axis length to let perlin scale from centre of mesh.
-                    float xPerlinCoord = ((float)xCount - halfLength) / (scale * frequency) + octaveOffsets[i].x + offsetX;
-                    float zPerlinCoord = ((float)zCount - halfWidth) / (scale * frequency) + octaveOffsets[i].y + offsetZ;
+                    float xPerlinCoord = (((float)xCount - halfLength) + octaveOffsetX) / (scale * frequency);
+                    float zPerlinCoord = ((float)zCount - halfWidth + octaveOffsetZ) / (scale * frequency);
 
                     // The perlinNoise coord are multiplied by scale.
                     // The scale is timesed by the frequency to affect the detail of the respective octave layers, with higher frequency allowing more
@@ -193,7 +196,7 @@ public class TerrainObject : MonoBehaviour
                 // Calculate the heights of the vertices using the global height min and max values.
                 else if (normalizeMode == TerrainInformation.NormalizeMode.Global)
                 {
-                    float normalisedHeight = (newVertices[x, z].y + 1.0f) / (2.0f * maxPossibleHeight);
+                    float normalisedHeight = /*(newVertices[x, z].y + 1.0f) / (2.0f * maxPossibleHeight) */ Mathf.InverseLerp(minPossibleHeight, maxPossibleHeight, newVertices[x, z].y);
                     newVertices[x, z].y = normalisedHeight;
 
                     // Animation curve will affect the normalised height value before being multiplied by the Height Range to alllow modified terrain in certain ranges of the normalised height scale.

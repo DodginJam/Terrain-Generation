@@ -154,8 +154,10 @@ public class TerrainManager : MonoBehaviour
                         positionalOffsets[completedTerrains] = new Vector3((float)xCount * GlobalTerrainInformation.GridXLength, 0, (float)zCount * GlobalTerrainInformation.GridZLength) * (float)GlobalTerrainInformation.GridSpacing;
 
                         // Assign the perlin offsets that would be required for the meshes adjacent and further away from centre.
-                        perlinXOffset[completedTerrains] = (positionalOffsets[completedTerrains].x / GlobalTerrainInformation.GridSpacing / GlobalTerrainInformation.PerlinScale);
-                        perlinZOffset[completedTerrains] = (positionalOffsets[completedTerrains].z / GlobalTerrainInformation.GridSpacing / GlobalTerrainInformation.PerlinScale);
+    
+                            perlinXOffset[completedTerrains] = (positionalOffsets[completedTerrains].x / GlobalTerrainInformation.GridSpacing);
+                            perlinZOffset[completedTerrains] = (positionalOffsets[completedTerrains].z / GlobalTerrainInformation.GridSpacing);
+                        
 
                         completedTerrains++;
                     }
