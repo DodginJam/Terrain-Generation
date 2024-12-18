@@ -149,11 +149,18 @@ public class TerrainInformation
     /// The seed here is fed into a new initialisation of the System.Random class to provide reproducable outcomes.
     /// Provides offsets per octave layer to be randomised -  too be re-looked at its application.
     /// </summary>
-    [field: SerializeField, Tooltip("Provides offsets per octave layer to be randomised - too be re-looked at its application")] public int Seed
+    [field: SerializeField, Tooltip("Provides offsets per octave layer to be randomised - too be re-looked at its application")] 
+    public int Seed
     { get; set; }
 
+    /// <summary>
+    /// The value here represent the layers of perlin noise in producing the final noise output.
+    /// </summary>
     [SerializeField, Range(1, 20)] 
     private int octaves;
+    /// <summary>
+    /// The value here represent the layers of perlin noise in producing the final noise output.
+    /// </summary>
     public int Octaves
     {
         get { return octaves; }
@@ -162,6 +169,10 @@ public class TerrainInformation
             octaves = Mathf.Clamp(value, 1, 20);
         }
     }
+
+    /// <summary>
+    /// Influences 
+    /// </summary>
     [SerializeField, Range(0f, 1f)]
     private float persistance;
     public float Persistance
@@ -173,6 +184,9 @@ public class TerrainInformation
         }
     }
 
+    /// <summary>
+    /// This values influences the level at which an octaves scale is applied to the overall noise output - can help provide greater detail.
+    /// </summary>
     [SerializeField, Range(0.1f, 5.0f)]
     private float lacunarity;
     public float Lacunarity
