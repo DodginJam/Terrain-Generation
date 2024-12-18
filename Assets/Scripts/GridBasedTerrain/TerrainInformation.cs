@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class TerrainInformation
 {
-    public TerrainInformation(int gridLengthX, int gridLengthZ, float gridSpacing, float perlinScale, float OffsetX, float OffsetZ, float gridYHeightRange, float gridYHeightMultiplier, Gradient terrainGradient, float heightColorChange, bool enableSmoothing, Vector3 position, Material terrainMaterial, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset, AnimationCurve terrainCurve, bool colourLockToHeight)
+    public TerrainInformation(int gridLengthX, int gridLengthZ, float gridSpacing, float perlinScale, float OffsetX, float OffsetZ, float gridYHeightRange, float gridYHeightMultiplier, Gradient terrainGradient, float heightColorChange, bool enableSmoothing, Vector3 position, Material terrainMaterial, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset, AnimationCurve terrainCurve, bool colourLockToHeight, NormalizeMode normalizeMode)
     {
         this.GridXLength = gridLengthX;
         this.GridZLength = gridLengthZ;
@@ -27,6 +27,7 @@ public class TerrainInformation
         this.OctaveOffset = octaveOffset;
         this.TerrainCurve = terrainCurve;
         this.ColourLockToHeight = colourLockToHeight;
+        this.HeightNormalisation = normalizeMode;
 
         // HeightColourChange values is locked to GridHeight value if the bool is true.
         if (!colourLockToHeight)
@@ -194,4 +195,15 @@ public class TerrainInformation
 
     public bool ColourLockToHeight
     { get; set; }
+
+    [Serializable]
+    public enum NormalizeMode
+    {
+        Local,
+        Global
+    }
+
+    [field: SerializeField]
+    public NormalizeMode HeightNormalisation
+    { get; set; } = NormalizeMode.Global;
 }

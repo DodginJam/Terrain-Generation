@@ -55,7 +55,7 @@ public class TerrainObject : MonoBehaviour
     void UpdateTerrain()
     {
         // Apply the terrainMesh mesh to the filter.
-        TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale, Information.TerrainGradient, Information.HeightColorChange, Information.Seed, Information.Octaves, Information.Persistance, Information.Lacunarity, Information.OctaveOffset, Information.TerrainCurve);
+        TerrainMeshFilter.mesh = GenerateMesh(Information.GridXLength, Information.GridZLength, Information.GridSpacing, Information.GridYHeightRange, Information.GridYHeightMultiplier, Information.OffsetX, Information.OffsetZ, Information.PerlinScale, Information.TerrainGradient, Information.HeightColorChange, Information.Seed, Information.Octaves, Information.Persistance, Information.Lacunarity, Information.OctaveOffset, Information.TerrainCurve, Information.HeightNormalisation);
         // TerrainRenderer.material.mainTexture = GenerateTexture(Vertices2DArray, Information.TerrainGradient, Information.HeightColorChange);
         TerrainRenderer.material = Information.TerrainMaterial;
         transform.position = Information.Position;
@@ -67,7 +67,26 @@ public class TerrainObject : MonoBehaviour
         transform.AddComponent<MeshCollider>();
     }
 
-    public Vector3[,] GenerateVertices(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float scale, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset, AnimationCurve heightCurve)
+    /// <summary>
+    /// Generates the a set of normalised vertices with height affected via Perlin Noise. These are then multiplied by the height max values towards the end of the method before the return, as well as the Y values being manipulated by an animation curve.
+    /// </summary>
+    /// <param name="xLength"></param>
+    /// <param name="zLength"></param>
+    /// <param name="gridSpacing"></param>
+    /// <param name="gridYHeightRange"></param>
+    /// <param name="gridYHeightMultiplier"></param>
+    /// <param name="offsetX"></param>
+    /// <param name="offsetZ"></param>
+    /// <param name="scale"></param>
+    /// <param name="seed"></param>
+    /// <param name="octaves"></param>
+    /// <param name="persistance"></param>
+    /// <param name="lacunarity"></param>
+    /// <param name="octaveOffset"></param>
+    /// <param name="heightCurve"></param>
+    /// <param name="normalizeMode"></param>
+    /// <returns></returns>
+    public Vector3[,] GenerateVertices(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float scale, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset, AnimationCurve heightCurve, TerrainInformation.NormalizeMode normalizeMode)
     {
         int xVerticeCount = xLength + 1;
         int zVerticeCount = zLength + 1;
@@ -79,16 +98,25 @@ public class TerrainObject : MonoBehaviour
         TerrainHeightMax = float.MinValue;
         TerrainHeightMin = float.MaxValue;
 
+        float maxPossibleHeight = 0;
+        // Amplitude is how much off an effect the lesser octaves have an impact in overall height values - this is affected by the persistance value.
+        float amplitude = 1;
+        // Frequency is the level of detail each ocatave passes through to the overall noise height values - this is affected by the lacunarity value.
+        float frequency = 1;
+
         // Sampled from Sebastian Lague Procedural Landmass Generation (E03: Octaves). Link: https://youtu.be/MRNFcywkUSA?si=-IN_Y8heM2EOnWIs
         // Provides offsets per octave layer to be randomised.
         System.Random prng = new System.Random(seed);
         Vector2[] octaveOffsets = new Vector2[octaves];
         for (int i = 0; i < octaves; i++)
         {
-            float octaveOffsetX = prng.Next(-1000000, 1000000) + octaveOffset.x;
-            float octaveOffsetZ = prng.Next(-1000000, 1000000) + octaveOffset.y;
+            float octaveOffsetX = prng.Next(-100000, 100000) + octaveOffset.x;
+            float octaveOffsetZ = prng.Next(-100000, 100000) + octaveOffset.y;
 
             octaveOffsets[i] = new Vector2(octaveOffsetX, octaveOffsetZ);
+
+            maxPossibleHeight += amplitude;
+            amplitude *= persistance;
         }
 
         Vector3[,] newVertices = new Vector3[xVerticeCount, zVerticeCount];
@@ -97,10 +125,10 @@ public class TerrainObject : MonoBehaviour
         {
             for (int zCount = 0; zCount < zVerticeCount; zCount++)
             {
-                // Amplitude is how much off an effect the lesser octaves have an impact in overall height values - this is affected by the persistance value.
-                float amplitude = 1;
-                // Frequency is the level of detail each ocatave passes through to the overall noise height values - this is affected by the lacunarity value.
-                float frequency = 1;
+                // Amplitude reset
+                amplitude = 1;
+                // Frequency reset.
+                frequency = 1;
                 // The noise height is added up over multiple layers - octaves - and the later normalised to allow it to be projected as a value for perlin noise.
                 float noiseHeight = 0;
 
@@ -122,7 +150,7 @@ public class TerrainObject : MonoBehaviour
                     // The perlinNoise coord are multiplied by scale.
                     // The scale is timesed by the frequency to affect the detail of the respective octave layers, with higher frequency allowing more
                     // finer detail to emerge in the noise.
-                                                                                      // Helps to allow negative values of the Perlin Noise.
+                                                                                      // Helps to allow negative values of the Perlin Noise - not working?.
                     float perlinValue = Mathf.PerlinNoise(xPerlinCoord, zPerlinCoord) * 2 - 1 ;
 
                     // The perlin value is timesed by amplitude to effect how much the other octaves have impact in the overall 
@@ -155,9 +183,22 @@ public class TerrainObject : MonoBehaviour
         {
             for (int z = 0; z < newVertices.GetLength(1); z++)
             {
-                newVertices[x, z].y = Mathf.InverseLerp(TerrainHeightMax, TerrainHeightMin, newVertices[x, z].y);
-                // Animation curve will affect the normalised height value before being multiplied by the Height Range to alllow modified terrain in certain ranges of the normalised height scale.
-                newVertices[x, z].y = heightCurve.Evaluate(newVertices[x, z].y) * gridYHeightRange;
+                // Calculate the heights of the vertices using local height min and max values.
+                if (normalizeMode == TerrainInformation.NormalizeMode.Local)
+                {
+                    newVertices[x, z].y = Mathf.InverseLerp(TerrainHeightMin, TerrainHeightMax, newVertices[x, z].y);
+                    // Animation curve will affect the normalised height value before being multiplied by the Height Range to alllow modified terrain in certain ranges of the normalised height scale.
+                    newVertices[x, z].y = heightCurve.Evaluate(newVertices[x, z].y) * gridYHeightRange;
+                }
+                // Calculate the heights of the vertices using the global height min and max values.
+                else if (normalizeMode == TerrainInformation.NormalizeMode.Global)
+                {
+                    float normalisedHeight = (newVertices[x, z].y + 1.0f) / (2.0f * maxPossibleHeight);
+                    newVertices[x, z].y = normalisedHeight;
+
+                    // Animation curve will affect the normalised height value before being multiplied by the Height Range to alllow modified terrain in certain ranges of the normalised height scale.
+                    newVertices[x, z].y = heightCurve.Evaluate(newVertices[x, z].y) * gridYHeightRange;
+                }
             }
         }
 
@@ -408,7 +449,8 @@ public class TerrainObject : MonoBehaviour
                                             Information.Lacunarity,
                                             Information.OctaveOffset,
                                             Information.TerrainCurve,
-                                            Information.ColourLockToHeight
+                                            Information.ColourLockToHeight,
+                                            Information.HeightNormalisation
                                             );
 
             yield return new WaitForSeconds(timeTillNextCheck);
@@ -430,7 +472,8 @@ public class TerrainObject : MonoBehaviour
                                     && oldInformation.Persistance == Information.Persistance
                                     && oldInformation.Lacunarity == Information.Lacunarity
                                     && oldInformation.OctaveOffset == Information.OctaveOffset
-                                    && oldInformation.ColourLockToHeight == Information.ColourLockToHeight;
+                                    && oldInformation.ColourLockToHeight == Information.ColourLockToHeight
+                                    && oldInformation.HeightNormalisation == Information.HeightNormalisation;
 
             if (areValuesSame)
             {
@@ -441,9 +484,30 @@ public class TerrainObject : MonoBehaviour
         }
     }
 
-    Mesh GenerateMesh(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float perlinScale, Gradient terrainGradient, float heightColorChange, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset, AnimationCurve terrainCurve)
+    /// <summary>
+    /// Generate the a used to display the height values. This generates the vertices, triangles, normals and UV's required for displaying the mesh, along with applying vertex colours.
+    /// </summary>
+    /// <param name="xLength"></param>
+    /// <param name="zLength"></param>
+    /// <param name="gridSpacing"></param>
+    /// <param name="gridYHeightRange"></param>
+    /// <param name="gridYHeightMultiplier"></param>
+    /// <param name="offsetX"></param>
+    /// <param name="offsetZ"></param>
+    /// <param name="perlinScale"></param>
+    /// <param name="terrainGradient"></param>
+    /// <param name="heightColorChange"></param>
+    /// <param name="seed"></param>
+    /// <param name="octaves"></param>
+    /// <param name="persistance"></param>
+    /// <param name="lacunarity"></param>
+    /// <param name="octaveOffset"></param>
+    /// <param name="terrainCurve"></param>
+    /// <param name="normalizeMode"></param>
+    /// <returns></returns>
+    Mesh GenerateMesh(int xLength, int zLength, float gridSpacing, float gridYHeightRange, float gridYHeightMultiplier, float offsetX, float offsetZ, float perlinScale, Gradient terrainGradient, float heightColorChange, int seed, int octaves, float persistance, float lacunarity, Vector2 octaveOffset, AnimationCurve terrainCurve, TerrainInformation.NormalizeMode normalizeMode)
     {
-        Vector3[,] newVertices = GenerateVertices(xLength, zLength, gridSpacing, gridYHeightRange, gridYHeightMultiplier, offsetX, offsetZ, perlinScale, seed, octaves, persistance, lacunarity, octaveOffset, terrainCurve);
+        Vector3[,] newVertices = GenerateVertices(xLength, zLength, gridSpacing, gridYHeightRange, gridYHeightMultiplier, offsetX, offsetZ, perlinScale, seed, octaves, persistance, lacunarity, octaveOffset, terrainCurve, normalizeMode);
 
         Vertices2DArray = newVertices;
 

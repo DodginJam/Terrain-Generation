@@ -100,7 +100,8 @@ public class TerrainManager : MonoBehaviour
                 GlobalTerrainInformation.Lacunarity,
                 GlobalTerrainInformation.OctaveOffset,
                 GlobalTerrainInformation.TerrainCurve,
-                GlobalTerrainInformation.ColourLockToHeight
+                GlobalTerrainInformation.ColourLockToHeight,
+                GlobalTerrainInformation.HeightNormalisation
                 );
 
             // Pass the currentTerrainInformation, which should be a modified version of global data, to the terrainObject being generated.
@@ -194,7 +195,8 @@ public class TerrainManager : MonoBehaviour
                                         GlobalTerrainInformation.Lacunarity,
                                         GlobalTerrainInformation.OctaveOffset,
                                         GlobalTerrainInformation.TerrainCurve,
-                                        GlobalTerrainInformation.ColourLockToHeight
+                                        GlobalTerrainInformation.ColourLockToHeight,
+                                        GlobalTerrainInformation.HeightNormalisation
                                         );
 
             // Storing the old Colours/Time and Alpha/Time values.
@@ -303,7 +305,9 @@ public class TerrainManager : MonoBehaviour
                         && oldInformation.TerrainCurve == GlobalTerrainInformation.TerrainCurve
 
                         && oldTerrainRenderDistance == TerrainRenderDistance
-                        && AreValuesTheSameGC(oldColours, newColours) && AreValuesTheSameGA(oldAlphas, newAlphas);
+                        && AreValuesTheSameGC(oldColours, newColours) && AreValuesTheSameGA(oldAlphas, newAlphas)
+
+                        && oldInformation.HeightNormalisation == GlobalTerrainInformation.HeightNormalisation;
 
 
             if (areValuesSame)

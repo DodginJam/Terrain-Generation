@@ -231,6 +231,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    <HeightNormalisation>k__BackingField: 1
   <TerrainRenderDistance>k__BackingField: 0
   <UIGameObject>k__BackingField: {fileID: 0}
 --- !u!4 &105660420
