@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEditor.UI;
 using UnityEngine.UI;
 using TMPro;
 using static UnityEngine.Rendering.DebugUI;
@@ -146,13 +145,13 @@ public class TerrainManagerUI : UIManager
         SetTextBoxValue(PerlinSeedSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), TerrainManagerInformation.Seed);
 
         // Perlin Based Slider Values Second Panel Values.
-        SetSliderValues(OctavesSlider, 1, 20, TerrainManagerInformation.Octaves);
+        SetSliderValues(OctavesSlider, 1, 8, TerrainManagerInformation.Octaves);
         SetTextBoxValue(OctavesSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), TerrainManagerInformation.Octaves);
 
         SetSliderValues(PersistanceSlider, 0, 1, TerrainManagerInformation.Persistance);
         SetTextBoxValue(PersistanceSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), TerrainManagerInformation.Persistance);
 
-        SetSliderValues(LacunaritySlider, 0.15f, 5, TerrainManagerInformation.Lacunarity);
+        SetSliderValues(LacunaritySlider, 0.15f, 1.25f, TerrainManagerInformation.Lacunarity);
         SetTextBoxValue(LacunaritySlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), TerrainManagerInformation.Lacunarity);
 
         // Colour Based Slider Values.

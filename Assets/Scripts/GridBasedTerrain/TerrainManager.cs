@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static TerrainCurveOptions;
 
 public class TerrainManager : MonoBehaviour
 {
@@ -59,12 +60,6 @@ public class TerrainManager : MonoBehaviour
     /// <param name="terrainRenderDistance"></param>
     void GenerateNewTerrainList(int terrainRenderDistance)
     {
-        // Update UI if it exists.
-        if (UIGameObject != null)
-        {
-            UIGameObject.GetComponent<UIManager>().InitUIValues();
-        }
-
         // Calculate the number of terrain meshes to generate based on the render distance. Total Blocks = ((2 * renderdistance) + 1)POW2
         int numberOfTerrains = (int)Mathf.Pow((terrainRenderDistance * 2) + 1, 2);
 
@@ -110,6 +105,12 @@ public class TerrainManager : MonoBehaviour
             terrainObject.TerrainName = terrainName;
 
             TerrainsList.Add(currentTerrain);
+        }
+
+        // Update UI if it exists.
+        if (UIGameObject != null)
+        {
+            UIGameObject.GetComponent<UIManager>().InitUIValues();
         }
     }
 

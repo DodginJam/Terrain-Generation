@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static TerrainInformation;
+using UnityEngine.UIElements;
+using System.Text.Json; 
 
 [Serializable]
 public class TerrainInformation
@@ -171,7 +174,7 @@ public class TerrainInformation
     }
 
     /// <summary>
-    /// Influences 
+    /// Persistance represent the factor to which each Octaves layer effects the overall mesh height values - lower values have subsequent Octaves having diminishing returns.
     /// </summary>
     [SerializeField, Range(0f, 1f)]
     private float persistance;

@@ -31,6 +31,7 @@ public class SwitchCamera : MonoBehaviour
     void Start()
     {
         SwitchCameraButton.onClick.AddListener(() => SwitchCameraEvent());
+        CameraTypeText.text = "Fixed Overhead";
     }
 
     // Update is called once per frame
@@ -49,12 +50,14 @@ public class SwitchCamera : MonoBehaviour
             CameraMain.enabled = false;
             CameraFreeLook.enabled = true;
             UICanvas.worldCamera = CameraFreeLook;
+            CameraTypeText.text = "Freelook";
         }
         else if (CameraFreeLook.isActiveAndEnabled)
         {
             CameraFreeLook.enabled = false;
             CameraMain.enabled = true;
             UICanvas.worldCamera = CameraMain;
+            CameraTypeText.text = "Fixed Overhead";
         }
     }
 }
