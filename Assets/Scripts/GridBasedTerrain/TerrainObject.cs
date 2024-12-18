@@ -196,7 +196,8 @@ public class TerrainObject : MonoBehaviour
                 // Calculate the heights of the vertices using the global height min and max values.
                 else if (normalizeMode == TerrainInformation.NormalizeMode.Global)
                 {
-                    float normalisedHeight = /*(newVertices[x, z].y + 1.0f) / (2.0f * maxPossibleHeight) */ Mathf.InverseLerp(minPossibleHeight, maxPossibleHeight, newVertices[x, z].y);
+                    // Lerp between the predicted minimum and maximum possible heights.
+                    float normalisedHeight = Mathf.InverseLerp(minPossibleHeight, maxPossibleHeight, newVertices[x, z].y);
                     newVertices[x, z].y = normalisedHeight;
 
                     // Animation curve will affect the normalised height value before being multiplied by the Height Range to alllow modified terrain in certain ranges of the normalised height scale.
