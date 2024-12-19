@@ -342,4 +342,22 @@ public class TerrainManager : MonoBehaviour
 
         GenerateNewTerrainList(TerrainRenderDistance);
     }
+
+    public void LoadNewAnimationCurve(TerrainInformation newInformation)
+    {
+        ClearTerrainData();
+
+        GlobalTerrainInformation.TerrainCurve = newInformation.TerrainCurve;
+
+        GenerateNewTerrainList(TerrainRenderDistance);
+    }
+
+    public void LoadNewInformation(TerrainInformation newInformation)
+    {
+        ClearTerrainData();
+
+        GlobalTerrainInformation = newInformation;
+
+        GenerateNewTerrainList(TerrainRenderDistance);
+    }
 }

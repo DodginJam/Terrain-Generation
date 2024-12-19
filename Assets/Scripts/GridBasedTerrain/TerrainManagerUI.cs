@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-using static UnityEngine.Rendering.DebugUI;
 using System;
 
 public class TerrainManagerUI : UIManager
@@ -15,7 +14,7 @@ public class TerrainManagerUI : UIManager
     public TerrainInformation TerrainManagerInformation
     { get; private set; }
 
-    [field: SerializeField, Header("Grid Based UI Elements")]
+    [field: SerializeField, Header("Grid Based UI Elements - Grid Controls")]
     public Slider GridXLengthSlider
     { get; private set; }
 
@@ -30,6 +29,40 @@ public class TerrainManagerUI : UIManager
     [field: SerializeField]
     public Slider GridHeightSlider
     { get; private set; }
+
+
+    [field: SerializeField, Header("Grid Based UI Elements - Terrain Curves Presets")]
+    public Button RollingHillsCurve
+    { get; private set; }
+
+    [field: SerializeField]
+    public Button MountainsCurve
+    { get; private set; }
+
+    [field: SerializeField]
+    public Button DesertCurve
+    { get; private set; }
+
+    [field: SerializeField]
+    public Button AridRock
+    { get; private set; }
+
+    [field: SerializeField]
+    public Button IslandFlat
+    { get; private set; }
+
+    [field: SerializeField]
+    public Button IslandHill
+    { get; private set; }
+
+    [field: SerializeField]
+    public Button Canyons
+    { get; private set; }
+
+    [field: SerializeField]
+    public Toggle ChangeTerrainInTotal
+    { get; private set; }
+
 
     [field: SerializeField, Header("Perlin Based UI Elements")]
     public Slider PerlinScaleSlider
@@ -51,6 +84,7 @@ public class TerrainManagerUI : UIManager
     public TMP_InputField RenderDistanceInput
     { get; private set; }
 
+
     [field: SerializeField, Header("Perlin Based UI Elements Second Panel")]
     public Slider OctavesSlider
     { get; private set; }
@@ -66,6 +100,7 @@ public class TerrainManagerUI : UIManager
     [field: SerializeField]
     public Toggle SmoothingToggle
     { get; private set; }
+
 
     [field: SerializeField, Header("Colour Mesh UI Elements")]
     public Toggle ColourMatchHeightToggle
@@ -291,5 +326,35 @@ public class TerrainManagerUI : UIManager
             TerrainManagerInformation.HeightColorChange = value;
             SetTextBoxValue(ColourHeightChangeSlider.transform.parent.Find("SliderValue").GetComponent<TextMeshProUGUI>(), value);
         });
+
+
+        // TerrainCurve based values.
+        RollingHillsCurve.onClick.AddListener(() => { CurveOrAllData(ChangeTerrainInTotal.isOn, TerrainManagerScript.gameObject.GetComponent<TerrainCurveOptions>().RollingHills.Information); });
+
+        MountainsCurve.onClick.AddListener(() => { CurveOrAllData(ChangeTerrainInTotal.isOn, TerrainManagerScript.gameObject.GetComponent<TerrainCurveOptions>().Mountains.Information); });
+
+        DesertCurve.onClick.AddListener(() => { CurveOrAllData(ChangeTerrainInTotal.isOn, TerrainManagerScript.gameObject.GetComponent<TerrainCurveOptions>().DesertDunes.Information); });
+
+        AridRock.onClick.AddListener(() => { CurveOrAllData(ChangeTerrainInTotal.isOn, TerrainManagerScript.gameObject.GetComponent<TerrainCurveOptions>().RockyArid.Information); });
+
+        IslandFlat.onClick.AddListener(() => { CurveOrAllData(ChangeTerrainInTotal.isOn, TerrainManagerScript.gameObject.GetComponent<TerrainCurveOptions>().IslandsFlat.Information); });
+
+        IslandHill.onClick.AddListener(() => { CurveOrAllData(ChangeTerrainInTotal.isOn, TerrainManagerScript.gameObject.GetComponent<TerrainCurveOptions>().IslandsHills.Information); });
+
+        Canyons.onClick.AddListener(() => { CurveOrAllData(ChangeTerrainInTotal.isOn, TerrainManagerScript.gameObject.GetComponent<TerrainCurveOptions>().Canyons.Information); });
+
+        ChangeTerrainInTotal.onValueChanged.AddListener((value) => {  });
+    }
+
+    void CurveOrAllData(bool allData, TerrainInformation newTerrainInformation)
+    {
+        if (allData)
+        {
+            TerrainManagerScript.LoadNewInformation(newTerrainInformation);
+        }
+        else 
+        {
+            TerrainManagerScript.LoadNewAnimationCurve(newTerrainInformation);
+        }
     }
 }
