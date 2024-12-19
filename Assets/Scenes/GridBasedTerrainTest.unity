@@ -156,28 +156,28 @@ MonoBehaviour:
     gridXLength: 300
     gridZLength: 300
     <GridSpacing>k__BackingField: 4
-    <PerlinScale>k__BackingField: 33
+    <PerlinScale>k__BackingField: 30
     <OffsetX>k__BackingField: 0
     <OffsetZ>k__BackingField: 0
-    <GridYHeightRange>k__BackingField: 95
+    <GridYHeightRange>k__BackingField: 106
     <TerrainGradient>k__BackingField:
       serializedVersion: 2
-      key0: {r: 0, g: 0.2163105, b: 1, a: 1}
-      key1: {r: 0.5734577, g: 0.5943396, b: 0.12615702, a: 1}
-      key2: {r: 0.1707013, g: 0.26415092, b: 0.19107598, a: 1}
-      key3: {r: 0.2660528, g: 0.5943396, b: 0.025231387, a: 1}
-      key4: {r: 0.26666668, g: 0.59607846, b: 0.023529414, a: 1}
-      key5: {r: 0.2660528, g: 0.5943396, b: 0.025231387, a: 1}
-      key6: {r: 0.15935814, g: 0.2830189, b: 0.068084724, a: 1}
-      key7: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 1}
-      ctime0: 193
-      ctime1: 1928
-      ctime2: 2120
-      ctime3: 4433
-      ctime4: 21203
-      ctime5: 37201
-      ctime6: 52814
-      ctime7: 65535
+      key0: {r: 0, g: 0, b: 1, a: 1}
+      key1: {r: 0.6132076, g: 0.42445114, b: 0.19958171, a: 1}
+      key2: {r: 0.5660378, g: 0.46124068, b: 0.14684944, a: 1}
+      key3: {r: 0.3962264, g: 0.3848048, b: 0.3681915, a: 1}
+      key4: {r: 0.4716981, g: 0.12475267, b: 0, a: 1}
+      key5: {r: 0.7735849, g: 0.6549679, b: 0.36124954, a: 1}
+      key6: {r: 0.1981132, g: 0.1981132, b: 0.1981132, a: 1}
+      key7: {r: 0.5660378, g: 0.33908868, b: 0.33908868, a: 1}
+      ctime0: 1349
+      ctime1: 2506
+      ctime2: 12914
+      ctime3: 21588
+      ctime4: 24287
+      ctime5: 33731
+      ctime6: 39321
+      ctime7: 57440
       atime0: 0
       atime1: 8192
       atime2: 16384
@@ -190,14 +190,14 @@ MonoBehaviour:
       m_ColorSpace: -1
       m_NumColorKeys: 8
       m_NumAlphaKeys: 8
-    <HeightColorChange>k__BackingField: 95
+    <HeightColorChange>k__BackingField: 106
     <EnableSmoothing>k__BackingField: 0
     <Position>k__BackingField: {x: 0, y: 0, z: 0}
     <TerrainMaterial>k__BackingField: {fileID: -876546973899608171, guid: e0cc447a66be7914595b98e3b39ca86d, type: 3}
-    <Seed>k__BackingField: 9
+    <Seed>k__BackingField: 0
     octaves: 5
-    persistance: 0.15
-    lacunarity: 0.58
+    persistance: 0.2
+    lacunarity: 0.2
     <OctaveOffset>k__BackingField: {x: 0, y: 0}
     <TerrainCurve>k__BackingField:
       serializedVersion: 2
@@ -212,13 +212,58 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 2
-        outSlope: 2
+        time: 0.1735218
+        value: 0.45976663
+        inSlope: 0.1940381
+        outSlope: 0.1940381
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.21742599
+      - serializedVersion: 3
+        time: 0.45787716
+        value: 0.61700475
+        inSlope: -2.3840406
+        outSlope: -2.3840406
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.26982754
+        outWeight: 0.16272394
+      - serializedVersion: 3
+        time: 0.66267985
+        value: 0.17606938
+        inSlope: 0.45743775
+        outSlope: 0.45743775
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.11086419
+        outWeight: 0.17843807
+      - serializedVersion: 3
+        time: 0.7924496
+        value: 0.30286098
+        inSlope: 1.2294852
+        outSlope: 1.2294852
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.18781282
+        outWeight: 0.3699754
+      - serializedVersion: 3
+        time: 0.8551191
+        value: 0.41576314
+        inSlope: 1.6414057
+        outSlope: 1.6414057
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.60721976
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.9952563
+        value: 1.3419017
+        inSlope: 35.381096
+        outSlope: 35.381096
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.02729848
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -424,314 +469,629 @@ MonoBehaviour:
     <LacunarityRange>k__BackingField: 0.08
   <DesertDunes>k__BackingField:
     <Information>k__BackingField:
-      gridXLength: 0
-      gridZLength: 0
-      <GridSpacing>k__BackingField: 0
-      <PerlinScale>k__BackingField: 0
+      gridXLength: 300
+      gridZLength: 300
+      <GridSpacing>k__BackingField: 4
+      <PerlinScale>k__BackingField: 30
       <OffsetX>k__BackingField: 0
       <OffsetZ>k__BackingField: 0
-      <GridYHeightRange>k__BackingField: 0
+      <GridYHeightRange>k__BackingField: 40
       <TerrainGradient>k__BackingField:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 1}
-        key2: {r: 0, g: 0, b: 0, a: 0}
-        key3: {r: 0, g: 0, b: 0, a: 0}
-        key4: {r: 0, g: 0, b: 0, a: 0}
-        key5: {r: 0, g: 0, b: 0, a: 0}
-        key6: {r: 0, g: 0, b: 0, a: 0}
-        key7: {r: 0, g: 0, b: 0, a: 0}
+        key0: {r: 0.5471698, g: 0.47058824, b: 0.25035602, a: 1}
+        key1: {r: 0.70980394, g: 0.6039216, b: 0.33333334, a: 1}
+        key2: {r: 0.61960787, g: 0.5372549, b: 0.2901961, a: 1}
+        key3: {r: 0.53333336, g: 0.4509804, b: 0.24705882, a: 1}
+        key4: {r: 0.8, g: 0.6784314, b: 0.37254903, a: 1}
+        key5: {r: 0.98039216, g: 0.8352941, b: 0.64705884, a: 1}
+        key6: {r: 0.97647065, g: 0.8313726, b: 0.6431373, a: 1}
+        key7: {r: 0.7843138, g: 0.6666667, b: 0.5176471, a: 1}
         ctime0: 0
-        ctime1: 65535
-        ctime2: 0
-        ctime3: 0
-        ctime4: 0
-        ctime5: 0
-        ctime6: 0
-        ctime7: 0
+        ctime1: 7517
+        ctime2: 12914
+        ctime3: 20250
+        ctime4: 54163
+        ctime5: 56861
+        ctime6: 60909
+        ctime7: 65535
         atime0: 0
-        atime1: 65535
-        atime2: 0
-        atime3: 0
-        atime4: 0
-        atime5: 0
-        atime6: 0
-        atime7: 0
-        m_Mode: 0
+        atime1: 8192
+        atime2: 16384
+        atime3: 24576
+        atime4: 32768
+        atime5: 40959
+        atime6: 49151
+        atime7: 57343
+        m_Mode: 2
         m_ColorSpace: -1
-        m_NumColorKeys: 2
-        m_NumAlphaKeys: 2
-      <HeightColorChange>k__BackingField: 0
+        m_NumColorKeys: 8
+        m_NumAlphaKeys: 8
+      <HeightColorChange>k__BackingField: 40
       <EnableSmoothing>k__BackingField: 0
       <Position>k__BackingField: {x: 0, y: 0, z: 0}
-      <TerrainMaterial>k__BackingField: {fileID: 0}
+      <TerrainMaterial>k__BackingField: {fileID: -876546973899608171, guid: e0cc447a66be7914595b98e3b39ca86d, type: 3}
       <Seed>k__BackingField: 0
-      octaves: 0
-      persistance: 0
-      lacunarity: 0
+      octaves: 5
+      persistance: 0.15
+      lacunarity: 0.45
       <OctaveOffset>k__BackingField: {x: 0, y: 0}
       <TerrainCurve>k__BackingField:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0.0066670566
+          value: 0.007080078
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.2797809
+          value: 0.12723213
+          inSlope: 0.1940381
+          outSlope: 0.1940381
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.21742599
+        - serializedVersion: 3
+          time: 0.4787495
+          value: 0.2680776
+          inSlope: 0.54314846
+          outSlope: 0.54314846
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.26982754
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.6512496
+          value: 0.40763065
+          inSlope: 0.45743775
+          outSlope: 0.45743775
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.11086419
+          outWeight: 0.17843807
+        - serializedVersion: 3
+          time: 0.8283296
+          value: 0.6334182
+          inSlope: 1.2294852
+          outSlope: 1.2294852
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.18781282
+          outWeight: 0.3699754
+        - serializedVersion: 3
+          time: 0.89099914
+          value: 0.74632037
+          inSlope: 1.6414057
+          outSlope: 1.6414057
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.60721976
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      <HeightNormalisation>k__BackingField: 0
-    <GridSpacingRange>k__BackingField: 0
-    <PerlinScaleRange>k__BackingField: 0
-    <HeightRange>k__BackingField: 0
-    <HeightColourAppliedRange>k__BackingField: 0
-    <OctaveRange>k__BackingField: 0
-    <PersistanceRange>k__BackingField: 0
-    <LacunarityRange>k__BackingField: 0
+      <HeightNormalisation>k__BackingField: 1
+    <GridSpacingRange>k__BackingField: 3
+    <PerlinScaleRange>k__BackingField: 10
+    <HeightRange>k__BackingField: 10
+    <HeightColourAppliedRange>k__BackingField: 10
+    <OctaveRange>k__BackingField: 3
+    <PersistanceRange>k__BackingField: 0.1
+    <LacunarityRange>k__BackingField: 0.15
   <RockyArid>k__BackingField:
     <Information>k__BackingField:
-      gridXLength: 0
-      gridZLength: 0
-      <GridSpacing>k__BackingField: 0
-      <PerlinScale>k__BackingField: 0
+      gridXLength: 300
+      gridZLength: 300
+      <GridSpacing>k__BackingField: 4
+      <PerlinScale>k__BackingField: 30
       <OffsetX>k__BackingField: 0
       <OffsetZ>k__BackingField: 0
-      <GridYHeightRange>k__BackingField: 0
+      <GridYHeightRange>k__BackingField: 70
       <TerrainGradient>k__BackingField:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 1}
-        key2: {r: 0, g: 0, b: 0, a: 0}
-        key3: {r: 0, g: 0, b: 0, a: 0}
-        key4: {r: 0, g: 0, b: 0, a: 0}
-        key5: {r: 0, g: 0, b: 0, a: 0}
-        key6: {r: 0, g: 0, b: 0, a: 0}
-        key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 0
-        ctime1: 65535
-        ctime2: 0
-        ctime3: 0
-        ctime4: 0
-        ctime5: 0
-        ctime6: 0
-        ctime7: 0
+        key0: {r: 1, g: 0.91263056, b: 0.5707547, a: 1}
+        key1: {r: 0.6132076, g: 0.42445114, b: 0.19958171, a: 1}
+        key2: {r: 0.5660378, g: 0.46124068, b: 0.14684944, a: 1}
+        key3: {r: 0.745283, g: 0.53093606, b: 0.21444462, a: 1}
+        key4: {r: 0.8, g: 0.6784314, b: 0.37254903, a: 1}
+        key5: {r: 0.7264151, g: 0.35207146, b: 0.14048593, a: 1}
+        key6: {r: 0.8584906, g: 0.8513728, b: 0.31990921, a: 1}
+        key7: {r: 0.7830189, g: 0.5714616, b: 0.2770114, a: 1}
+        ctime0: 1349
+        ctime1: 5590
+        ctime2: 12914
+        ctime3: 21010
+        ctime4: 40285
+        ctime5: 57054
+        ctime6: 61102
+        ctime7: 65535
         atime0: 0
-        atime1: 65535
-        atime2: 0
-        atime3: 0
-        atime4: 0
-        atime5: 0
-        atime6: 0
-        atime7: 0
-        m_Mode: 0
+        atime1: 8192
+        atime2: 16384
+        atime3: 24576
+        atime4: 32768
+        atime5: 40959
+        atime6: 49151
+        atime7: 57343
+        m_Mode: 2
         m_ColorSpace: -1
-        m_NumColorKeys: 2
-        m_NumAlphaKeys: 2
-      <HeightColorChange>k__BackingField: 0
+        m_NumColorKeys: 8
+        m_NumAlphaKeys: 8
+      <HeightColorChange>k__BackingField: 70
       <EnableSmoothing>k__BackingField: 0
       <Position>k__BackingField: {x: 0, y: 0, z: 0}
-      <TerrainMaterial>k__BackingField: {fileID: 0}
+      <TerrainMaterial>k__BackingField: {fileID: -876546973899608171, guid: e0cc447a66be7914595b98e3b39ca86d, type: 3}
       <Seed>k__BackingField: 0
-      octaves: 0
-      persistance: 0
-      lacunarity: 0
+      octaves: 5
+      persistance: 0.2
+      lacunarity: 0.2
       <OctaveOffset>k__BackingField: {x: 0, y: 0}
       <TerrainCurve>k__BackingField:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0.0066670566
+          value: 0.007080078
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.2883196
+          value: 0.09678884
+          inSlope: 0.1940381
+          outSlope: 0.1940381
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.21742599
+        - serializedVersion: 3
+          time: 0.4787495
+          value: 0.2680776
+          inSlope: 0.54314846
+          outSlope: 0.54314846
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.26982754
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.6512496
+          value: 0.40763065
+          inSlope: 0.45743775
+          outSlope: 0.45743775
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.11086419
+          outWeight: 0.17843807
+        - serializedVersion: 3
+          time: 0.8283296
+          value: 0.6334182
+          inSlope: 1.2294852
+          outSlope: 1.2294852
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.18781282
+          outWeight: 0.3699754
+        - serializedVersion: 3
+          time: 0.89099914
+          value: 0.74632037
+          inSlope: 1.6414057
+          outSlope: 1.6414057
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.60721976
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      <HeightNormalisation>k__BackingField: 0
-    <GridSpacingRange>k__BackingField: 0
-    <PerlinScaleRange>k__BackingField: 0
-    <HeightRange>k__BackingField: 0
-    <HeightColourAppliedRange>k__BackingField: 0
-    <OctaveRange>k__BackingField: 0
-    <PersistanceRange>k__BackingField: 0
-    <LacunarityRange>k__BackingField: 0
+      <HeightNormalisation>k__BackingField: 1
+    <GridSpacingRange>k__BackingField: 3
+    <PerlinScaleRange>k__BackingField: 10
+    <HeightRange>k__BackingField: 30
+    <HeightColourAppliedRange>k__BackingField: 30
+    <OctaveRange>k__BackingField: 3
+    <PersistanceRange>k__BackingField: 0.1
+    <LacunarityRange>k__BackingField: 0.15
   <IslandsFlat>k__BackingField:
     <Information>k__BackingField:
-      gridXLength: 0
-      gridZLength: 0
-      <GridSpacing>k__BackingField: 0
-      <PerlinScale>k__BackingField: 0
+      gridXLength: 300
+      gridZLength: 300
+      <GridSpacing>k__BackingField: 4
+      <PerlinScale>k__BackingField: 40
       <OffsetX>k__BackingField: 0
       <OffsetZ>k__BackingField: 0
-      <GridYHeightRange>k__BackingField: 0
+      <GridYHeightRange>k__BackingField: 30
       <TerrainGradient>k__BackingField:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 1}
-        key2: {r: 0, g: 0, b: 0, a: 0}
-        key3: {r: 0, g: 0, b: 0, a: 0}
-        key4: {r: 0, g: 0, b: 0, a: 0}
-        key5: {r: 0, g: 0, b: 0, a: 0}
-        key6: {r: 0, g: 0, b: 0, a: 0}
-        key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 0
-        ctime1: 65535
-        ctime2: 0
-        ctime3: 0
-        ctime4: 0
-        ctime5: 0
-        ctime6: 0
-        ctime7: 0
+        key0: {r: 0, g: 0.2163105, b: 1, a: 1}
+        key1: {r: 0.7328231, g: 0.754717, b: 0.31683874, a: 1}
+        key2: {r: 0.7137255, g: 0.7411765, b: 0.31764707, a: 1}
+        key3: {r: 0.2660528, g: 0.5943396, b: 0.025231387, a: 1}
+        key4: {r: 0.26666668, g: 0.59607846, b: 0.023529414, a: 1}
+        key5: {r: 0.2660528, g: 0.5943396, b: 0.025231387, a: 1}
+        key6: {r: 0.15935814, g: 0.2830189, b: 0.068084724, a: 1}
+        key7: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 1}
+        ctime0: 386
+        ctime1: 2506
+        ctime2: 8674
+        ctime3: 10987
+        ctime4: 21203
+        ctime5: 37201
+        ctime6: 62644
+        ctime7: 65535
         atime0: 0
-        atime1: 65535
-        atime2: 0
-        atime3: 0
-        atime4: 0
-        atime5: 0
-        atime6: 0
-        atime7: 0
-        m_Mode: 0
+        atime1: 8192
+        atime2: 16384
+        atime3: 24576
+        atime4: 32768
+        atime5: 40959
+        atime6: 49151
+        atime7: 57343
+        m_Mode: 2
         m_ColorSpace: -1
-        m_NumColorKeys: 2
-        m_NumAlphaKeys: 2
-      <HeightColorChange>k__BackingField: 0
-      <EnableSmoothing>k__BackingField: 0
+        m_NumColorKeys: 8
+        m_NumAlphaKeys: 8
+      <HeightColorChange>k__BackingField: 30
+      <EnableSmoothing>k__BackingField: 1
       <Position>k__BackingField: {x: 0, y: 0, z: 0}
-      <TerrainMaterial>k__BackingField: {fileID: 0}
+      <TerrainMaterial>k__BackingField: {fileID: -876546973899608171, guid: e0cc447a66be7914595b98e3b39ca86d, type: 3}
       <Seed>k__BackingField: 0
-      octaves: 0
-      persistance: 0
-      lacunarity: 0
+      octaves: 5
+      persistance: 0.173
+      lacunarity: 0.2
       <OctaveOffset>k__BackingField: {x: 0, y: 0}
       <TerrainCurve>k__BackingField:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0.0066670566
+          value: 0.007080078
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.32626924
+          value: 0.01014252
+          inSlope: -0.0148564
+          outSlope: -0.0148564
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.27093586
+        - serializedVersion: 3
+          time: 0.5745725
+          value: 0.017505823
+          inSlope: 0.0702201
+          outSlope: 0.0702201
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.26982754
+          outWeight: 0.5396975
+        - serializedVersion: 3
+          time: 0.723354
+          value: 0.22731262
+          inSlope: 0.45743775
+          outSlope: 0.45743775
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.11086419
+          outWeight: 0.17843807
+        - serializedVersion: 3
+          time: 0.82553595
+          value: 0.29201266
+          inSlope: 1.6414057
+          outSlope: 1.6414057
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.60721976
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.8719718
+          value: 0.60531664
+          inSlope: 1.2294852
+          outSlope: 1.2294852
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.18781282
+          outWeight: 0.3699754
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      <HeightNormalisation>k__BackingField: 0
-    <GridSpacingRange>k__BackingField: 0
-    <PerlinScaleRange>k__BackingField: 0
-    <HeightRange>k__BackingField: 0
-    <HeightColourAppliedRange>k__BackingField: 0
-    <OctaveRange>k__BackingField: 0
-    <PersistanceRange>k__BackingField: 0
-    <LacunarityRange>k__BackingField: 0
+      <HeightNormalisation>k__BackingField: 1
+    <GridSpacingRange>k__BackingField: 3
+    <PerlinScaleRange>k__BackingField: 25
+    <HeightRange>k__BackingField: 10
+    <HeightColourAppliedRange>k__BackingField: 10
+    <OctaveRange>k__BackingField: 2
+    <PersistanceRange>k__BackingField: 0.1
+    <LacunarityRange>k__BackingField: 0.05
   <IslandsHills>k__BackingField:
     <Information>k__BackingField:
-      gridXLength: 0
-      gridZLength: 0
-      <GridSpacing>k__BackingField: 0
-      <PerlinScale>k__BackingField: 0
+      gridXLength: 300
+      gridZLength: 300
+      <GridSpacing>k__BackingField: 4
+      <PerlinScale>k__BackingField: 65
       <OffsetX>k__BackingField: 0
       <OffsetZ>k__BackingField: 0
-      <GridYHeightRange>k__BackingField: 0
+      <GridYHeightRange>k__BackingField: 132
       <TerrainGradient>k__BackingField:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 1}
-        key2: {r: 0, g: 0, b: 0, a: 0}
-        key3: {r: 0, g: 0, b: 0, a: 0}
-        key4: {r: 0, g: 0, b: 0, a: 0}
-        key5: {r: 0, g: 0, b: 0, a: 0}
-        key6: {r: 0, g: 0, b: 0, a: 0}
-        key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 0
-        ctime1: 65535
-        ctime2: 0
-        ctime3: 0
-        ctime4: 0
-        ctime5: 0
-        ctime6: 0
-        ctime7: 0
+        key0: {r: 0, g: 0.2163105, b: 1, a: 1}
+        key1: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 1}
+        key2: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
+        key3: {r: 0.2660528, g: 0.5943396, b: 0.025231387, a: 1}
+        key4: {r: 0.26666668, g: 0.59607846, b: 0.023529414, a: 1}
+        key5: {r: 0.20000002, g: 0.45098042, b: 0.019607844, a: 1}
+        key6: {r: 0.15935814, g: 0.2830189, b: 0.068084724, a: 1}
+        key7: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 1}
+        ctime0: 386
+        ctime1: 2120
+        ctime2: 4048
+        ctime3: 6168
+        ctime4: 22166
+        ctime5: 28527
+        ctime6: 62644
+        ctime7: 65535
         atime0: 0
-        atime1: 65535
-        atime2: 0
-        atime3: 0
-        atime4: 0
-        atime5: 0
-        atime6: 0
-        atime7: 0
-        m_Mode: 0
+        atime1: 8192
+        atime2: 16384
+        atime3: 24576
+        atime4: 32768
+        atime5: 40959
+        atime6: 49151
+        atime7: 57343
+        m_Mode: 2
         m_ColorSpace: -1
-        m_NumColorKeys: 2
-        m_NumAlphaKeys: 2
-      <HeightColorChange>k__BackingField: 0
-      <EnableSmoothing>k__BackingField: 0
+        m_NumColorKeys: 8
+        m_NumAlphaKeys: 8
+      <HeightColorChange>k__BackingField: 132
+      <EnableSmoothing>k__BackingField: 1
       <Position>k__BackingField: {x: 0, y: 0, z: 0}
-      <TerrainMaterial>k__BackingField: {fileID: 0}
+      <TerrainMaterial>k__BackingField: {fileID: -876546973899608171, guid: e0cc447a66be7914595b98e3b39ca86d, type: 3}
       <Seed>k__BackingField: 0
-      octaves: 0
-      persistance: 0
-      lacunarity: 0
+      octaves: 5
+      persistance: 0.173
+      lacunarity: 0.2
       <OctaveOffset>k__BackingField: {x: 0, y: 0}
       <TerrainCurve>k__BackingField:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0.0066670566
+          value: 0.007080078
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.32626924
+          value: 0.01014252
+          inSlope: -0.0148564
+          outSlope: -0.0148564
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.27093586
+        - serializedVersion: 3
+          time: 0.5745725
+          value: 0.017505823
+          inSlope: 0.0702201
+          outSlope: 0.0702201
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.26982754
+          outWeight: 0.5396975
+        - serializedVersion: 3
+          time: 0.723354
+          value: 0.22731262
+          inSlope: 0.45743775
+          outSlope: 0.45743775
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.11086419
+          outWeight: 0.17843807
+        - serializedVersion: 3
+          time: 0.82363844
+          value: 0.54726803
+          inSlope: -0.07864468
+          outSlope: -0.07864468
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.60721976
+          outWeight: 1
+        - serializedVersion: 3
+          time: 0.8767155
+          value: 0.7458242
+          inSlope: 1.2294852
+          outSlope: 1.2294852
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.18781282
+          outWeight: 0.3699754
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      <HeightNormalisation>k__BackingField: 0
-    <GridSpacingRange>k__BackingField: 0
-    <PerlinScaleRange>k__BackingField: 0
-    <HeightRange>k__BackingField: 0
-    <HeightColourAppliedRange>k__BackingField: 0
-    <OctaveRange>k__BackingField: 0
-    <PersistanceRange>k__BackingField: 0
-    <LacunarityRange>k__BackingField: 0
+      <HeightNormalisation>k__BackingField: 1
+    <GridSpacingRange>k__BackingField: 3
+    <PerlinScaleRange>k__BackingField: 25
+    <HeightRange>k__BackingField: 30
+    <HeightColourAppliedRange>k__BackingField: 10
+    <OctaveRange>k__BackingField: 2
+    <PersistanceRange>k__BackingField: 0.1
+    <LacunarityRange>k__BackingField: 0.05
   <Canyons>k__BackingField:
     <Information>k__BackingField:
-      gridXLength: 0
-      gridZLength: 0
-      <GridSpacing>k__BackingField: 0
-      <PerlinScale>k__BackingField: 0
+      gridXLength: 300
+      gridZLength: 300
+      <GridSpacing>k__BackingField: 4
+      <PerlinScale>k__BackingField: 30
       <OffsetX>k__BackingField: 0
       <OffsetZ>k__BackingField: 0
-      <GridYHeightRange>k__BackingField: 0
+      <GridYHeightRange>k__BackingField: 117.1
       <TerrainGradient>k__BackingField:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 1}
-        key2: {r: 0, g: 0, b: 0, a: 0}
-        key3: {r: 0, g: 0, b: 0, a: 0}
-        key4: {r: 0, g: 0, b: 0, a: 0}
-        key5: {r: 0, g: 0, b: 0, a: 0}
-        key6: {r: 0, g: 0, b: 0, a: 0}
-        key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 0
-        ctime1: 65535
-        ctime2: 0
-        ctime3: 0
-        ctime4: 0
-        ctime5: 0
-        ctime6: 0
-        ctime7: 0
+        key0: {r: 0, g: 0, b: 1, a: 1}
+        key1: {r: 0.6132076, g: 0.42445114, b: 0.19958171, a: 1}
+        key2: {r: 0.5660378, g: 0.46124068, b: 0.14684944, a: 1}
+        key3: {r: 0.3962264, g: 0.3848048, b: 0.3681915, a: 1}
+        key4: {r: 0.4716981, g: 0.12475267, b: 0, a: 1}
+        key5: {r: 0.7735849, g: 0.6549679, b: 0.36124954, a: 1}
+        key6: {r: 0.1981132, g: 0.1981132, b: 0.1981132, a: 1}
+        key7: {r: 0.5660378, g: 0.33908868, b: 0.33908868, a: 1}
+        ctime0: 1349
+        ctime1: 2506
+        ctime2: 12914
+        ctime3: 21588
+        ctime4: 24287
+        ctime5: 33731
+        ctime6: 39321
+        ctime7: 57440
         atime0: 0
-        atime1: 65535
-        atime2: 0
-        atime3: 0
-        atime4: 0
-        atime5: 0
-        atime6: 0
-        atime7: 0
-        m_Mode: 0
+        atime1: 8192
+        atime2: 16384
+        atime3: 24576
+        atime4: 32768
+        atime5: 40959
+        atime6: 49151
+        atime7: 57343
+        m_Mode: 2
         m_ColorSpace: -1
-        m_NumColorKeys: 2
-        m_NumAlphaKeys: 2
-      <HeightColorChange>k__BackingField: 0
+        m_NumColorKeys: 8
+        m_NumAlphaKeys: 8
+      <HeightColorChange>k__BackingField: 106
       <EnableSmoothing>k__BackingField: 0
       <Position>k__BackingField: {x: 0, y: 0, z: 0}
-      <TerrainMaterial>k__BackingField: {fileID: 0}
+      <TerrainMaterial>k__BackingField: {fileID: -876546973899608171, guid: e0cc447a66be7914595b98e3b39ca86d, type: 3}
       <Seed>k__BackingField: 0
-      octaves: 0
-      persistance: 0
-      lacunarity: 0
+      octaves: 5
+      persistance: 0.15
+      lacunarity: 0.24181831
       <OctaveOffset>k__BackingField: {x: 0, y: 0}
       <TerrainCurve>k__BackingField:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0.0066670566
+          value: 0.007080078
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.1735218
+          value: 0.45976663
+          inSlope: 0.1940381
+          outSlope: 0.1940381
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.21742599
+        - serializedVersion: 3
+          time: 0.45787716
+          value: 0.61700475
+          inSlope: -2.3840406
+          outSlope: -2.3840406
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.26982754
+          outWeight: 0.16272394
+        - serializedVersion: 3
+          time: 0.66267985
+          value: 0.17606938
+          inSlope: 0.45743775
+          outSlope: 0.45743775
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.11086419
+          outWeight: 0.17843807
+        - serializedVersion: 3
+          time: 0.7924496
+          value: 0.30286098
+          inSlope: 1.2294852
+          outSlope: 1.2294852
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.18781282
+          outWeight: 0.3699754
+        - serializedVersion: 3
+          time: 0.8551191
+          value: 0.41576314
+          inSlope: 1.6414057
+          outSlope: 1.6414057
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.60721976
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.9952563
+          value: 1.3419017
+          inSlope: 35.381096
+          outSlope: 35.381096
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.02729848
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      <HeightNormalisation>k__BackingField: 0
-    <GridSpacingRange>k__BackingField: 0
-    <PerlinScaleRange>k__BackingField: 0
-    <HeightRange>k__BackingField: 0
-    <HeightColourAppliedRange>k__BackingField: 0
-    <OctaveRange>k__BackingField: 0
-    <PersistanceRange>k__BackingField: 0
-    <LacunarityRange>k__BackingField: 0
+      <HeightNormalisation>k__BackingField: 1
+    <GridSpacingRange>k__BackingField: 3
+    <PerlinScaleRange>k__BackingField: 10
+    <HeightRange>k__BackingField: 15
+    <HeightColourAppliedRange>k__BackingField: 15
+    <OctaveRange>k__BackingField: 3
+    <PersistanceRange>k__BackingField: 0.05
+    <LacunarityRange>k__BackingField: 0.04
   <WildCard>k__BackingField:
     <Information>k__BackingField:
       gridXLength: 0
