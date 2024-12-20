@@ -2363,8 +2363,8 @@ MonoBehaviour:
   <RenderDistance>k__BackingField: {fileID: 1744646225}
   <RollingHillsCurve>k__BackingField: {fileID: 1077971206}
   <MountainsCurve>k__BackingField: {fileID: 225612231}
-  <DesertCurve>k__BackingField: {fileID: 1272468197}
-  <AridRock>k__BackingField: {fileID: 1243017649}
+  <DesertCurve>k__BackingField: {fileID: 1243017649}
+  <AridRock>k__BackingField: {fileID: 1272468197}
   <IslandFlat>k__BackingField: {fileID: 2020659468}
   <IslandHill>k__BackingField: {fileID: 2045306665}
   <Canyons>k__BackingField: {fileID: 379825959}
