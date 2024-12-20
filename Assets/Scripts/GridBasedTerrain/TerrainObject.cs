@@ -147,18 +147,17 @@ public class TerrainObject : MonoBehaviour
                     xCoord = (float)xCount * gridSpacing;
                     zCoord = (float)zCount * gridSpacing;
 
-                    // Getting the Perlin Coord for X and Z by normalising it's value - dividing the current vertices position by the total amounts of vertices in that axis.
+                    // Getting the Perlin Coord for X and Z by normalising it's value - dividing the current vertices position by the current scale of the Octaves frequency.
                     // The count is offset by half the axis length to let perlin scale from centre of mesh.
                     float xPerlinCoord = (((float)xCount - halfLength) + octaveOffsetX) / (scale * frequency);
                     float zPerlinCoord = ((float)zCount - halfWidth + octaveOffsetZ) / (scale * frequency);
 
-                    // The perlinNoise coord are multiplied by scale.
-                    // The scale is timesed by the frequency to affect the detail of the respective octave layers, with higher frequency allowing more
+                    // The scale is multiplied by the frequency to affect the detail of the respective octave layers, with higher frequency allowing more
                     // finer detail to emerge in the noise.
                                                                                       // Helps to allow negative values of the Perlin Noise - not working?.
                     float perlinValue = Mathf.PerlinNoise(xPerlinCoord, zPerlinCoord) * 2 - 1 ;
 
-                    // The perlin value is timesed by amplitude to effect how much the other octaves have impact in the overall 
+                    // The perlin value is multiplied by amplitude to effect how much the other octaves have impact in the overall 
                     // height - i.e. how persistant they are. Lower octaves should propertioanlly have lesser impact.
                     noiseHeight += perlinValue * amplitude;
 
