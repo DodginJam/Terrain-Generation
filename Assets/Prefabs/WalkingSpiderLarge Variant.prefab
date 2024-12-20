@@ -64,6 +64,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: WalkingSpiderLarge Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 6010980158638417531, guid: a3a40e9d1d44b404f9f48b79dfc14aef, type: 3}
+      propertyPath: <BodyOffset>k__BackingField.y
+      value: 57.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6010980158638417531, guid: a3a40e9d1d44b404f9f48b79dfc14aef, type: 3}
+      propertyPath: <StrideLength>k__BackingField
+      value: 87.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6010980158638417531, guid: a3a40e9d1d44b404f9f48b79dfc14aef, type: 3}
+      propertyPath: <MovementSpeed>k__BackingField
+      value: 3.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6010980158638417531, guid: a3a40e9d1d44b404f9f48b79dfc14aef, type: 3}
+      propertyPath: <RotationSpeed>k__BackingField
+      value: 49.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6010980158638417531, guid: a3a40e9d1d44b404f9f48b79dfc14aef, type: 3}
+      propertyPath: <TimeToMoveLeg>k__BackingField
+      value: 0.32
+      objectReference: {fileID: 0}
     - target: {fileID: 7003956244410726961, guid: a3a40e9d1d44b404f9f48b79dfc14aef, type: 3}
       propertyPath: m_LocalScale.x
       value: 50
@@ -78,15 +98,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7003956244410726961, guid: a3a40e9d1d44b404f9f48b79dfc14aef, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 144.43918
+      value: -257.8022
       objectReference: {fileID: 0}
     - target: {fileID: 7003956244410726961, guid: a3a40e9d1d44b404f9f48b79dfc14aef, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.0000009536743
+      value: 0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 7003956244410726961, guid: a3a40e9d1d44b404f9f48b79dfc14aef, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -68.766945
+      value: -81.608734
       objectReference: {fileID: 0}
     - target: {fileID: 7003956244410726961, guid: a3a40e9d1d44b404f9f48b79dfc14aef, type: 3}
       propertyPath: m_LocalRotation.w

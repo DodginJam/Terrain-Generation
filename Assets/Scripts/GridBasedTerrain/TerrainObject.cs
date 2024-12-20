@@ -65,6 +65,8 @@ public class TerrainObject : MonoBehaviour
 
         // Add the mesh collider component gameobject only once it has had all calculations completed on the mesh.
         transform.AddComponent<MeshCollider>();
+
+        TerrainManager.IsTerrainLoaded = true;
     }
 
     /// <summary>

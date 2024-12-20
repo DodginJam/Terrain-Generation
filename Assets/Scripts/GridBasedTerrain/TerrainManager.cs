@@ -8,7 +8,7 @@ public class TerrainManager : MonoBehaviour
 {
     [field: SerializeField]
     public TerrainInformation GlobalTerrainInformation
-    { get; private set; }
+    { get; set; }
 
     [field: SerializeField]
     public static List<GameObject> TerrainsList
@@ -22,10 +22,19 @@ public class TerrainManager : MonoBehaviour
     public GameObject UIGameObject
     { get; private set; }
 
+    public static bool IsTerrainLoaded { get; set; } = false;
+
     private void Awake()
+    {
+
+    }
+
+    // Start is called before the first frame update
+    void Start()
     {
         // Generate a grid of terrain meshes
         GenerateNewTerrainList(TerrainRenderDistance);
+
         // Coroutine here looks for changes in terrain information, and if detected, generates a new terrain mesh grid.
         StartCoroutine(UpdateMeshOnInputChange());
 
@@ -38,20 +47,10 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {
-        // Can manually re-generate the mesh on input.
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ClearAndLoad();
-        }
+
     }
 
     /// <summary>
@@ -60,6 +59,8 @@ public class TerrainManager : MonoBehaviour
     /// <param name="terrainRenderDistance"></param>
     void GenerateNewTerrainList(int terrainRenderDistance)
     {
+        IsTerrainLoaded = false;
+
         // Calculate the number of terrain meshes to generate based on the render distance. Total Blocks = ((2 * renderdistance) + 1)POW2
         int numberOfTerrains = (int)Mathf.Pow((terrainRenderDistance * 2) + 1, 2);
 
@@ -357,6 +358,17 @@ public class TerrainManager : MonoBehaviour
         ClearTerrainData();
 
         GlobalTerrainInformation = newInformation;
+
+        GenerateNewTerrainList(TerrainRenderDistance);
+    }
+
+    public void LoadNewInformation(TerrainInformation newInformation, int renderDistance)
+    {
+        ClearTerrainData();
+
+        GlobalTerrainInformation = newInformation;
+
+        TerrainRenderDistance = renderDistance;
 
         GenerateNewTerrainList(TerrainRenderDistance);
     }

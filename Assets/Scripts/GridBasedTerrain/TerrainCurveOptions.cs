@@ -80,9 +80,44 @@ public class TerrainCurveOptions : MonoBehaviour
     public TerrainRange WildCard
     { get; private set; }
 
-    public void PassRandomRangeInformationToTerrain(TerrainRange infoToPass, TerrainInformation information)
+    public TerrainInformation ParseTerrainRangeIntoInformation(TerrainRange infoToPass)
     {
-        information.GridSpacing = UnityEngine.Random.Range(-infoToPass.Information.GridSpacing, infoToPass.Information.GridSpacing);
-        information.PerlinScale = UnityEngine.Random.Range(-infoToPass.Information.PerlinScale, infoToPass.Information.PerlinScale);
+        TerrainInformation newInformation = new TerrainInformation
+            (
+                infoToPass.Information.GridXLength,
+                infoToPass.Information.GridZLength,
+                infoToPass.Information.GridSpacing,
+                infoToPass.Information.PerlinScale += UnityEngine.Random.Range(-infoToPass.PerlinScaleRange, infoToPass.PerlinScaleRange),
+                infoToPass.Information.OffsetX,
+                infoToPass.Information.OffsetZ,
+                infoToPass.Information.GridYHeightRange += UnityEngine.Random.Range(-infoToPass.HeightRange, infoToPass.HeightRange),
+                infoToPass.Information.GridYHeightMultiplier,
+                infoToPass.Information.TerrainGradient,
+                infoToPass.Information.HeightColorChange += UnityEngine.Random.Range(-infoToPass.HeightColourAppliedRange, infoToPass.HeightColourAppliedRange),
+                infoToPass.Information.EnableSmoothing,
+                infoToPass.Information.Position,
+                infoToPass.Information.TerrainMaterial,
+                infoToPass.Information.Seed,
+                infoToPass.Information.Octaves += UnityEngine.Random.Range((int)-infoToPass.OctaveRange, (int)infoToPass.OctaveRange + 1),
+                infoToPass.Information.Persistance += UnityEngine.Random.Range(-infoToPass.PersistanceRange, infoToPass.PersistanceRange),
+                infoToPass.Information.Lacunarity += UnityEngine.Random.Range(-infoToPass.LacunarityRange, infoToPass.LacunarityRange),
+                infoToPass.Information.OctaveOffset,
+                infoToPass.Information.TerrainCurve,
+                infoToPass.Information.ColourLockToHeight,
+                infoToPass.Information.HeightNormalisation
+            );
+
+        /*
+        // Allowing for randomness within the pre-arranged ranges.
+        newInformation.GridSpacing += UnityEngine.Random.Range(-infoToPass.GridSpacingRange, infoToPass.GridSpacingRange);
+        newInformation.PerlinScale += UnityEngine.Random.Range(-infoToPass.PerlinScaleRange, infoToPass.PerlinScaleRange);
+        newInformation.GridYHeightRange += UnityEngine.Random.Range(-infoToPass.HeightRange, infoToPass.HeightRange);
+        newInformation.HeightColorChange += UnityEngine.Random.Range(-infoToPass.HeightColourAppliedRange, infoToPass.HeightColourAppliedRange);
+        newInformation.Octaves += Mathf.Clamp(UnityEngine.Random.Range((int)-infoToPass.OctaveRange, (int)infoToPass.OctaveRange + 1), 1, 20);
+        newInformation.Persistance += Mathf.Clamp(UnityEngine.Random.Range(-infoToPass.PersistanceRange, infoToPass.PersistanceRange), 0.01f, 20);
+        newInformation.Lacunarity += Mathf.Clamp(UnityEngine.Random.Range(-infoToPass.LacunarityRange, infoToPass.LacunarityRange), 0.01f, 20);
+        */
+
+        return newInformation;
     }
 }
