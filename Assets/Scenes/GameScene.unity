@@ -2368,11 +2368,12 @@ MonoBehaviour:
   <IslandFlat>k__BackingField: {fileID: 2020659468}
   <IslandHill>k__BackingField: {fileID: 2045306665}
   <Canyons>k__BackingField: {fileID: 379825959}
+  <WalkerSelectionDropdown>k__BackingField: {fileID: 1510745791}
   <TerrainMangerObject>k__BackingField: {fileID: 7953542025212332131}
   <TerrainCurveOptions>k__BackingField: {fileID: 7953542025212332130}
   <SpiderWalkerNormal>k__BackingField: {fileID: 5736471191869189631, guid: a3a40e9d1d44b404f9f48b79dfc14aef, type: 3}
   <SpiderWalkerLarge>k__BackingField: {fileID: 5909654303896781833, guid: ea415bb8f4ad2cb4a9157a807de7d426, type: 3}
-  <WalkerSelectionDropdown>k__BackingField: {fileID: 1510745791}
+  <CollectablePrefab>k__BackingField: {fileID: 1119491388653704977, guid: 540cb5ad027f813409ce9bc321d76320, type: 3}
 --- !u!4 &772217272
 Transform:
   m_ObjectHideFlags: 0

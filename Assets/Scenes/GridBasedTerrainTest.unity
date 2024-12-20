@@ -623,7 +623,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 539407562822498188, guid: 82e7d640be78c1347bd06e508d9ac705, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1334559474856408150, guid: 82e7d640be78c1347bd06e508d9ac705, type: 3}
       propertyPath: m_Camera
@@ -675,15 +675,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3460361314477958690, guid: 82e7d640be78c1347bd06e508d9ac705, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3557416198672601423, guid: 82e7d640be78c1347bd06e508d9ac705, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3663553223581083294, guid: 82e7d640be78c1347bd06e508d9ac705, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4573339469587368380, guid: 82e7d640be78c1347bd06e508d9ac705, type: 3}
       propertyPath: <CameraMain>k__BackingField
@@ -695,23 +695,23 @@ PrefabInstance:
       objectReference: {fileID: 1966692403}
     - target: {fileID: 4725338151086564542, guid: 82e7d640be78c1347bd06e508d9ac705, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4819454780787472745, guid: 82e7d640be78c1347bd06e508d9ac705, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4832182725328918378, guid: 82e7d640be78c1347bd06e508d9ac705, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5308691918059133601, guid: 82e7d640be78c1347bd06e508d9ac705, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6628996851339970533, guid: 82e7d640be78c1347bd06e508d9ac705, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using static TerrainInformation;
 using UnityEngine.UIElements;
-using System.Text.Json; 
 
 [Serializable]
 public class TerrainInformation

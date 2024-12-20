@@ -64,17 +64,21 @@ public class SpiderController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        VerticalInput = Input.GetAxisRaw("Vertical");
-        HorizontalInput = Input.GetAxisRaw("Horizontal");
+        if (gameObject.transform.parent.CompareTag("Player"))
+        {
+            VerticalInput = Input.GetAxisRaw("Vertical");
+            HorizontalInput = Input.GetAxisRaw("Horizontal");
 
-        // Forward and back movement.
-        gameObject.transform.localPosition += Time.deltaTime * SpiderModifiableValues.MovementSpeed * VerticalInput * gameObject.transform.forward;
+            // Forward and back movement.
+            gameObject.transform.localPosition += Time.deltaTime * SpiderModifiableValues.MovementSpeed * VerticalInput * gameObject.transform.forward;
 
-        // Rotational movement.
-        gameObject.transform.localRotation *= Quaternion.Euler(Time.deltaTime * SpiderModifiableValues.RotationSpeed * HorizontalInput * gameObject.transform.up);
+            // Rotational movement.
+            gameObject.transform.localRotation *= Quaternion.Euler(Time.deltaTime * SpiderModifiableValues.RotationSpeed * HorizontalInput * gameObject.transform.up);
 
-        // Set the body to the average of the leg positions plus offset.
-        transform.position = new Vector3(transform.position.x, CalulateAveragePosition(LimbsEndPoints).y + SpiderModifiableValues.BodyOffset.y, transform.position.z);
+            // Set the body to the average of the leg positions plus offset.
+            transform.position = new Vector3(transform.position.x, CalulateAveragePosition(LimbsEndPoints).y + SpiderModifiableValues.BodyOffset.y, transform.position.z);
+
+        }
     }
 
     /// <summary>

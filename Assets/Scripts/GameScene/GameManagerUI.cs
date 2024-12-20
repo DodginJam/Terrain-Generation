@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManagerUI : UIManager
 {
-    [field: SerializeField]
+    [field: SerializeField, Header("UserInterface")]
     public TMP_Dropdown RenderDistance
     { get; private set; }
 
@@ -40,6 +41,12 @@ public class GameManagerUI : UIManager
     { get; private set; }
 
     [field: SerializeField]
+    public TMP_Dropdown WalkerSelectionDropdown
+    { get; private set; }
+
+
+
+    [field: SerializeField, Header("Script References")]
     public TerrainManager TerrainMangerObject
     { get; private set; }
 
@@ -47,6 +54,9 @@ public class GameManagerUI : UIManager
     public TerrainCurveOptions TerrainCurveOptions
     { get; private set; }
 
+    /// <summary>
+    /// The current selected preset of terrain information chosen.
+    /// </summary>
     public TerrainCurveOptions.TerrainRange SelectedPreSet
     { get; private set; }
 
@@ -71,8 +81,9 @@ public class GameManagerUI : UIManager
     { get; private set; }
 
     [field: SerializeField]
-    public TMP_Dropdown WalkerSelectionDropdown
+    public GameObject CollectablePrefab
     { get; private set; }
+
 
     protected override void Awake()
     {
@@ -80,6 +91,7 @@ public class GameManagerUI : UIManager
 
         InitUIValues();
 
+        // Default value for render distance.
         RenderDistance.value = 1;
     }
 
@@ -97,10 +109,31 @@ public class GameManagerUI : UIManager
             LoadScene("MenuScene");
         }
 
+        // Only onces the GameManager has loads the meshes is this set to true, allowing player walker to spawn.
         if (TerrainManager.IsTerrainLoaded == true)
         {
             SpawnWalker();
             TerrainManager.IsTerrainLoaded = false;
+            GetComponentInChildren<Canvas>().worldCamera = GameObject.FindWithTag("Player").GetComponentInChildren<Camera>();
+
+
+            // Spawn game objects around the scene that can be collected.
+            foreach (GameObject terrain in TerrainManager.TerrainsList)
+            {
+                if (terrain == null)
+                {
+                    break;
+                }
+
+                MeshFilter terrainMesh = terrain.GetComponent<MeshFilter>();
+
+                Vector3 randomVertex = terrainMesh.mesh.vertices[Random.Range(0, terrainMesh.mesh.vertices.Length)];
+
+                Vector3 worldSpace = terrain.transform.TransformPoint(randomVertex);
+
+                Instantiate(CollectablePrefab, worldSpace + new Vector3(0, 0.3f, 0), Quaternion.identity);
+            }
+
         }
     }
 
