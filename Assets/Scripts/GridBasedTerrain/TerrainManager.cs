@@ -176,8 +176,11 @@ public class TerrainManager : MonoBehaviour
     {
         float timeTillNextCheck = 0.1f;
 
+        // Weakness with this implementation is that it can not handle reference type comparisions. A workaround was built with deconstructing the Gradient into re-made component arrays.
+        // Should be replaced and re-worked with a deep clone of reference type, or prehaps custom event listeners for when values are changed.
         while (true)
         {
+            // Storing old information befor coroutine yield.
             TerrainInformation oldInformation = new TerrainInformation
                                         (
                                         GlobalTerrainInformation.GridXLength,
@@ -279,6 +282,7 @@ public class TerrainManager : MonoBehaviour
                 return true;
             }
 
+            // Big comparison statement to see any changes from old to new information.
             bool areValuesSame = oldInformation.GridXLength == GlobalTerrainInformation.GridXLength
                         && oldInformation.GridZLength == GlobalTerrainInformation.GridZLength
                         && oldInformation.GridSpacing == GlobalTerrainInformation.GridSpacing
