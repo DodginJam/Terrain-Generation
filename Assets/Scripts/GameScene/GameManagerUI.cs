@@ -98,16 +98,13 @@ public class GameManagerUI : UIManager
     // Start is called before the first frame update
     protected override void Start()
     {
-
+        base.Start();
     }
 
     // Update is called once per frame
     protected override void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            LoadScene("MenuScene");
-        }
+        base.Update();
 
         // Only onces the GameManager has loads the meshes is this set to true, allowing player walker to spawn.
         if (TerrainManager.IsTerrainLoaded == true)
@@ -190,6 +187,10 @@ public class GameManagerUI : UIManager
         SelectedPreSet = chosenRange;
     }
 
+    /// <summary>
+    /// Passes TerrainGeneration relevent information to the TerrainManager, before awakening the TerrainManager.
+    /// </summary>
+    /// <param name="currentTerrainRange"></param>
     public void TerrainSelectionSetup(TerrainCurveOptions.TerrainRange currentTerrainRange)
     {
         TerrainInformation newInformation = TerrainCurveOptions.ParseTerrainRangeIntoInformation(currentTerrainRange);
@@ -206,6 +207,9 @@ public class GameManagerUI : UIManager
         disable.SetActive(!disable.activeInHierarchy);
     }
 
+    /// <summary>
+    /// Chooses the centre terrain tile at which to spawn the player walker.
+    /// </summary>
     public void SpawnWalker()
     {
         Vector3 position = GameObject.Find("Terrain0").GetComponent<MeshRenderer>().bounds.center;

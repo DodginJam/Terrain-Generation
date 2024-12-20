@@ -44,8 +44,10 @@ public class SpiderController : MonoBehaviour
 
     private void Awake()
     {
+        // Ensure visuals of the IK transform components are hidden.
         ToggleIKMeshVisual = false;
 
+        // Grabbing reference to all limb end points via the FastIKFabric script attached.
         FastIKFabric[] limbList = transform.GetComponentsInChildren<DitzelGames.FastIK.FastIKFabric>();
 
         foreach(FastIKFabric script in limbList)
@@ -64,6 +66,7 @@ public class SpiderController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Update loop containing player input.
         if (gameObject.transform.parent.CompareTag("Player"))
         {
             VerticalInput = Input.GetAxisRaw("Vertical");
@@ -77,7 +80,6 @@ public class SpiderController : MonoBehaviour
 
             // Set the body to the average of the leg positions plus offset.
             transform.position = new Vector3(transform.position.x, CalulateAveragePosition(LimbsEndPoints).y + SpiderModifiableValues.BodyOffset.y, transform.position.z);
-
         }
     }
 
@@ -98,6 +100,10 @@ public class SpiderController : MonoBehaviour
         return totalPositions / limbPositions.Count;
     }
 
+    /// <summary>
+    /// Toggles the visability of the meshes of objects attached to transform components relating to calculation of limb movement in world space.
+    /// </summary>
+    /// <param name="setToVisable"></param>
     private void MeshVisableSet(bool setToVisable)
     {
         Debug.Log($"Mesh visibility set to: {setToVisable}");

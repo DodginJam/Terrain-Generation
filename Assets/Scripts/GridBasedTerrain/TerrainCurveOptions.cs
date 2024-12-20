@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class TerrainCurveOptions : MonoBehaviour
 {
+    /// <summary>
+    /// TerrainRange class represents a holding classes for storing specific TerrainInformation input values assciated within a given terrain style, along with a number of "range" floats which represent acceptable ranges in given TerrainInformation parameters.
+    /// The outcome is produce varabilty within given presets to allow constrained varability.
+    /// </summary>
     [Serializable]
     public class TerrainRange
     {
@@ -48,7 +52,8 @@ public class TerrainCurveOptions : MonoBehaviour
 
     }
 
-    [field: SerializeField]
+  
+    [field: SerializeField, Header("Presets for TerrainInformation and the ranges allowed for certain values.")]
     public TerrainRange RollingHills
     {  get; private set; }
 
@@ -80,8 +85,15 @@ public class TerrainCurveOptions : MonoBehaviour
     public TerrainRange WildCard
     { get; private set; }
 
+    /// <summary>
+    /// Methods parses the information contained in the TerrainRange parameters, and returns a TerrainInformation from that data.
+    /// </summary>
+    /// <param name="infoToPass"></param>
+    /// <returns></returns>
     public TerrainInformation ParseTerrainRangeIntoInformation(TerrainRange infoToPass)
     {
+        // This should have been set to prevent a pass-by-reference of the TerrainRange information to the new TerrainInformation, as I am generating a new class here - however in practise this doesn't appear to be the case.
+        // If this method ran more then once in the main game loop, the random range additions and subtractions keep stacking due to the reference to the TerrainRange Information persisting even despite this - needs further looking into.
         TerrainInformation newInformation = new TerrainInformation
             (
                 infoToPass.Information.GridXLength,

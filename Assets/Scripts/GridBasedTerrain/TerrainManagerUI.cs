@@ -328,7 +328,7 @@ public class TerrainManagerUI : UIManager
         });
 
 
-        // TerrainCurve based values.
+        // TerrainCurve based values buttons have listeners attached - will load the terraindata of a specific pre-set.
         RollingHillsCurve.onClick.AddListener(() => { CurveOrAllData(ChangeTerrainInTotal.isOn, TerrainManagerScript.gameObject.GetComponent<TerrainCurveOptions>().RollingHills.Information); });
 
         MountainsCurve.onClick.AddListener(() => { CurveOrAllData(ChangeTerrainInTotal.isOn, TerrainManagerScript.gameObject.GetComponent<TerrainCurveOptions>().Mountains.Information); });
@@ -346,6 +346,11 @@ public class TerrainManagerUI : UIManager
         ChangeTerrainInTotal.onValueChanged.AddListener((value) => {  });
     }
 
+    /// <summary>
+    /// Method 
+    /// </summary>
+    /// <param name="allData"></param>
+    /// <param name="newTerrainInformation"></param>
     void CurveOrAllData(bool allData, TerrainInformation newTerrainInformation)
     {
         if (allData)
